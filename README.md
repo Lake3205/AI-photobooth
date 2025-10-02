@@ -1,6 +1,8 @@
 # Dark Tech - Project 2025
 
+## Installation
 
+[Installation guide](/docs/installation.md)
 
 ## Getting started
 
