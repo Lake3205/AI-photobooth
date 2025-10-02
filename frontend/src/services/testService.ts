@@ -10,7 +10,7 @@ export function testService() {
         data.value = null;
         error.value = null;
 
-        const res = await fetch('http://localhost:8000/test');
+        const res = await fetch(import.meta.env.VITE_API_URL + '/test');
         
         isLoading.value = false;
         if (res.ok) {

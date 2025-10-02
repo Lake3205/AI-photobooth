@@ -1,8 +1,9 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { fileURLToPath } from 'node:url'
+import dotenv from 'dotenv'
 
-// https://vite.dev/config/
+dotenv.config({path:"./.env"})
 export default defineConfig({
   plugins: [
     vue(),
