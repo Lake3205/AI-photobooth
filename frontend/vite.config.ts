@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite'
+import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import { fileURLToPath } from 'node:url'
 import dotenv from 'dotenv'
@@ -7,6 +8,7 @@ dotenv.config({path:"./.env"})
 export default defineConfig({
   plugins: [
     vue(),
+    tailwindcss(),
   ],
   resolve: {
     alias: {
