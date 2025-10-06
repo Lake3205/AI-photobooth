@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from backend.controllers.assumptions_controller import router as assumptions_controller
 
 app = FastAPI()
 
@@ -15,6 +16,4 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/test")
-def root():
-    return {"status": "Working"}
+app.include_router(assumptions_controller)

@@ -25,10 +25,11 @@ pip install -r requirements.txt
 ```
 
 ### Run the Backend Server
-Start the FastAPI server using Uvicorn:
+Start the FastAPI server using Uvicorn from the project root:
 
 ```bash
-uvicorn main:app --reload
+cd ..
+uvicorn backend.main:app --reload
 ```
 
 ## Frontend Setup
