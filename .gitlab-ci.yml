@@ -11,9 +11,9 @@ stages:
     - apt-get update && apt-get install -y openssh-client
 
   script:
-    - chmod 600 id_rsa
+    - chmod 400 $VPS_SSH_KEY
     - ssh -v -o StrictHostKeyChecking=no -i $VPS_SSH_KEY root@185.228.82.235 "echo '✅ SSH connection successful!'"
-    - rm id_rsa
+    - rm $VPS_SSH_KEY
 
 test_ssh:
   <<: *test_connection
