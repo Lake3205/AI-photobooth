@@ -9,18 +9,10 @@ stages:
 
   before_script:
     - apt-get update && apt-get install -y openssh-client
-    - echo "GitLab CI/CD | Print all environment variables"
-    - env
 
   script:
-    - echo "$CI_TEST_VAR"
-    - echo "$TEST_VAR"
-    - echo "$VPS_SSH_KEY"
-    - echo "$VPS_SSH_KEY" > id_rsa
     - chmod 600 id_rsa
-    - echo "🔑 Trying SSH connection..."
-    - cat id_rsa
-    - ssh -v -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 "echo '✅ SSH connection successful!'"
+    - ssh -v -o StrictHostKeyChecking=no -i $VPS_SSH_KEY root@185.228.82.235 "echo '✅ SSH connection successful!'"
     - rm id_rsa
 
 test_ssh:
