@@ -11,9 +11,10 @@ stages:
     - apt-get update && apt-get install -y openssh-client
 
   script:
-    - chmod 400 $VPS_SSH_KEY
-    - ssh -v -o StrictHostKeyChecking=no -i $VPS_SSH_KEY root@185.228.82.235 "echo '✅ SSH connection successful!'"
-    - rm $VPS_SSH_KEY
+    - echo "$VPS_SSH_KEY" > id_rsa
+    - chmod 400 id_rsa
+    - ssh -v -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 "echo '✅ SSH connection successful!'"
+    - rm id_rsa
 
 test_ssh:
   <<: *test_connection
@@ -34,7 +35,7 @@ deploy_dev:
     - apt-get update && apt-get install -y openssh-client
   script:
     - echo "$VPS_SSH_KEY" > id_rsa
-    - chmod 600 id_rsa
+    - chmod 400 id_rsa
     - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 '
         docker stop frontend-dev || true &&
         docker rm frontend-dev || true &&
@@ -61,7 +62,7 @@ deploy_main:
     - apt-get update && apt-get install -y openssh-client
   script:
     - echo "$VPS_SSH_KEY" > id_rsa
-    - chmod 600 id_rsa
+    - chmod 400 id_rsa
     - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 '
         docker stop frontend-main || true &&
         docker rm frontend-main || true &&
