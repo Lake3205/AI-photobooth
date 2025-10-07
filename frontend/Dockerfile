@@ -1,17 +1,20 @@
-# frontend dockerfile
-FROM node:22
+FROM node:alpine
 
-WORKDIR /frontend
+WORKDIR /opt/app
 
-COPY package*.json ./
+# Copy dependency files first
+COPY package.json package-lock.json ./
 
-RUN npm config set legacy-peer-deps true
-RUN npm install --force
+# Install dependencies
+RUN npm install
 
+# Copy all source files
 COPY . .
 
-ENV PORT=3000
+# Build the application
+RUN npm run build
 
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+# Run the server
+ENTRYPOINT ["npx", "http-server", "-p", "3000", "./dist"]
