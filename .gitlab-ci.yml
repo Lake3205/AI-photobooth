@@ -38,12 +38,12 @@ deploy_dev:
     - cat id_rsa
     - echo $VPS_SSH_KEY
     - ssh -v -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 '
-        docker stop frontend-dev || true &&
-        docker rm frontend-dev || true &&
-        docker run -d --name frontend-dev -p 3001:3000 dark-tech-frontend:dev &&
-        docker stop backend-dev || true &&
-        docker rm backend-dev || true &&
-        docker run -d --name backend-dev -p 8001:8000 dark-tech-backend:dev
+        docker stop dark-tech-frontend-dev-1 || true &&
+        docker rm dark-tech-frontend-dev-1 || true &&
+        docker run -p 3001:3000 dark-tech-frontend-dev &&
+        docker stop dark-tech-backend-dev-1 || true &&
+        docker rm dark-tech-backend-dev-1 || true &&
+        docker run -d --name dark-tech-backend-dev-1 -p 8001:8000 dark-tech-backend:dev
       '
     - rm id_rsa
   rules:
@@ -65,12 +65,12 @@ deploy_main:
     - cat id_rsa
     - echo $VPS_SSH_KEY
     - ssh -v -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 '
-        docker stop frontend-main || true &&
-        docker rm frontend-main || true &&
-        docker run -d --name frontend-main -p 3000:3000 dark-tech-frontend:main &&
-        docker stop backend-main || true &&
-        docker rm backend-main || true &&
-        docker run -d --name backend-main -p 8000:8000 dark-tech-backend:main
+        docker stop frontend || true &&
+        docker rm frontend || true &&
+        docker run -p 3000:3000 dark-tech-frontend &&
+        docker stop backend || true &&
+        docker rm backend || true &&
+        docker run -p 8000:8000 dark-tech-backend:main
       '
     - rm id_rsa
   rules:
