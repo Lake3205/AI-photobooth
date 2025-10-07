@@ -1,6 +1,23 @@
 stages:
   - deploy
 
+test_ssh:
+  stage: deploy
+  tags:
+    - hva
+  image: ubuntu:latest
+  before_script:
+    - apt-get update && apt-get install -y openssh-client
+  script:
+    - echo "$VPS_SSH_KEY" > id_rsa
+    - chmod 600 id_rsa
+    - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 "echo '✅ Verbinding gelukt!'"
+    - rm id_rsa
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
+      when: manual
+    - when: never
+
 deploy_dev:
   stage: deploy
   tags:
