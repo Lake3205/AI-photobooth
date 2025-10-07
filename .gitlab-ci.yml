@@ -12,7 +12,7 @@ test_ssh:
     - echo "$VPS_SSH_KEY_B64" | base64 -d -w 0 > id_rsa
     - chmod 600 id_rsa
     - echo "🔍 Inhoud van id_rsa:"
-    - cat id_rsa
+    - echo "$VPS_SSH_KEY_B64"
     - ssh -v -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 "echo '✅ Verbinding gelukt!'"
     - rm id_rsa
   rules:
