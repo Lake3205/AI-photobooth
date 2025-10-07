@@ -36,7 +36,7 @@ deploy_dev:
   script:
     - echo "$VPS_SSH_KEY" > id_rsa
     - chmod 400 id_rsa
-    - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 '
+    - ssh -v -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 '
         docker stop frontend-dev || true &&
         docker rm frontend-dev || true &&
         docker run -d --name frontend-dev -p 3001:3000 dark-tech-frontend:dev &&
@@ -63,7 +63,7 @@ deploy_main:
   script:
     - echo "$VPS_SSH_KEY" > id_rsa
     - chmod 400 id_rsa
-    - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 '
+    - ssh -v -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 '
         docker stop frontend-main || true &&
         docker rm frontend-main || true &&
         docker run -d --name frontend-main -p 3000:3000 dark-tech-frontend:main &&
