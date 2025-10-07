@@ -9,10 +9,10 @@ test_ssh:
   before_script:
     - apt-get update && apt-get install -y openssh-client
   script:
-    - echo "$VPS_SSH_KEY_B64" | base64 -d -w 0 > id_rsa
+    - echo "$TEST_VAR" | base64 -d > id_rsa
     - chmod 600 id_rsa
     - echo "🔍 Inhoud van id_rsa:"
-    - echo "$VPS_SSH_KEY_B64"
+    - echo "$TEST_VAR"
     - ssh -v -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 "echo '✅ Verbinding gelukt!'"
     - rm id_rsa
   rules:
