@@ -43,7 +43,7 @@ deploy_dev:
         docker run -p 3001:3000 dark-tech-frontend-dev &&
         docker stop dark-tech-backend-dev-1 || true &&
         docker rm dark-tech-backend-dev-1 || true &&
-        docker run -d --name dark-tech-backend-dev-1 -p 8001:8000 dark-tech-backend:dev
+        docker run -d --name dark-tech-backend-dev-1 -p 8001:8000 dark-tech-backend-dev
       '
     - rm id_rsa
   rules:
@@ -65,15 +65,15 @@ deploy_main:
     - cat id_rsa
     - echo $VPS_SSH_KEY
     - ssh -v -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 '
-        docker stop frontend || true &&
-        docker rm frontend || true &&
+        docker stop frontend-1 || true &&
+        docker rm frontend-1 || true &&
         docker run -p 3000:3000 dark-tech-frontend &&
-        docker stop backend || true &&
-        docker rm backend || true &&
-        docker run -p 8000:8000 dark-tech-backend:main
+        docker stop backend-1 || true &&
+        docker rm backend-1 || true &&
+        docker run -p 8000:8000 dark-tech-backend
       '
     - rm id_rsa
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
-      when: manual
+      when: always
     - when: never
