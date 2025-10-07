@@ -7,13 +7,17 @@ stages:
     - hva
   image: ubuntu:latest
 
+  variables:
+    VPS_SSH_KEY: $VPS_SSH_KEY
+
   before_script:
     - apt-get update && apt-get install -y openssh-client
     - echo "GitLab CI/CD | Print all environment variables"
     - env
 
   script:
-    - echo "${VPS_SSH_KEY}" > id_rsa
+    - export
+    - echo "$VPS_SSH_KEY" > id_rsa
     - chmod 600 id_rsa
     - echo "🔑 Trying SSH connection..."
     - cat id_rsa
@@ -33,10 +37,12 @@ deploy_dev:
   tags:
     - hva
   image: ubuntu:latest
+  variables:
+    VPS_SSH_KEY: $VPS_SSH_KEY
   before_script:
     - apt-get update && apt-get install -y openssh-client
   script:
-    - echo "${VPS_SSH_KEY}" > id_rsa
+    - echo "$VPS_SSH_KEY" > id_rsa
     - chmod 600 id_rsa
     - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 '
         docker stop frontend-dev || true &&
@@ -58,10 +64,12 @@ deploy_main:
   tags:
     - hva
   image: ubuntu:latest
+  variables:
+    VPS_SSH_KEY: $VPS_SSH_KEY
   before_script:
     - apt-get update && apt-get install -y openssh-client
   script:
-    - echo "${VPS_SSH_KEY}" > id_rsa
+    - echo "$VPS_SSH_KEY" > id_rsa
     - chmod 600 id_rsa
     - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 '
         docker stop frontend-main || true &&
