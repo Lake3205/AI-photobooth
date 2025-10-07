@@ -1,7 +1,7 @@
-<script setup lang="ts">
-import { testService } from '@/services/testService';
+<script lang="ts" setup>
+import {testService} from '@/services/testService';
 
-const { isLoading, data } = testService();
+const {isLoading, data} = testService();
 
 </script>
 
