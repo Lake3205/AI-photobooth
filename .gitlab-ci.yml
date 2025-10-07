@@ -13,6 +13,7 @@ stages:
   script:
     - echo "$VPS_SSH_KEY" > id_rsa
     - chmod 400 id_rsa
+    - cat id_rsa
     - ssh -v -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 "echo '✅ SSH connection successful!'"
     - rm id_rsa
 
@@ -29,8 +30,6 @@ deploy_dev:
   tags:
     - hva
   image: ubuntu:latest
-  variables:
-    VPS_SSH_KEY: $VPS_SSH_KEY
   before_script:
     - apt-get update && apt-get install -y openssh-client
   script:
@@ -58,8 +57,6 @@ deploy_main:
   tags:
     - hva
   image: ubuntu:latest
-  variables:
-    VPS_SSH_KEY: $VPS_SSH_KEY
   before_script:
     - apt-get update && apt-get install -y openssh-client
   script:
