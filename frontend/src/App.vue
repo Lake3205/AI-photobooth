@@ -1,29 +1,29 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 </script>
 
 <template>
-  <div class="flex">
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="min-h-svh overflow-hidden min-w-svw bg-black text-white">
+    <RouterView v-slot="{ Component }">
+      <Transition appear mode="out-in" name="view">
+        <component :is="Component"/>
+      </Transition>
+    </RouterView>
   </div>
-  <router-view />
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.view-enter-active,
+.view-leave-active {
+  transition: opacity 300ms ease, transform 400ms cubic-bezier(.2, .65, .2, 1);
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+.view-enter-from {
+  opacity: 0;
+  transform: translateY(12px) scale(0.995);
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+.view-leave-to {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.995);
 }
 </style>
