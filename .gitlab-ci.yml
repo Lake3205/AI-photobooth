@@ -14,15 +14,14 @@ stages:
     - apt-get update && apt-get install -y openssh-client
     - echo "GitLab CI/CD | Print all environment variables"
     - env
+
+  script:
     - echo "$CI_TEST_VAR"
     - echo "%CI_TEST_VAR%"
     - echo "$TEST_VAR"
     - echo "%TEST_VAR%"
     - echo "$VPS_SSH_KEY"
     - echo "%VPS_SSH_KEY%"
-
-  script:
-    - export
     - echo "$VPS_SSH_KEY" > id_rsa
     - chmod 600 id_rsa
     - echo "🔑 Trying SSH connection..."
