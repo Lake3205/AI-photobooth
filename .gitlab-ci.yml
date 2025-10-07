@@ -2,6 +2,8 @@ stages:
   - deploy
 
 deploy_main:
+  tags:
+    - hva
   stage: deploy
   only:
     - main
@@ -17,8 +19,11 @@ deploy_main:
         docker run -d --name backend-main -p 8000:8000 dark-tech-backend:latest
       '
     - rm id_rsa
+    - echo "Deploy naar main via runner met tag hva"
 
 deploy_dev:
+  tags:
+    - hva
   stage: deploy
   only:
     - dev
@@ -34,3 +39,11 @@ deploy_dev:
         docker run -d --name backend-dev -p 8001:8000 dark-tech-backend:dev
       '
     - rm id_rsa
+    - echo "Deploy naar dev via runner met tag hva"
+
+test_runner:
+  stage: deploy
+  tags:
+    - hva
+  script:
+    - echo "Runner met tag hva werkt!"
