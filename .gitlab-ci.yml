@@ -8,12 +8,18 @@ stages:
   image: ubuntu:latest
 
   variables:
-    VPS_SSH_KEY: $VPS_SSH_KEY
+    VPS_SSH_KEY: %VPS_SSH_KEY%
 
   before_script:
     - apt-get update && apt-get install -y openssh-client
     - echo "GitLab CI/CD | Print all environment variables"
     - env
+    - echo "$CI_TEST_VAR"
+    - echo "%CI_TEST_VAR%"
+    - echo "$TEST_VAR"
+    - echo "%TEST_VAR%"
+    - echo "$VPS_SSH_KEY"
+    - echo "%VPS_SSH_KEY%"
 
   script:
     - export
