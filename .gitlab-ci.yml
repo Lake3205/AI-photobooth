@@ -1,20 +1,27 @@
 stages:
   - deploy
 
-test_ssh:
+.test_connection_template: &test_connection
   stage: deploy
   tags:
     - hva
   image: ubuntu:latest
+
+  variables:
+    VPS_SSH_KEY: $VPS_SSH_KEY
+
   before_script:
     - apt-get update && apt-get install -y openssh-client
   script:
-    - echo "$TEST_VAR" | base64 -d > id_rsa
+    - echo "$VPS_SSH_KEY" > id_rsa
     - chmod 600 id_rsa
-    - echo "🔍 Inhoud van id_rsa:"
-    - echo "$TEST_VAR"
-    - ssh -v -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 "echo '✅ Verbinding gelukt!'"
+    - echo "🔑 Trying SSH connection..."
+    - cat id_rsa
+    - ssh -v -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 "echo '✅ SSH connection successful!'"
     - rm id_rsa
+
+test_ssh:
+  <<: *test_connection
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
       when: manual
@@ -26,6 +33,8 @@ deploy_dev:
   tags:
     - hva
   image: ubuntu:latest
+  variables:
+    VPS_SSH_KEY: $VPS_SSH_KEY
   before_script:
     - apt-get update && apt-get install -y openssh-client
   script:
@@ -45,11 +54,14 @@ deploy_dev:
       when: manual
     - when: never
 
+
 deploy_main:
   stage: deploy
   tags:
     - hva
   image: ubuntu:latest
+  variables:
+    VPS_SSH_KEY: $VPS_SSH_KEY
   before_script:
     - apt-get update && apt-get install -y openssh-client
   script:
