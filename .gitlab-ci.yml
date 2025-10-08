@@ -10,51 +10,47 @@ build_dev:
   rules:
     - if: '$CI_COMMIT_BRANCH == "dev"'
   script:
-    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-    - docker build -t $DOCKER_USERNAME/dark-tech-frontend-dev ./frontend
-    - docker build -t $DOCKER_USERNAME/dark-tech-backend-dev ./backend
-    - docker push $DOCKER_USERNAME/dark-tech-frontend-dev
-    - docker push $DOCKER_USERNAME/dark-tech-backend-dev
+    - docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
+    - docker build -t ${DOCKER_USERNAME}/dark-tech-frontend-dev ./frontend
+    - docker build -t ${DOCKER_USERNAME}/dark-tech-backend-dev ./backend
+    - docker push ${DOCKER_USERNAME}/dark-tech-frontend-dev
+    - docker push ${DOCKER_USERNAME}/dark-tech-backend-dev
 
 deploy_dev:
   stage: deploy
   tags:
     - hva
   image: ubuntu:latest
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "dev"'
   before_script:
     - apt-get update && apt-get install -y openssh-client
   script:
     - echo "$VPS_SSH_KEY" | tr -d '\r' > id_rsa
     - chmod 400 id_rsa
-    - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 '
-        docker pull $DOCKER_USERNAME/dark-tech-frontend-dev &&
-        docker pull $DOCKER_USERNAME/dark-tech-backend-dev &&
-        docker stop dark-tech-frontend-dev-1 || true &&
-        docker rm dark-tech-frontend-dev-1 || true &&
-        docker run -d --name dark-tech-frontend-dev-1 -p 3001:3000 $DOCKER_USERNAME/dark-tech-frontend-dev &&
-        docker stop dark-tech-backend-dev-1 || true &&
-        docker rm dark-tech-backend-dev-1 || true &&
-        docker run -d --name dark-tech-backend-dev-1 -p 8001:8000 $DOCKER_USERNAME/dark-tech-backend-dev
-      '
+    - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 "
+        docker pull ${DOCKER_USERNAME}/dark-tech-frontend-dev &&
+        docker pull ${DOCKER_USERNAME}/dark-tech-backend-dev &&
+        cd /home/dark-tech &&
+        docker-compose -f docker-compose.dev.yml up -d --remove-orphans
+      "
     - rm id_rsa
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
+      when: always
+    - when: never
 
 build_main:
   stage: build
   image: docker:latest
   services:
     - docker:dind
-  script:
-    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-    - docker build -t $DOCKER_USERNAME/dark-tech-frontend ./frontend
-    - docker build -t $DOCKER_USERNAME/dark-tech-backend ./backend
-    - docker push $DOCKER_USERNAME/dark-tech-frontend
-    - docker push $DOCKER_USERNAME/dark-tech-backend
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
-      when: always
-    - when: never
+  script:
+    - docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
+    - docker build -t ${DOCKER_USERNAME}/dark-tech-frontend ./frontend
+    - docker build -t ${DOCKER_USERNAME}/dark-tech-backend ./backend
+    - docker push ${DOCKER_USERNAME}/dark-tech-frontend
+    - docker push ${DOCKER_USERNAME}/dark-tech-backend
 
 deploy_main:
   stage: deploy
@@ -66,16 +62,12 @@ deploy_main:
   script:
     - echo "$VPS_SSH_KEY" | tr -d '\r' > id_rsa
     - chmod 400 id_rsa
-    - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 '
-        docker pull $DOCKER_USERNAME/dark-tech-frontend &&
-        docker pull $DOCKER_USERNAME/dark-tech-backend &&
-        docker stop dark-tech-frontend-main-1 || true &&
-        docker rm dark-tech-frontend-main-1 || true &&
-        docker run -d --name dark-tech-frontend-main-1 -p 3000:3000 $DOCKER_USERNAME/dark-tech-frontend &&
-        docker stop dark-tech-backend-main-1 || true &&
-        docker rm dark-tech-backend-main-1 || true &&
-        docker run -d --name dark-tech-backend-main-1 -p 8000:8000 $DOCKER_USERNAME/dark-tech-backend
-      '
+    - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 "
+        docker pull ${DOCKER_USERNAME}/dark-tech-frontend &&
+        docker pull ${DOCKER_USERNAME}/dark-tech-backend &&
+        cd /home/dark-tech &&
+        docker-compose -f docker-compose.prod.yml up -d --remove-orphans
+      "
     - rm id_rsa
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
