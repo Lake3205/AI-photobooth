@@ -6,23 +6,24 @@ build_dev:
   stage: build
   tags:
     - hva
-  image: docker:latest
-  services:
-    - name: docker:dind
-      alias: docker
-  variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_TLS_CERTDIR: ""
+  image: gcr.io/kaniko-project/executor:latest
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
-      when: always
-    - when: never
+  variables:
+    DOCKER_CONFIG: /kaniko/.docker/
   script:
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-    - docker build -t ${DOCKER_USERNAME}/dark-tech-frontend-dev:dev ./frontend
-    - docker build -t ${DOCKER_USERNAME}/dark-tech-backend-dev:dev ./backend
-    - docker push ${DOCKER_USERNAME}/dark-tech-frontend-dev:dev
-    - docker push ${DOCKER_USERNAME}/dark-tech-backend-dev:dev
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"username\":\"$DOCKER_USERNAME\",\"password\":\"$DOCKER_PASSWORD\"}}}" > /kaniko/.docker/config.json
+
+    - /kaniko/executor
+        --context ./frontend
+        --dockerfile ./frontend/Dockerfile
+        --destination ${DOCKER_USERNAME}/dark-tech-frontend-dev:dev
+
+    - /kaniko/executor
+        --context ./backend
+        --dockerfile ./backend/Dockerfile
+        --destination ${DOCKER_USERNAME}/dark-tech-backend-dev:dev
 
 
 deploy_dev:
@@ -53,23 +54,25 @@ build_main:
   stage: build
   tags:
     - hva
-  image: docker:latest
-  services:
-    - name: docker:dind
-      alias: docker
-  variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_TLS_CERTDIR: ""
+  image: gcr.io/kaniko-project/executor:latest
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
-      when: always
-    - when: never
+  variables:
+    DOCKER_CONFIG: /kaniko/.docker/
   script:
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-    - docker build -t ${DOCKER_USERNAME}/dark-tech-frontend:latest ./frontend
-    - docker build -t ${DOCKER_USERNAME}/dark-tech-backend:latest ./backend
-    - docker push ${DOCKER_USERNAME}/dark-tech-frontend:latest
-    - docker push ${DOCKER_USERNAME}/dark-tech-backend:latest
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"username\":\"$DOCKER_USERNAME\",\"password\":\"$DOCKER_PASSWORD\"}}}" > /kaniko/.docker/config.json
+
+    - /kaniko/executor
+        --context ./frontend
+        --dockerfile ./frontend/Dockerfile
+        --destination ${DOCKER_USERNAME}/dark-tech-frontend:main
+
+    - /kaniko/executor
+        --context ./backend
+        --dockerfile ./backend/Dockerfile
+        --destination ${DOCKER_USERNAME}/dark-tech-backend:main
+
 
 deploy_main:
   stage: deploy
