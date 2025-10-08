@@ -22,7 +22,7 @@ build_dev:
 deploy_dev:
   stage: deploy
   needs:
-    - job: build-dev
+    - job: build_dev
   tags:
     - hva
   image: ubuntu:latest
@@ -62,7 +62,7 @@ build_main:
 deploy_main:
   stage: deploy
   needs:
-    - job: build-main
+    - job: build_main
   image: ubuntu:latest
   tags:
     - hva
