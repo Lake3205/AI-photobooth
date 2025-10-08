@@ -45,22 +45,22 @@ build_main:
   image: docker:latest
   services:
     - docker:dind
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
   script:
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
     - docker build -t $DOCKER_USERNAME/dark-tech-frontend ./frontend
     - docker build -t $DOCKER_USERNAME/dark-tech-backend ./backend
     - docker push $DOCKER_USERNAME/dark-tech-frontend
     - docker push $DOCKER_USERNAME/dark-tech-backend
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - when: never
 
 deploy_main:
   stage: deploy
   image: ubuntu:latest
   tags:
     - hva
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
   before_script:
     - apt-get update && apt-get install -y openssh-client
   script:
@@ -77,6 +77,10 @@ deploy_main:
         docker run -d --name dark-tech-backend-main-1 -p 8000:8000 $DOCKER_USERNAME/dark-tech-backend
       '
     - rm id_rsa
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
+      when: always
+    - when: never
 
 .test_connection_template: &test_connection
   stage: deploy
