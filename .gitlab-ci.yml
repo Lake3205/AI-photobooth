@@ -14,17 +14,20 @@ build_dev:
   variables:
     DOCKER_CONFIG: /kaniko/.docker/
   script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"username\":\"$DOCKER_USERNAME\",\"password\":\"$DOCKER_PASSWORD\"}}}" > /kaniko/.docker/config.json
+
     - >
       /kaniko/executor
       --context ./frontend
       --dockerfile ./frontend/Dockerfile
-      --destination ${DOCKER_USERNAME}/dark-tech-frontend-dev:dev
+      --destination emetain/dark-tech-frontend-dev:dev
+
     - >
       /kaniko/executor
       --context ./backend
       --dockerfile ./backend/Dockerfile
-      --destination ${DOCKER_USERNAME}/dark-tech-backend-dev:dev
-
+      --destination emetain/dark-tech-backend-dev:dev
 
 deploy_dev:
   stage: deploy
@@ -60,16 +63,20 @@ build_main:
   variables:
     DOCKER_CONFIG: /kaniko/.docker/
   script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"username\":\"$DOCKER_USERNAME\",\"password\":\"$DOCKER_PASSWORD\"}}}" > /kaniko/.docker/config.json
+
     - >
       /kaniko/executor
       --context ./frontend
       --dockerfile ./frontend/Dockerfile
-      --destination ${DOCKER_USERNAME}/dark-tech-frontend:main
+      --destination emetain/dark-tech-frontend-dev:dev
+
     - >
       /kaniko/executor
       --context ./backend
       --dockerfile ./backend/Dockerfile
-      --destination ${DOCKER_USERNAME}/dark-tech-backend:main
+      --destination emetain/dark-tech-backend-dev:dev
 
 deploy_main:
   stage: deploy
