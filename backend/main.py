@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.controllers.assumptions_controller import router as assumptions_controller
+from controllers.assumptions_controller import router as assumptions_controller
 
 app = FastAPI()
 

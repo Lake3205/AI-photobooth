@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from backend.services.assumptions_sevice import AssumptionsService
+from services.assumptions_service import AssumptionsService
 
 router = APIRouter(prefix="/assumptions")
 assumptions_service = AssumptionsService()

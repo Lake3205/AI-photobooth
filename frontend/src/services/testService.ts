@@ -1,4 +1,4 @@
-import { onMounted, ref } from "vue";
+import {onMounted, ref} from "vue";
 
 export function testService() {
     const isLoading = ref(false);
@@ -11,7 +11,7 @@ export function testService() {
         error.value = null;
 
         const res = await fetch(import.meta.env.VITE_API_URL + '/test');
-        
+
         isLoading.value = false;
         if (res.ok) {
             data.value = await res.json();
@@ -24,5 +24,5 @@ export function testService() {
         fetchData();
     });
 
-    return { isLoading, data, error };
+    return {isLoading, data, error};
 }

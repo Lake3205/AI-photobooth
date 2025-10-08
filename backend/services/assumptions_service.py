@@ -1,6 +1,6 @@
 import random
 
-from backend.constants.assumptions_constants import (
+from constants.assumptions_constants import (
     EDUCATION_LEVELS, GENERATIONS, MARITAL_STATUSES
 )
 
