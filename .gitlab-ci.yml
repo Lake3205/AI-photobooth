@@ -4,6 +4,8 @@ stages:
 
 build_dev:
   stage: build
+  tags:
+    - hva
   image: docker:latest
   services:
     - docker:dind
@@ -45,6 +47,8 @@ deploy_dev:
 
 build_main:
   stage: build
+  tags:
+    - hva
   image: docker:latest
   services:
     - docker:dind
