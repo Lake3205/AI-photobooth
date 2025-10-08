@@ -1,5 +1,82 @@
 stages:
+  - build
   - deploy
+
+build_dev:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+  script:
+    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+    - docker build -t $DOCKER_USERNAME/dark-tech-frontend-dev ./frontend
+    - docker build -t $DOCKER_USERNAME/dark-tech-backend-dev ./backend
+    - docker push $DOCKER_USERNAME/dark-tech-frontend-dev
+    - docker push $DOCKER_USERNAME/dark-tech-backend-dev
+
+deploy_dev:
+  stage: deploy
+  tags:
+    - hva
+  image: ubuntu:latest
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+  before_script:
+    - apt-get update && apt-get install -y openssh-client
+  script:
+    - echo "$VPS_SSH_KEY" | tr -d '\r' > id_rsa
+    - chmod 400 id_rsa
+    - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 '
+        docker pull $DOCKER_USERNAME/dark-tech-frontend-dev &&
+        docker pull $DOCKER_USERNAME/dark-tech-backend-dev &&
+        docker stop dark-tech-frontend-dev-1 || true &&
+        docker rm dark-tech-frontend-dev-1 || true &&
+        docker run -d --name dark-tech-frontend-dev-1 -p 3001:3000 $DOCKER_USERNAME/dark-tech-frontend-dev &&
+        docker stop dark-tech-backend-dev-1 || true &&
+        docker rm dark-tech-backend-dev-1 || true &&
+        docker run -d --name dark-tech-backend-dev-1 -p 8001:8000 $DOCKER_USERNAME/dark-tech-backend-dev
+      '
+    - rm id_rsa
+
+build_main:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  script:
+    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+    - docker build -t $DOCKER_USERNAME/dark-tech-frontend ./frontend
+    - docker build -t $DOCKER_USERNAME/dark-tech-backend ./backend
+    - docker push $DOCKER_USERNAME/dark-tech-frontend
+    - docker push $DOCKER_USERNAME/dark-tech-backend
+
+deploy_main:
+  stage: deploy
+  image: ubuntu:latest
+  tags:
+    - hva
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  before_script:
+    - apt-get update && apt-get install -y openssh-client
+  script:
+    - echo "$VPS_SSH_KEY" | tr -d '\r' > id_rsa
+    - chmod 400 id_rsa
+    - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 '
+        docker pull $DOCKER_USERNAME/dark-tech-frontend &&
+        docker pull $DOCKER_USERNAME/dark-tech-backend &&
+        docker stop dark-tech-frontend-main-1 || true &&
+        docker rm dark-tech-frontend-main-1 || true &&
+        docker run -d --name dark-tech-frontend-main-1 -p 3000:3000 $DOCKER_USERNAME/dark-tech-frontend &&
+        docker stop dark-tech-backend-main-1 || true &&
+        docker rm dark-tech-backend-main-1 || true &&
+        docker run -d --name dark-tech-backend-main-1 -p 8000:8000 $DOCKER_USERNAME/dark-tech-backend
+      '
+    - rm id_rsa
 
 .test_connection_template: &test_connection
   stage: deploy
@@ -21,54 +98,4 @@ test_ssh:
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
       when: manual
-    - when: never
-
-
-deploy_dev:
-  stage: deploy
-  tags:
-    - hva
-  image: ubuntu:latest
-  before_script:
-    - apt-get update && apt-get install -y openssh-client
-  script:
-    - echo "$VPS_SSH_KEY" > id_rsa
-    - chmod 400 id_rsa
-    - ssh -v -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 '
-        docker stop dark-tech-frontend-dev-1 || true &&
-        docker rm dark-tech-frontend-dev-1 || true &&
-        docker run -p 3001:3000 dark-tech-frontend-dev &&
-        docker stop dark-tech-backend-dev-1 || true &&
-        docker rm dark-tech-backend-dev-1 || true &&
-        docker run -d --name dark-tech-backend-dev-1 -p 8001:8000 dark-tech-backend-dev
-      '
-    - rm id_rsa
-  rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
-      when: always
-    - when: never
-
-
-deploy_main:
-  stage: deploy
-  tags:
-    - hva
-  image: ubuntu:latest
-  before_script:
-    - apt-get update && apt-get install -y openssh-client
-  script:
-    - echo "$VPS_SSH_KEY" > id_rsa
-    - chmod 400 id_rsa
-    - ssh -v -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 '
-        docker stop frontend-1 || true &&
-        docker rm frontend-1 || true &&
-        docker run -p 3000:3000 dark-tech-frontend &&
-        docker stop backend-1 || true &&
-        docker rm backend-1 || true &&
-        docker run -p 8000:8000 dark-tech-backend
-      '
-    - rm id_rsa
-  rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
-      when: always
     - when: never
