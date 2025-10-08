@@ -6,7 +6,9 @@ build_dev:
   stage: build
   tags:
     - hva
-  image: gcr.io/kaniko-project/executor:latest
+  image:
+    name: gcr.io/kaniko-project/executor:latest
+    entrypoint: [""]
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
   variables:
@@ -17,12 +19,12 @@ build_dev:
       --context ./frontend
       --dockerfile ./frontend/Dockerfile
       --destination ${DOCKER_USERNAME}/dark-tech-frontend-dev:dev
-
     - >
       /kaniko/executor
       --context ./backend
       --dockerfile ./backend/Dockerfile
       --destination ${DOCKER_USERNAME}/dark-tech-backend-dev:dev
+
 
 deploy_dev:
   stage: deploy
@@ -52,7 +54,9 @@ build_main:
   stage: build
   tags:
     - hva
-  image: gcr.io/kaniko-project/executor:latest
+  image:
+    name: gcr.io/kaniko-project/executor:latest
+    entrypoint: [""]
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
   variables:
@@ -60,55 +64,15 @@ build_main:
   script:
     - >
       /kaniko/executor
-      --dockerfile=./frontend/Dockerfile
-      --context=./frontend
-      --destination=${DOCKER_USERNAME}/dark-tech-frontend:main
-      --verbosity=info
-      --skip-unused-stages
-      --single-snapshot
-      --insecure
-      --insecure-pull
-      --insecure-registry
-      --cache=true
-      --cache-repo=${DOCKER_USERNAME}/dark-tech-frontend-cache
-      --build-arg=DOCKER_USERNAME=${DOCKER_USERNAME}
-      --build-arg=DOCKER_PASSWORD=${DOCKER_PASSWORD}
-      --custom-platform=linux/amd64
-      --log-format=text
-      --snapshotMode=redo
-      --use-new-run
-      --context-sub-path=frontend
-      --destination=${DOCKER_USERNAME}/dark-tech-frontend:main
-      --oci-layout-path=/kaniko/oci-layout
-      --tar-path=/kaniko/image.tar
-      --push-image=true
-      --cleanup
+      --context ./frontend
+      --dockerfile ./frontend/Dockerfile
+      --destination ${DOCKER_USERNAME}/dark-tech-frontend:main
 
     - >
       /kaniko/executor
-      --dockerfile=./backend/Dockerfile
-      --context=./backend
-      --destination=${DOCKER_USERNAME}/dark-tech-backend:main
-      --verbosity=info
-      --skip-unused-stages
-      --single-snapshot
-      --insecure
-      --insecure-pull
-      --insecure-registry
-      --cache=true
-      --cache-repo=${DOCKER_USERNAME}/dark-tech-backend-cache
-      --build-arg=DOCKER_USERNAME=${DOCKER_USERNAME}
-      --build-arg=DOCKER_PASSWORD=${DOCKER_PASSWORD}
-      --custom-platform=linux/amd64
-      --log-format=text
-      --snapshotMode=redo
-      --use-new-run
-      --context-sub-path=backend
-      --destination=${DOCKER_USERNAME}/dark-tech-backend:main
-      --oci-layout-path=/kaniko/oci-layout
-      --tar-path=/kaniko/image.tar
-      --push-image=true
-      --cleanup
+      --context ./backend
+      --dockerfile ./backend/Dockerfile
+      --destination ${DOCKER_USERNAME}/dark-tech-backend:main
 
 deploy_main:
   stage: deploy
