@@ -12,19 +12,17 @@ build_dev:
   variables:
     DOCKER_CONFIG: /kaniko/.docker/
   script:
-    - mkdir -p /kaniko/.docker
-    - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"username\":\"$DOCKER_USERNAME\",\"password\":\"$DOCKER_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - >
+      /kaniko/executor
+      --context ./frontend
+      --dockerfile ./frontend/Dockerfile
+      --destination ${DOCKER_USERNAME}/dark-tech-frontend-dev:dev
 
-    - /kaniko/executor
-        --context ./frontend
-        --dockerfile ./frontend/Dockerfile
-        --destination ${DOCKER_USERNAME}/dark-tech-frontend-dev:dev
-
-    - /kaniko/executor
-        --context ./backend
-        --dockerfile ./backend/Dockerfile
-        --destination ${DOCKER_USERNAME}/dark-tech-backend-dev:dev
-
+    - >
+      /kaniko/executor
+      --context ./backend
+      --dockerfile ./backend/Dockerfile
+      --destination ${DOCKER_USERNAME}/dark-tech-backend-dev:dev
 
 deploy_dev:
   stage: deploy
@@ -60,19 +58,57 @@ build_main:
   variables:
     DOCKER_CONFIG: /kaniko/.docker/
   script:
-    - mkdir -p /kaniko/.docker
-    - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"username\":\"$DOCKER_USERNAME\",\"password\":\"$DOCKER_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - >
+      /kaniko/executor
+      --dockerfile=./frontend/Dockerfile
+      --context=./frontend
+      --destination=${DOCKER_USERNAME}/dark-tech-frontend:main
+      --verbosity=info
+      --skip-unused-stages
+      --single-snapshot
+      --insecure
+      --insecure-pull
+      --insecure-registry
+      --cache=true
+      --cache-repo=${DOCKER_USERNAME}/dark-tech-frontend-cache
+      --build-arg=DOCKER_USERNAME=${DOCKER_USERNAME}
+      --build-arg=DOCKER_PASSWORD=${DOCKER_PASSWORD}
+      --custom-platform=linux/amd64
+      --log-format=text
+      --snapshotMode=redo
+      --use-new-run
+      --context-sub-path=frontend
+      --destination=${DOCKER_USERNAME}/dark-tech-frontend:main
+      --oci-layout-path=/kaniko/oci-layout
+      --tar-path=/kaniko/image.tar
+      --push-image=true
+      --cleanup
 
-    - /kaniko/executor
-        --context ./frontend
-        --dockerfile ./frontend/Dockerfile
-        --destination ${DOCKER_USERNAME}/dark-tech-frontend:main
-
-    - /kaniko/executor
-        --context ./backend
-        --dockerfile ./backend/Dockerfile
-        --destination ${DOCKER_USERNAME}/dark-tech-backend:main
-
+    - >
+      /kaniko/executor
+      --dockerfile=./backend/Dockerfile
+      --context=./backend
+      --destination=${DOCKER_USERNAME}/dark-tech-backend:main
+      --verbosity=info
+      --skip-unused-stages
+      --single-snapshot
+      --insecure
+      --insecure-pull
+      --insecure-registry
+      --cache=true
+      --cache-repo=${DOCKER_USERNAME}/dark-tech-backend-cache
+      --build-arg=DOCKER_USERNAME=${DOCKER_USERNAME}
+      --build-arg=DOCKER_PASSWORD=${DOCKER_PASSWORD}
+      --custom-platform=linux/amd64
+      --log-format=text
+      --snapshotMode=redo
+      --use-new-run
+      --context-sub-path=backend
+      --destination=${DOCKER_USERNAME}/dark-tech-backend:main
+      --oci-layout-path=/kaniko/oci-layout
+      --tar-path=/kaniko/image.tar
+      --push-image=true
+      --cleanup
 
 deploy_main:
   stage: deploy
