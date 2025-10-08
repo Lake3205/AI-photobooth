@@ -8,7 +8,7 @@ build_dev:
   services:
     - docker:dind
   rules:
-    - if: '$CI_COMMIT_BRANCH == "dev"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
       when: always
     - when: never
   script:
@@ -39,7 +39,7 @@ deploy_dev:
       "
     - rm id_rsa
   rules:
-    - if: '$CI_COMMIT_BRANCH == "dev"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
       when: always
     - when: never
 
@@ -49,7 +49,7 @@ build_main:
   services:
     - docker:dind
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
       when: always
     - when: never
   script:
@@ -79,7 +79,7 @@ deploy_main:
       "
     - rm id_rsa
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
       when: always
     - when: never
 
@@ -101,6 +101,6 @@ deploy_main:
 test_ssh:
   <<: *test_connection
   rules:
-    - if: '$CI_COMMIT_BRANCH == "dev"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
       when: manual
     - when: never
