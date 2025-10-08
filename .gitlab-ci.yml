@@ -9,6 +9,8 @@ build_dev:
     - docker:dind
   rules:
     - if: '$CI_COMMIT_BRANCH == "dev"'
+      when: always
+    - when: never
   script:
     - docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
     - docker build -t ${DOCKER_USERNAME}/dark-tech-frontend-dev:dev ./frontend
@@ -19,6 +21,8 @@ build_dev:
 
 deploy_dev:
   stage: deploy
+  needs:
+    - job: build-dev
   tags:
     - hva
   image: ubuntu:latest
@@ -46,15 +50,19 @@ build_main:
     - docker:dind
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - when: never
   script:
     - docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
-    - docker build -t ${DOCKER_USERNAME}/dark-tech-frontend:main ./frontend
-    - docker build -t ${DOCKER_USERNAME}/dark-tech-backend:main ./backend
-    - docker push ${DOCKER_USERNAME}/dark-tech-frontend:main
-    - docker push ${DOCKER_USERNAME}/dark-tech-backend:main
+    - docker build -t ${DOCKER_USERNAME}/dark-tech-frontend:latest ./frontend
+    - docker build -t ${DOCKER_USERNAME}/dark-tech-backend:latest ./backend
+    - docker push ${DOCKER_USERNAME}/dark-tech-frontend:latest
+    - docker push ${DOCKER_USERNAME}/dark-tech-backend:latest
 
 deploy_main:
   stage: deploy
+  needs:
+    - job: build-main
   image: ubuntu:latest
   tags:
     - hva
@@ -64,8 +72,8 @@ deploy_main:
     - echo "$VPS_SSH_KEY" | tr -d '\r' > id_rsa
     - chmod 400 id_rsa
     - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 "
-        docker pull ${DOCKER_USERNAME}/dark-tech-frontend:main &&
-        docker pull ${DOCKER_USERNAME}/dark-tech-backend:main &&
+        docker pull ${DOCKER_USERNAME}/dark-tech-frontend:latest &&
+        docker pull ${DOCKER_USERNAME}/dark-tech-backend:latest &&
         cd /home/dark-tech &&
         docker-compose -f docker-compose.prod.yml up -d --remove-orphans
       "
