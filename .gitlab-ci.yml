@@ -8,13 +8,17 @@ build_dev:
     - hva
   image: docker:latest
   services:
-    - docker:dind
+    - name: docker:dind
+      alias: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_TLS_CERTDIR: ""
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
       when: always
     - when: never
   script:
-    - docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
     - docker build -t ${DOCKER_USERNAME}/dark-tech-frontend-dev:dev ./frontend
     - docker build -t ${DOCKER_USERNAME}/dark-tech-backend-dev:dev ./backend
     - docker push ${DOCKER_USERNAME}/dark-tech-frontend-dev:dev
@@ -51,13 +55,17 @@ build_main:
     - hva
   image: docker:latest
   services:
-    - docker:dind
+    - name: docker:dind
+      alias: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_TLS_CERTDIR: ""
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
       when: always
     - when: never
   script:
-    - docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
     - docker build -t ${DOCKER_USERNAME}/dark-tech-frontend:latest ./frontend
     - docker build -t ${DOCKER_USERNAME}/dark-tech-backend:latest ./backend
     - docker push ${DOCKER_USERNAME}/dark-tech-frontend:latest
