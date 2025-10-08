@@ -11,10 +11,11 @@ build_dev:
     - if: '$CI_COMMIT_BRANCH == "dev"'
   script:
     - docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
-    - docker build -t ${DOCKER_USERNAME}/dark-tech-frontend-dev ./frontend
-    - docker build -t ${DOCKER_USERNAME}/dark-tech-backend-dev ./backend
-    - docker push ${DOCKER_USERNAME}/dark-tech-frontend-dev
-    - docker push ${DOCKER_USERNAME}/dark-tech-backend-dev
+    - docker build -t ${DOCKER_USERNAME}/dark-tech-frontend-dev:dev ./frontend
+    - docker build -t ${DOCKER_USERNAME}/dark-tech-backend-dev:dev ./backend
+    - docker push ${DOCKER_USERNAME}/dark-tech-frontend-dev:dev
+    - docker push ${DOCKER_USERNAME}/dark-tech-backend-dev:dev
+
 
 deploy_dev:
   stage: deploy
@@ -27,8 +28,8 @@ deploy_dev:
     - echo "$VPS_SSH_KEY" | tr -d '\r' > id_rsa
     - chmod 400 id_rsa
     - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 "
-        docker pull ${DOCKER_USERNAME}/dark-tech-frontend-dev &&
-        docker pull ${DOCKER_USERNAME}/dark-tech-backend-dev &&
+        docker pull ${DOCKER_USERNAME}/dark-tech-frontend-dev:dev &&
+        docker pull ${DOCKER_USERNAME}/dark-tech-backend-dev:dev &&
         cd /home/dark-tech &&
         docker-compose -f docker-compose.dev.yml up -d --remove-orphans
       "
@@ -47,10 +48,10 @@ build_main:
     - if: '$CI_COMMIT_BRANCH == "main"'
   script:
     - docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
-    - docker build -t ${DOCKER_USERNAME}/dark-tech-frontend ./frontend
-    - docker build -t ${DOCKER_USERNAME}/dark-tech-backend ./backend
-    - docker push ${DOCKER_USERNAME}/dark-tech-frontend
-    - docker push ${DOCKER_USERNAME}/dark-tech-backend
+    - docker build -t ${DOCKER_USERNAME}/dark-tech-frontend:main ./frontend
+    - docker build -t ${DOCKER_USERNAME}/dark-tech-backend:main ./backend
+    - docker push ${DOCKER_USERNAME}/dark-tech-frontend:main
+    - docker push ${DOCKER_USERNAME}/dark-tech-backend:main
 
 deploy_main:
   stage: deploy
@@ -63,8 +64,8 @@ deploy_main:
     - echo "$VPS_SSH_KEY" | tr -d '\r' > id_rsa
     - chmod 400 id_rsa
     - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 "
-        docker pull ${DOCKER_USERNAME}/dark-tech-frontend &&
-        docker pull ${DOCKER_USERNAME}/dark-tech-backend &&
+        docker pull ${DOCKER_USERNAME}/dark-tech-frontend:main &&
+        docker pull ${DOCKER_USERNAME}/dark-tech-backend:main &&
         cd /home/dark-tech &&
         docker-compose -f docker-compose.prod.yml up -d --remove-orphans
       "
