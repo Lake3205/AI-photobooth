@@ -10,7 +10,9 @@ build_dev:
     name: emetain/kaniko-wrapper:latest
     entrypoint: [""]
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+      when: always
+    - when: never
   variables:
     DOCKER_CONFIG: /kaniko/.docker/
   script:
@@ -49,7 +51,7 @@ deploy_dev:
       "
     - rm id_rsa
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
+    - if: '$CI_COMMIT_BRANCH == "dev"'
       when: always
     - when: never
 
@@ -59,7 +61,9 @@ build_main:
     - hva
   image: emetain/kaniko-wrapper:latest
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - when: never
   variables:
     DOCKER_CONFIG: /kaniko/.docker/
   script:
@@ -98,28 +102,6 @@ deploy_main:
       "
     - rm id_rsa
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
       when: always
-    - when: never
-
-.test_connection_template: &test_connection
-  stage: deploy
-  tags:
-    - hva
-  image: ubuntu:latest
-
-  before_script:
-    - apt-get update && apt-get install -y openssh-client
-
-  script:
-    - echo "$VPS_SSH_KEY" > id_rsa
-    - chmod 400 id_rsa
-    - ssh -v -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 "echo '✅ SSH connection successful!'"
-    - rm id_rsa
-
-test_ssh:
-  <<: *test_connection
-  rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
-      when: manual
     - when: never
