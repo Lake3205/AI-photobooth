@@ -1,20 +1,19 @@
 FROM node:alpine
 
-WORKDIR /opt/app
-
-# Copy dependency files first
-COPY package.json package-lock.json ./
-
-# Install dependencies
-RUN npm install
-
-# Copy all source files
-COPY . .
-
-# Build the application
-RUN npm run build
+RUN mkdir -p /opt/app/dist
 
 EXPOSE 3000
 
-# Run the server
+WORKDIR /opt/app
+
+COPY ./package.json ./package.json
+
+COPY ./package-lock.json .
+
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
 ENTRYPOINT ["npx", "http-server", "-p", "3000", "./dist"]
