@@ -2,6 +2,7 @@
 </script>
 
 <template>
+  <router-view />
   <div class="min-h-svh overflow-hidden min-w-svw bg-black text-white">
     <RouterView v-slot="{ Component }">
       <Transition appear mode="out-in" name="view">
