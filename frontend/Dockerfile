@@ -4,9 +4,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN ls -la && ls -la src && ls -la public
 
-RUN npm run build || echo "Build failed"
+RUN npm run build
 
 FROM node:18-alpine
 
