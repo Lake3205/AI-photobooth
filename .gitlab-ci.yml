@@ -1,49 +1,125 @@
 stages:
+  - build
   - deploy
 
-deploy_main:
+build_dev:
+  stage: build
   tags:
     - hva
-  stage: deploy
-  only:
-    - main
+  image:
+    name: emetain/kaniko-wrapper:latest
+    entrypoint: [""]
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
+  variables:
+    DOCKER_CONFIG: /kaniko/.docker/
   script:
-    - echo "$VPS_SSH_KEY" > id_rsa
-    - chmod 600 id_rsa
-    - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 '
-        docker stop frontend-main || true &&
-        docker rm frontend-main || true &&
-        docker run -d --name frontend-main -p 3000:3000 dark-tech-frontend:latest &&
-        docker stop backend-main || true &&
-        docker rm backend-main || true &&
-        docker run -d --name backend-main -p 8000:8000 dark-tech-backend:latest
-      '
-    - rm id_rsa
-    - echo "Deploy naar main via runner met tag hva"
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"username\":\"$DOCKER_USERNAME\",\"password\":\"$DOCKER_PASSWORD\"}}}" > /kaniko/.docker/config.json
+
+    - >
+      /kaniko/executor
+      --context ./frontend
+      --dockerfile ./frontend/Dockerfile
+      --destination emetain/dark-tech-frontend-dev:dev
+
+    - >
+      /kaniko/executor
+      --context ./backend
+      --dockerfile ./backend/Dockerfile
+      --destination emetain/dark-tech-backend-dev:dev
 
 deploy_dev:
+  stage: deploy
+  needs:
+    - job: build_dev
   tags:
     - hva
+  image: ubuntu:latest
+  before_script:
+    - apt-get update && apt-get install -y openssh-client
+  script:
+    - echo "$VPS_SSH_KEY" | tr -d '\r' > id_rsa
+    - chmod 400 id_rsa
+    - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 "
+        docker pull ${DOCKER_USERNAME}/dark-tech-frontend-dev:dev &&
+        docker pull ${DOCKER_USERNAME}/dark-tech-backend-dev:dev &&
+        cd /home/dark-tech &&
+        docker-compose -f docker-compose.dev.yml up -d --remove-orphans
+      "
+    - rm id_rsa
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
+      when: always
+    - when: never
+
+build_main:
+  stage: build
+  tags:
+    - hva
+  image: emetain/kaniko-wrapper:latest
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
+  variables:
+    DOCKER_CONFIG: /kaniko/.docker/
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"username\":\"$DOCKER_USERNAME\",\"password\":\"$DOCKER_PASSWORD\"}}}" > /kaniko/.docker/config.json
+
+    - >
+      /kaniko/executor
+      --context ./frontend
+      --dockerfile ./frontend/Dockerfile
+      --destination emetain/dark-tech-frontend-dev:dev
+
+    - >
+      /kaniko/executor
+      --context ./backend
+      --dockerfile ./backend/Dockerfile
+      --destination emetain/dark-tech-backend-dev:dev
+
+deploy_main:
   stage: deploy
-  only:
-    - dev
+  needs:
+    - job: build_main
+  image: ubuntu:latest
+  tags:
+    - hva
+  before_script:
+    - apt-get update && apt-get install -y openssh-client
+  script:
+    - echo "$VPS_SSH_KEY" | tr -d '\r' > id_rsa
+    - chmod 400 id_rsa
+    - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 "
+        docker pull ${DOCKER_USERNAME}/dark-tech-frontend:latest &&
+        docker pull ${DOCKER_USERNAME}/dark-tech-backend:latest &&
+        cd /home/dark-tech &&
+        docker-compose -f docker-compose.prod.yml up -d --remove-orphans
+      "
+    - rm id_rsa
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
+      when: always
+    - when: never
+
+.test_connection_template: &test_connection
+  stage: deploy
+  tags:
+    - hva
+  image: ubuntu:latest
+
+  before_script:
+    - apt-get update && apt-get install -y openssh-client
+
   script:
     - echo "$VPS_SSH_KEY" > id_rsa
-    - chmod 600 id_rsa
-    - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 '
-        docker stop frontend-dev || true &&
-        docker rm frontend-dev || true &&
-        docker run -d --name frontend-dev -p 3001:3000 dark-tech-frontend:dev &&
-        docker stop backend-dev || true &&
-        docker rm backend-dev || true &&
-        docker run -d --name backend-dev -p 8001:8000 dark-tech-backend:dev
-      '
+    - chmod 400 id_rsa
+    - ssh -v -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 "echo '✅ SSH connection successful!'"
     - rm id_rsa
-    - echo "Deploy naar dev via runner met tag hva"
 
-test_runner:
-  stage: deploy
-  tags:
-    - hva
-  script:
-    - echo "Runner met tag hva werkt!"
+test_ssh:
+  <<: *test_connection
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
+      when: manual
+    - when: never
