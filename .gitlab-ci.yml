@@ -74,13 +74,13 @@ build_main:
       /kaniko/executor
       --context ./frontend
       --dockerfile ./frontend/Dockerfile
-      --destination emetain/dark-tech-frontend-dev:dev
+      --destination emetain/dark-tech-frontend:latest
 
     - >
       /kaniko/executor
       --context ./backend
       --dockerfile ./backend/Dockerfile
-      --destination emetain/dark-tech-backend-dev:dev
+      --destination emetain/dark-tech-backend:latest
 
 deploy_main:
   stage: deploy
