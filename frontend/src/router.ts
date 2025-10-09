@@ -1,7 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import Landing from '@/pages/Landing.vue';
 import Upload from '@/pages/Upload.vue';
-import WebcamTest from './views/WebcamTest.vue';
+import WebcamTest from '@/pages/WebcamTest.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
