@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -b && vite build",
+    "build": "vue-tsc -b && vite build && vite build",
     "build-production": "vite build --mode=production",
     "build-development": "vite build --mode=development",
     "preview": "vite preview"
@@ -24,6 +24,6 @@
     "@vue/tsconfig": "^0.8.1",
     "typescript": "~5.9.3",
     "vite": "^7.1.9",
-    "vue-tsc": "^3.1.0"
+    "vue-tsc": "^3.1.1"
   }
 }

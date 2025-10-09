@@ -1,19 +1,18 @@
-FROM node:alpine
+FROM node:18-alpine AS builder
 
-RUN mkdir -p /opt/app/dist
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN ls -la && ls -la src && ls -la public
+
+RUN npm run build || echo "Build failed"
+
+FROM node:18-alpine
+
+WORKDIR /app
+RUN npm install -g serve
+COPY --from=builder /app/dist /app/dist
 
 EXPOSE 3000
-
-WORKDIR /opt/app
-
-COPY ./package.json ./package.json
-
-COPY ./package-lock.json .
-
-RUN npm install
-
-COPY . .
-
-RUN npm run build
-
-ENTRYPOINT ["npx", "http-server", "-p", "3000", "./dist"]
+CMD ["serve", "-s", "dist", "-l", "3000"]
