@@ -4,8 +4,8 @@ import LandingButton from '@/components/LandingButton.vue'
 
 const router = useRouter()
 
-function goToUpload() {
-  router.push({name: 'upload'})
+function goToSelfie() {
+  router.push({name: 'selfie'})
 }
 </script>
 
@@ -31,7 +31,7 @@ function goToUpload() {
         Uncover the unseen — shifting perspectives, one image at a time.
       </p>
 
-      <LandingButton :label="'Get Started'" :onClick="goToUpload" class="mt-5"/>
+      <LandingButton :label="'Get Started'" :onClick="goToSelfie" class="mt-5"/>
     </section>
   </main>
 </template>

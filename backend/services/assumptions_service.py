@@ -18,3 +18,24 @@ class AssumptionsService:
             "Fitnessleeftijd": f"{random.randint(18, 70)} jaar",
             "Schermtijd": f"{random.randint(0, 12)} uur per dag",
         }
+    
+    def get_assumptions_with_defaults(self):
+        assumptions = self.get_assumptions()
+        
+        defaults = {
+            "TheftRate": 50,
+            "School": "havo",
+            "Salary": 50000,
+            "Generation": "Millenial",
+            "Weight": 70,
+            "CitizenState": "Single",
+            "Dept": 10000,
+            "FitnessAge": 30,
+            "ScreenTime": 6
+        }
+        
+        for key, default_value in defaults.items():
+            if key not in assumptions or assumptions[key] is None:
+                assumptions[key] = default_value
+        
+        return assumptions
