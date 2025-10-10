@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, UploadFile, File
 
 from services.assumptions_service import AssumptionsService
 
@@ -7,4 +7,9 @@ assumptions_service = AssumptionsService()
 
 @router.get("")
 def get_assumptions():
-    return assumptions_service.get_assumptions()
+    return assumptions_service.get_assumptions_with_defaults()
+
+@router.post("/generate")
+def generate_assumptions(image: UploadFile = File(...)):
+    assumptions = assumptions_service.get_assumptions()
+    return {image.filename: assumptions}
