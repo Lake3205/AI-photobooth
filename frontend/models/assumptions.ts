@@ -56,11 +56,18 @@ export class Assumptions implements AssumptionsProps {
   private validateProps(props: AssumptionsProps): void {
     const errors: string[] = [];
 
+    type Rule = { min: number; max?: number };
+
+    function hasMax(rules: Rule): rules is { min: number; max: number } {
+      return 'max' in rules && typeof rules.max === 'number';
+    }
+
+
 
     Object.entries(VALIDATION_RULES).forEach(([key, rules]) => {
       const value = props[key as keyof AssumptionsProps] as number;
-      if (value < rules.min || (rules.max && value > rules.max)) {
-        errors.push(`${key} must be between ${rules.min} and ${rules.max || 'infinity'}`);
+      if (value < rules.min || (hasMax(rules) && value > rules.max)) {
+        errors.push(`${key} must be between ${rules.min} and ${hasMax(rules) ? rules.max : 'infinity'}`);
       }
     });
 
