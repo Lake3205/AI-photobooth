@@ -205,29 +205,6 @@ onMounted(() => {
                       ></div>
                     </div>
                   </div>
-                  <!-- <div>
-                    <div class="flex justify-between text-sm mb-1">
-                      <span class="text-blue-200/70">{{ formatLabel('TheftRate') }}</span>
-                      <span class="text-white">{{ getDisplayValue('TheftRate') }}</span>
-                    </div>
-                    <div class="w-full bg-white/10 rounded-full h-2">
-                      <div class="bg-gradient-to-r from-red-500 to-red-300 h-2 rounded-full transition-all duration-1000" :style="`width: ${getPercentageValue('TheftRate')}%`"></div>
-                    </div>
-                  </div>
-
-                  <div v-for="field in ['School', 'Salary', 'Generation', 'Weight', 'CitizenState', 'Dept', 'FitnessAge', 'ScreenTime']" :key="field">
-                    <div class="flex justify-between text-sm mb-1">
-                      <span class="text-blue-200/70">{{ formatLabel(field) }}</span>
-                      <span class="text-white text-xs">{{ getDisplayValue(field) }}</span>
-                    </div>
-                    <div class="w-full bg-white/10 rounded-full h-2">
-                      <div 
-                        class="h-2 rounded-full transition-all duration-1000"
-                        :class="getBarColorClass(field)"
-                        :style="`width: ${getConsistentPercentage(field)}%`"
-                      ></div>
-                    </div>
-                  </div> -->
                 </div>
 
                 <div v-else class="space-y-3">

@@ -306,24 +306,6 @@ export const useWebcamService = () => {
     }
   }
 
-  // Helper function to format display labels
-  const formatLabel = (key: string): string => {
-    // Map the AssumptionsProps keys to user-friendly display labels
-    const labelMap: { [key: string]: string } = {
-      'TheftRate': 'Theft Risk',
-      'School': 'Education Level',
-      'Salary': 'Annual Salary',
-      'Generation': 'Generation',
-      'Weight': 'Weight',
-      'CitizenState': 'Marital Status',
-      'Dept': 'Debt',
-      'FitnessAge': 'Fitness Age',
-      'ScreenTime': 'Screen Time'
-    };
-    
-    return labelMap[key] || key;
-  }
-
   // Clear all images and analysis data
   const clearAllData = () => {
     capturedImages.value.length = 0
@@ -392,7 +374,6 @@ export const useWebcamService = () => {
     getStringHash,
     getConsistentPercentage,
     getBarColorClass,
-    formatLabel,
     uploadFile
   }
 }
