@@ -45,7 +45,6 @@ defaultAssumptions = {
         "format": FORMAT_TYPES["currency"],
         "min": 0,
         "max": 100000,
-        "ideal": 0
     },
     "FitnessAge": {
         "name": "Fitness age",
