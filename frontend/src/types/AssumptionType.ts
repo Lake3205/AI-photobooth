@@ -8,4 +8,5 @@ export type AssumptionType = {
     format:  "PERCENTAGE" | "CURRENCY" | "NUMBER" | "WEIGHT" | "YEARS" | "HOURS_DAY" | "TEXT",
     min?: number;
     max?: number;
+    ideal?: number;
 }

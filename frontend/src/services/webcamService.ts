@@ -165,6 +165,16 @@ export const useWebcamService = () => {
 
     if (field.min !== undefined && field.max !== undefined && typeof field.value === 'number') {
       if (field.max === field.min) return 100
+
+      // If ideal is defined, adjust calculation to reflect distance from ideal
+      if (field.ideal !== undefined) {
+        if (field.ideal === field.min) {
+          if (field.value <= field.min) return 100
+          if (field.value >= field.max) return 0
+          return ((field.max - field.value) / (field.max - field.min)) * 100;
+        }
+      }
+
       const clampedValue = Math.min(Math.max(field.value, field.min), field.max)
       return ((clampedValue - field.min) / (field.max - field.min)) * 100
     }

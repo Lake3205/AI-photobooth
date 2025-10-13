@@ -6,17 +6,17 @@ from constants.assumptions_constants import (
 
 defaultAssumptions = {
     "TheftRate": {
-        "name": "Theft Rate",
+        "name": "Theft risk",
         "value": 50,
         "format": FORMAT_TYPES["percentage"]    
     },
     "School": {
-        "name": "Education Level",
+        "name": "Education level",
         "value": "hbo",
         "format": FORMAT_TYPES["text"]
     },
     "Salary": {
-        "name": "Annual Salary",
+        "name": "Annual salary",
         "value": 50000,
         "format": FORMAT_TYPES["currency"],
         "min": 20000,
@@ -35,7 +35,7 @@ defaultAssumptions = {
         "max": 120
     },
     "CitizenState": {
-        "name": "Marital Status",
+        "name": "Marital status",
         "value": "Single",
         "format": FORMAT_TYPES["text"]
     },
@@ -44,17 +44,18 @@ defaultAssumptions = {
         "value": 10000,
         "format": FORMAT_TYPES["currency"],
         "min": 0,
-        "max": 100000
+        "max": 100000,
+        "ideal": 0
     },
     "FitnessAge": {
-        "name": "Fitness Age",
+        "name": "Fitness age",
         "value": 30,
         "format": FORMAT_TYPES["years"],
         "min": 18,
         "max": 70
     },
     "ScreenTime": {
-        "name": "Screen Time",
+        "name": "Screen time",
         "value": 3,
         "format": FORMAT_TYPES["hoursPerDay"],
         "min": 0,
