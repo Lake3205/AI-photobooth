@@ -1,41 +1,69 @@
 import random
 
 from constants.assumptions_constants import (
-    EDUCATION_LEVELS, GENERATIONS, MARITAL_STATUSES
+    EDUCATION_LEVELS, GENERATIONS, MARITAL_STATUSES, FORMAT_TYPES
 )
+
+defaultAssumptions = {
+    "TheftRate": {
+        "name": "Theft Rate",
+        "value": 50,
+        "format": FORMAT_TYPES["percentage"]    
+    },
+    "School": {
+        "name": "Education Level",
+        "value": "hbo",
+        "format": FORMAT_TYPES["text"]
+    },
+    "Salary": {
+        "name": "Annual Salary",
+        "value": 50000,
+        "format": FORMAT_TYPES["currency"]
+    },
+    "Generation": {
+        "name": "Generation",
+        "value": "Millenial",
+        "format": FORMAT_TYPES["text"]
+    },
+    "Weight": {
+        "name": "Weight",
+        "value": 70,
+        "format": FORMAT_TYPES["weight"]
+    },
+    "CitizenState": {
+        "name": "Marital Status",
+        "value": "Single",
+        "format": FORMAT_TYPES["text"]
+    },
+    "Debt": {
+        "name": "Debt",
+        "value": 10000,
+        "format": FORMAT_TYPES["currency"]
+    },
+    "FitnessAge": {
+        "name": "Fitness Age",
+        "value": 30,
+        "format": FORMAT_TYPES["years"]
+    },
+    "ScreenTime": {
+        "name": "Screen Time",
+        "value": 3,
+        "format": FORMAT_TYPES["hoursPerDay"]
+    }
+}
 
 
 class AssumptionsService:
     def get_assumptions(self):
-        return {
-            "TheftRate": random.randint(0, 100),
-            "School": random.choice(EDUCATION_LEVELS),
-            "Salary": random.randint(20000, 200000),
-            "Generation": random.choice(GENERATIONS),
-            "Weight": random.randint(45, 120),
-            "CitizenState": random.choice(MARITAL_STATUSES),
-            "Dept": random.randint(0, 100000),
-            "FitnessAge": random.randint(18, 70),
-            "ScreenTime": random.randint(0, 12),
-        }
+        defaultAssumptions["TheftRate"]["value"] = random.randint(0, 100)
+        defaultAssumptions["School"]["value"] = random.choice(EDUCATION_LEVELS)
+        defaultAssumptions["Salary"]["value"] = random.randint(20000, 200000)
+        defaultAssumptions["Generation"]["value"] = random.choice(GENERATIONS)
+        defaultAssumptions["Weight"]["value"] = random.randint(45, 120)
+        defaultAssumptions["CitizenState"]["value"] = random.choice(MARITAL_STATUSES)
+        defaultAssumptions["Debt"]["value"] = random.randint(0, 100000)
+        defaultAssumptions["FitnessAge"]["value"] = random.randint(18, 70)
+        defaultAssumptions["ScreenTime"]["value"] = random.randint(0, 12)
+        
+        return defaultAssumptions
     
-    def get_assumptions_with_defaults(self):
-        assumptions = self.get_assumptions()
-        
-        defaults = {
-            "TheftRate": 50,
-            "School": "havo",
-            "Salary": 50000,
-            "Generation": "Millenial",
-            "Weight": 70,
-            "CitizenState": "Single",
-            "Dept": 10000,
-            "FitnessAge": 30,
-            "ScreenTime": 6
-        }
-        
-        for key, default_value in defaults.items():
-            if key not in assumptions or assumptions[key] is None:
-                assumptions[key] = default_value
-        
-        return assumptions

@@ -1,13 +1,11 @@
+import type { AssumptionData, AssumptionType } from '@/types/AssumptionType';
 import { ref, onUnmounted, computed, watch } from 'vue'
-import type { AssumptionsProps } from '../../models/assumptions'
 
 interface CapturedImage {
   dataUrl: string
   timestamp: string
   blob: Blob
 }
-
-export interface AssumptionData extends AssumptionsProps {}
 
 interface AnalysisResponse {
   [filename: string]: AssumptionData;
@@ -38,38 +36,14 @@ class AssumptionsService {
       
       const assumptions = data[filename];
       if (!assumptions) {
-        return this.getDefaultAssumptions();
+        return null as unknown as AssumptionData;
       }
       
-      return {
-        TheftRate: assumptions.TheftRate ?? 50,
-        School: assumptions.School ?? 'havo',
-        Salary: assumptions.Salary ?? 50000,
-        Generation: assumptions.Generation ?? 'Millenial',
-        Weight: assumptions.Weight ?? 70,
-        CitizenState: assumptions.CitizenState ?? 'Single',
-        Dept: assumptions.Dept ?? 10000,
-        FitnessAge: assumptions.FitnessAge ?? 30,
-        ScreenTime: assumptions.ScreenTime ?? 6
-      };
+      return assumptions;
     } catch (error) {
       console.error('Error generating assumptions:', error);
       throw new Error('Failed to generate assumptions');
     }
-  }
-
-  private getDefaultAssumptions(): AssumptionData {
-    return {
-      TheftRate: 50,
-      School: 'havo',
-      Salary: 50000,
-      Generation: 'Millenial',
-      Weight: 70,
-      CitizenState: 'Single',
-      Dept: 10000,
-      FitnessAge: 30,
-      ScreenTime: 6
-    };
   }
 }
 
@@ -157,42 +131,23 @@ export const useWebcamService = () => {
     isNavbarOpen.value = false
   }
 
-  const getPercentageValue = (key: string): number => {
-    if (!analysisData.value) return 0
-    
-    if (key === 'TheftRate') {
-      return analysisData.value.TheftRate
-    }
-    
-    return 0
+  const formatField = (field: AssumptionType): string => {
+    if (field.format === 'PERCENTAGE' && typeof field.value === 'number') {
+      return `${field.value.toFixed(1)}%`
+    } else if (field.format === 'CURRENCY' && typeof field.value === 'number') {
+      return `€${field.value.toLocaleString()}`
+    } else if (field.format === 'NUMBER' && typeof field.value === 'number') {
+      return field.value.toString()
+    } else if (field.format === 'WEIGHT' && typeof field.value === 'number') {
+      return `${field.value.toFixed(1)} kg`
+    } else if (field.format === 'YEARS' && typeof field.value === 'number') {
+      return `${field.value} years`
+    } else if (field.format === 'HOURS_DAY' && typeof field.value === 'number') {
+      return `${field.value} hours per day`
+    } 
+    return String(field.value)
   }
 
-  const getDisplayValue = (key: string): string => {
-    if (!analysisData.value) return '--'
-    
-    switch (key) {
-      case 'TheftRate':
-        return `${analysisData.value.TheftRate}%`
-      case 'School':
-        return analysisData.value.School
-      case 'Salary':
-        return `€${analysisData.value.Salary.toLocaleString()}`
-      case 'Generation':
-        return analysisData.value.Generation
-      case 'Weight':
-        return `${analysisData.value.Weight}kg`
-      case 'CitizenState':
-        return analysisData.value.CitizenState
-      case 'Dept':
-        return `€${analysisData.value.Dept.toLocaleString()}`
-      case 'FitnessAge':
-        return `${analysisData.value.FitnessAge} jaar`
-      case 'ScreenTime':
-        return `${analysisData.value.ScreenTime} uur per dag`
-      default:
-        return '--'
-    }
-  }
 
   const getStringHash = (str: string): number => {
     let hash = 0
@@ -202,8 +157,12 @@ export const useWebcamService = () => {
     return Math.abs(hash)
   }
 
-  const getConsistentPercentage = (key: string): number => {
-    return getStringHash(key) % 80 + 20 // Range from 20-100%
+  const getConsistentPercentage = (field: AssumptionType): number => {
+    if (field.format === 'PERCENTAGE' && typeof field.value === 'number') {
+      return Math.min(Math.max(field.value, 0), 100)
+    }
+
+    return getStringHash(field.name) % 80 + 20 // Range from 20-100%
   }
 
   const getBarColorClass = (key: string): string => {
@@ -411,8 +370,7 @@ export const useWebcamService = () => {
     clearAllData,
     
     // Helper
-    getPercentageValue,
-    getDisplayValue,
+    formatField,
     getStringHash,
     getConsistentPercentage,
     getBarColorClass,

@@ -38,12 +38,10 @@ const {
   clearAllData,
   
   // Helper functions
-  getPercentageValue,
-  getDisplayValue,
-  getConsistentPercentage,
+  uploadFile,
   getBarColorClass,
-  formatLabel,
-  uploadFile
+  getConsistentPercentage,
+  formatField
 } = useWebcamService()
 
 const goBack = () => {
@@ -157,7 +155,7 @@ onMounted(() => {
           (latestImage && isNavbarOpen) ? 'translate-x-0' : 'translate-x-full'
         ]"
       >
-        <div class="p-6 h-full flex flex-col">
+        <div class="p-6 !pr-0 h-full flex flex-col *:pr-6">
           <div class="flex items-center justify-between mb-6">
             <h2 class="text-xl font-semibold text-white">Picture Info</h2>
             <button 
@@ -194,7 +192,20 @@ onMounted(() => {
                 </div>
 
                 <div v-else-if="analysisData" class="space-y-3">
-                  <div>
+                  <div v-for="field in analysisData" :key="field.name">
+                    <div class="flex justify-between text-sm mb-1">
+                      <span class="text-blue-200/70">{{ field.name }}</span>
+                      <span class="text-white text-xs">{{ formatField(field) }}</span>
+                    </div>
+                    <div class="w-full bg-white/10 rounded-full h-2">
+                      <div 
+                        class="h-2 rounded-full transition-all duration-1000"
+                        :class="getBarColorClass(field.name)"
+                        :style="`width: ${getConsistentPercentage(field)}%`"
+                      ></div>
+                    </div>
+                  </div>
+                  <!-- <div>
                     <div class="flex justify-between text-sm mb-1">
                       <span class="text-blue-200/70">{{ formatLabel('TheftRate') }}</span>
                       <span class="text-white">{{ getDisplayValue('TheftRate') }}</span>
@@ -216,7 +227,7 @@ onMounted(() => {
                         :style="`width: ${getConsistentPercentage(field)}%`"
                       ></div>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
 
                 <div v-else class="space-y-3">
