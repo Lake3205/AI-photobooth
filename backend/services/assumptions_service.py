@@ -18,7 +18,9 @@ defaultAssumptions = {
     "Salary": {
         "name": "Annual Salary",
         "value": 50000,
-        "format": FORMAT_TYPES["currency"]
+        "format": FORMAT_TYPES["currency"],
+        "min": 20000,
+        "max": 200000
     },
     "Generation": {
         "name": "Generation",
@@ -28,7 +30,9 @@ defaultAssumptions = {
     "Weight": {
         "name": "Weight",
         "value": 70,
-        "format": FORMAT_TYPES["weight"]
+        "format": FORMAT_TYPES["weight"],
+        "min": 45,
+        "max": 120
     },
     "CitizenState": {
         "name": "Marital Status",
@@ -38,17 +42,23 @@ defaultAssumptions = {
     "Debt": {
         "name": "Debt",
         "value": 10000,
-        "format": FORMAT_TYPES["currency"]
+        "format": FORMAT_TYPES["currency"],
+        "min": 0,
+        "max": 100000
     },
     "FitnessAge": {
         "name": "Fitness Age",
         "value": 30,
-        "format": FORMAT_TYPES["years"]
+        "format": FORMAT_TYPES["years"],
+        "min": 18,
+        "max": 70
     },
     "ScreenTime": {
         "name": "Screen Time",
         "value": 3,
-        "format": FORMAT_TYPES["hoursPerDay"]
+        "format": FORMAT_TYPES["hoursPerDay"],
+        "min": 0,
+        "max": 12
     }
 }
 

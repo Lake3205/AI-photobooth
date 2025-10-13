@@ -158,10 +158,18 @@ export const useWebcamService = () => {
   }
 
   const getConsistentPercentage = (field: AssumptionType): number => {
+    // If the field has a defined range, calculate percentage within that range
     if (field.format === 'PERCENTAGE' && typeof field.value === 'number') {
       return Math.min(Math.max(field.value, 0), 100)
     }
 
+    if (field.min !== undefined && field.max !== undefined && typeof field.value === 'number') {
+      if (field.max === field.min) return 100
+      const clampedValue = Math.min(Math.max(field.value, field.min), field.max)
+      return ((clampedValue - field.min) / (field.max - field.min)) * 100
+    }
+
+    // Fallback: use hash-based percentage for consistent but arbitrary value
     return getStringHash(field.name) % 80 + 20 // Range from 20-100%
   }
 
