@@ -7,3 +7,13 @@ GENERATIONS = [
 MARITAL_STATUSES = [
     "Getrouwd", "Samenwonend", "Single"
 ]
+
+FORMAT_TYPES = {
+    "percentage": "PERCENTAGE",
+    "currency": "CURRENCY",
+    "number": "NUMBER",
+    "weight": "WEIGHT",
+    "years": "YEARS",
+    "hoursPerDay": "HOURS_DAY",
+    "text": "TEXT",
+}
