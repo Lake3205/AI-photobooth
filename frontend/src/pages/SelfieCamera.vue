@@ -3,6 +3,7 @@ import { onMounted } from 'vue'
 import { useWebcamService } from '@/services/webcamService'
 import { CameraIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 import { useRouter } from 'vue-router'
+import UploadButton from '@/components/UploadButton.vue'
 
 const router = useRouter()
 
@@ -41,7 +42,8 @@ const {
   getDisplayValue,
   getConsistentPercentage,
   getBarColorClass,
-  formatLabel
+  formatLabel,
+  uploadFile
 } = useWebcamService()
 
 const goBack = () => {
@@ -94,12 +96,20 @@ onMounted(() => {
                     <div class="text-center">
                       <CameraIcon class="h-20 w-20 text-white/50 mx-auto mb-4"/>
                       <p class="text-white/70 text-lg">Camera not active</p>
-                      <button 
-                        @click="startCamera"
-                        class="mt-4 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-lg transition-colors"
-                      >
-                        Start Camera
-                      </button>
+                      <div class="mt-6 flex flex-col gap-3">
+                        <button
+                          @click="startCamera"
+                          class="px-8 py-4 cursor-pointer bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-lg transition-colors"
+                        >
+                          Start Camera
+                        </button>
+                        <UploadButton
+                          :label="'Choose file instead'"
+                          :onChange="uploadFile"
+                          accept="image/*"
+                          class="px-6 py-3 text-base"
+                        />
+                      </div>
                     </div>
                   </div>
 

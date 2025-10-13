@@ -355,6 +355,21 @@ export const useWebcamService = () => {
     closeNavbar()
   }
 
+  // Upload file from upload button
+  function uploadFile(e: Event) {
+    const files = (e.target as HTMLInputElement).files
+    const file = files && files.length > 0 ? files[0] : undefined
+    if (!file || !file.type.startsWith('image/')) return
+
+    const blob: Blob = file;
+
+    capturedImages.value.push({ 
+      dataUrl: URL.createObjectURL(blob),
+      timestamp: new Date().toLocaleString(),
+      blob: blob
+    });
+  }
+
   // Cleanup on unmount
   onUnmounted(() => {
     stopCamera()
@@ -401,6 +416,7 @@ export const useWebcamService = () => {
     getStringHash,
     getConsistentPercentage,
     getBarColorClass,
-    formatLabel
+    formatLabel,
+    uploadFile
   }
 }
