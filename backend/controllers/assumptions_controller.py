@@ -7,7 +7,7 @@ assumptions_service = AssumptionsService()
 
 @router.get("")
 def get_assumptions():
-    return assumptions_service.get_assumptions_with_defaults()
+    return assumptions_service.get_assumptions()
 
 @router.post("/generate")
 def generate_assumptions(image: UploadFile = File(...)):

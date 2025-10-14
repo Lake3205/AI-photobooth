@@ -1,13 +1,11 @@
+import type { AssumptionData, AssumptionType } from '@/types/AssumptionType';
 import { ref, onUnmounted, computed, watch } from 'vue'
-import type { AssumptionsProps } from '../../models/assumptions'
 
 interface CapturedImage {
   dataUrl: string
   timestamp: string
   blob: Blob
 }
-
-export interface AssumptionData extends AssumptionsProps {}
 
 interface AnalysisResponse {
   [filename: string]: AssumptionData;
@@ -38,38 +36,14 @@ class AssumptionsService {
       
       const assumptions = data[filename];
       if (!assumptions) {
-        return this.getDefaultAssumptions();
+        return null as unknown as AssumptionData;
       }
       
-      return {
-        TheftRate: assumptions.TheftRate ?? 50,
-        School: assumptions.School ?? 'havo',
-        Salary: assumptions.Salary ?? 50000,
-        Generation: assumptions.Generation ?? 'Millenial',
-        Weight: assumptions.Weight ?? 70,
-        CitizenState: assumptions.CitizenState ?? 'Single',
-        Dept: assumptions.Dept ?? 10000,
-        FitnessAge: assumptions.FitnessAge ?? 30,
-        ScreenTime: assumptions.ScreenTime ?? 6
-      };
+      return assumptions;
     } catch (error) {
       console.error('Error generating assumptions:', error);
       throw new Error('Failed to generate assumptions');
     }
-  }
-
-  private getDefaultAssumptions(): AssumptionData {
-    return {
-      TheftRate: 50,
-      School: 'havo',
-      Salary: 50000,
-      Generation: 'Millenial',
-      Weight: 70,
-      CitizenState: 'Single',
-      Dept: 10000,
-      FitnessAge: 30,
-      ScreenTime: 6
-    };
   }
 }
 
@@ -157,42 +131,23 @@ export const useWebcamService = () => {
     isNavbarOpen.value = false
   }
 
-  const getPercentageValue = (key: string): number => {
-    if (!analysisData.value) return 0
-    
-    if (key === 'TheftRate') {
-      return analysisData.value.TheftRate
-    }
-    
-    return 0
+  const formatField = (field: AssumptionType): string => {
+    if (field.format === 'PERCENTAGE' && typeof field.value === 'number') {
+      return `${field.value.toFixed(1)}%`
+    } else if (field.format === 'CURRENCY' && typeof field.value === 'number') {
+      return `€${field.value.toLocaleString()}`
+    } else if (field.format === 'NUMBER' && typeof field.value === 'number') {
+      return field.value.toString()
+    } else if (field.format === 'WEIGHT' && typeof field.value === 'number') {
+      return `${field.value.toFixed(1)} kg`
+    } else if (field.format === 'YEARS' && typeof field.value === 'number') {
+      return `${field.value} years`
+    } else if (field.format === 'HOURS_DAY' && typeof field.value === 'number') {
+      return `${field.value} hours per day`
+    } 
+    return String(field.value)
   }
 
-  const getDisplayValue = (key: string): string => {
-    if (!analysisData.value) return '--'
-    
-    switch (key) {
-      case 'TheftRate':
-        return `${analysisData.value.TheftRate}%`
-      case 'School':
-        return analysisData.value.School
-      case 'Salary':
-        return `€${analysisData.value.Salary.toLocaleString()}`
-      case 'Generation':
-        return analysisData.value.Generation
-      case 'Weight':
-        return `${analysisData.value.Weight}kg`
-      case 'CitizenState':
-        return analysisData.value.CitizenState
-      case 'Dept':
-        return `€${analysisData.value.Dept.toLocaleString()}`
-      case 'FitnessAge':
-        return `${analysisData.value.FitnessAge} jaar`
-      case 'ScreenTime':
-        return `${analysisData.value.ScreenTime} uur per dag`
-      default:
-        return '--'
-    }
-  }
 
   const getStringHash = (str: string): number => {
     let hash = 0
@@ -202,8 +157,30 @@ export const useWebcamService = () => {
     return Math.abs(hash)
   }
 
-  const getConsistentPercentage = (key: string): number => {
-    return getStringHash(key) % 80 + 20 // Range from 20-100%
+  const getConsistentPercentage = (field: AssumptionType): number => {
+    // If the field has a defined range, calculate percentage within that range
+    if (field.format === 'PERCENTAGE' && typeof field.value === 'number') {
+      return Math.min(Math.max(field.value, 0), 100)
+    }
+
+    if (field.min !== undefined && field.max !== undefined && typeof field.value === 'number') {
+      if (field.max === field.min) return 100
+
+      // If ideal is defined, adjust calculation to reflect distance from ideal
+      if (field.ideal !== undefined) {
+        if (field.ideal === field.min) {
+          if (field.value <= field.min) return 100
+          if (field.value >= field.max) return 0
+          return ((field.max - field.value) / (field.max - field.min)) * 100;
+        }
+      }
+
+      const clampedValue = Math.min(Math.max(field.value, field.min), field.max)
+      return ((clampedValue - field.min) / (field.max - field.min)) * 100
+    }
+
+    // Fallback: use hash-based percentage for consistent but arbitrary value
+    return getStringHash(field.name) % 80 + 20 // Range from 20-100%
   }
 
   const getBarColorClass = (key: string): string => {
@@ -329,30 +306,27 @@ export const useWebcamService = () => {
     }
   }
 
-  // Helper function to format display labels
-  const formatLabel = (key: string): string => {
-    // Map the AssumptionsProps keys to user-friendly display labels
-    const labelMap: { [key: string]: string } = {
-      'TheftRate': 'Theft Risk',
-      'School': 'Education Level',
-      'Salary': 'Annual Salary',
-      'Generation': 'Generation',
-      'Weight': 'Weight',
-      'CitizenState': 'Marital Status',
-      'Dept': 'Debt',
-      'FitnessAge': 'Fitness Age',
-      'ScreenTime': 'Screen Time'
-    };
-    
-    return labelMap[key] || key;
-  }
-
   // Clear all images and analysis data
   const clearAllData = () => {
     capturedImages.value.length = 0
     analysisData.value = null
     analysisError.value = null
     closeNavbar()
+  }
+
+  // Upload file from upload button
+  function uploadFile(e: Event) {
+    const files = (e.target as HTMLInputElement).files
+    const file = files && files.length > 0 ? files[0] : undefined
+    if (!file || !file.type.startsWith('image/')) return
+
+    const blob: Blob = file;
+
+    capturedImages.value.push({ 
+      dataUrl: URL.createObjectURL(blob),
+      timestamp: new Date().toLocaleString(),
+      blob: blob
+    });
   }
 
   // Cleanup on unmount
@@ -396,11 +370,10 @@ export const useWebcamService = () => {
     clearAllData,
     
     // Helper
-    getPercentageValue,
-    getDisplayValue,
+    formatField,
     getStringHash,
     getConsistentPercentage,
     getBarColorClass,
-    formatLabel
+    uploadFile
   }
 }
