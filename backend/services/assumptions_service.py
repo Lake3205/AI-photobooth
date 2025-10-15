@@ -21,7 +21,7 @@ defaultAssumptions = {
         "value": 20000,
         "format": FORMAT_TYPES["currency"],
         "min": 0,
-        "max": 70000
+        "max": 100000
     },
     "Generation": {
         "name": "Generation",
@@ -85,6 +85,8 @@ class AssumptionsService:
         minSalary = assumptions["Salary"]["min"] if "min" in assumptions["Salary"] else 0
         maxSalary = assumptions["Salary"]["max"] if "max" in assumptions["Salary"] else 100000
         
+        maxSalary -= 30000 # general deduction for graph scaling
+        
         minFitnessAge = assumptions["FitnessAge"]["min"] if "min" in assumptions["FitnessAge"] else 18
         maxFitnessAge = assumptions["FitnessAge"]["max"] if "max" in assumptions["FitnessAge"] else 70
         
@@ -105,7 +107,7 @@ class AssumptionsService:
             assumptions["School"]["value"] == "PhD"):
             maxTheftRisk -= 20
             minDebt += 20000
-            minSalary += 20000
+            minSalary += 30000
             generations.remove("Gen Z")
             generations.remove("Gen alpha")
         else:
