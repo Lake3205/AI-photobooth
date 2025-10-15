@@ -314,7 +314,7 @@ onMounted(() => {
 }
 
 .overflow-y-auto::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(254, 255, 255, 0.3);
   border-radius: 2px;
 }
 
