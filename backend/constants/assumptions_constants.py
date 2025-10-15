@@ -1,5 +1,5 @@
 EDUCATION_LEVELS = [
-    "Practical education", "Basic education", "Pre-vocational secondary education", "Senior general secondary education", "Pre-university education", "Secondary vocational education", "University of applied sciences", "Research university education"
+    "Dropout", "Middle school", "High school", "Bachelor's degree", "Master's degree", "PhD"
 ]
 GENERATIONS = [
     "Stille generatie", "Boomer", "Gen X", "Millenial", "Gen Z", "Gen alpha"
