@@ -88,8 +88,9 @@ class AssumptionsService:
         minFitnessAge = assumptions["FitnessAge"]["min"] if "min" in assumptions["FitnessAge"] else 18
         maxFitnessAge = assumptions["FitnessAge"]["max"] if "max" in assumptions["FitnessAge"] else 70
         
+        generations = copy.deepcopy(GENERATIONS)
+        
         assumptions["School"]["value"] = random.choice(EDUCATION_LEVELS)
-        assumptions["Generation"]["value"] = random.choice(GENERATIONS)
         assumptions["Weight"]["value"] = random.randint(45, 120)
         assumptions["CitizenState"]["value"] = random.choice(MARITAL_STATUSES)
         assumptions["ScreenTime"]["value"] = random.randint(0, 12)
@@ -98,16 +99,21 @@ class AssumptionsService:
             maxTheftRisk -= 10
             minDebt += 10000
             minSalary += 10000
-            
+            generations.remove("Gen Z")
+            generations.remove("Gen alpha")
         elif (assumptions["School"]["value"] == "Master's degree" or
             assumptions["School"]["value"] == "PhD"):
             maxTheftRisk -= 20
             minDebt += 20000
             minSalary += 20000
+            generations.remove("Gen Z")
+            generations.remove("Gen alpha")
         else:
             minTheftRisk += 30
             maxDebt -= 10000
             maxSalary -= 30000
+        
+        assumptions["Generation"]["value"] = random.choice(generations)
             
         if (assumptions["Generation"]["value"] == "Gen Z" or
             assumptions["Generation"]["value"] == "Gen alpha"
