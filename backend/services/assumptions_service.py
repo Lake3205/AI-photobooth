@@ -17,10 +17,10 @@ defaultAssumptions = {
     },
     "Salary": {
         "name": "Annual salary",
-        "value": 50000,
+        "value": 20000,
         "format": FORMAT_TYPES["currency"],
-        "min": 20000,
-        "max": 200000
+        "min": 0,
+        "max": 100000
     },
     "Generation": {
         "name": "Generation",
@@ -65,15 +65,17 @@ defaultAssumptions = {
 
 class AssumptionsService:
     def get_assumptions(self):
-        defaultAssumptions["TheftRate"]["value"] = random.randint(0, 100)
         defaultAssumptions["School"]["value"] = random.choice(EDUCATION_LEVELS)
-        defaultAssumptions["Salary"]["value"] = random.randint(20000, 200000)
+        defaultAssumptions["Salary"]["value"] = random.randint(0, 100000)
         defaultAssumptions["Generation"]["value"] = random.choice(GENERATIONS)
         defaultAssumptions["Weight"]["value"] = random.randint(45, 120)
         defaultAssumptions["CitizenState"]["value"] = random.choice(MARITAL_STATUSES)
         defaultAssumptions["Debt"]["value"] = random.randint(0, 100000)
         defaultAssumptions["FitnessAge"]["value"] = random.randint(18, 70)
         defaultAssumptions["ScreenTime"]["value"] = random.randint(0, 12)
+        defaultAssumptions["TheftRate"]["value"] = random.randint(0, 100)
+        
+        
         
         return defaultAssumptions
     

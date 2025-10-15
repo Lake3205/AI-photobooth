@@ -123,6 +123,7 @@ onMounted(() => {
 
                   <div v-if="isStreaming" class="absolute bottom-8 left-1/2 transform -translate-x-1/2">
                     <button
+                        tabindex="1"
                         :disabled="countdown > 0"
                         class="group relative p-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full transition-all duration-200 hover:scale-110"
                         @click="takeLatestPicture"

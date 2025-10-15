@@ -1,11 +1,11 @@
 EDUCATION_LEVELS = [
-    "praktijk", "basis", "kader", "vmbo", "havo", "vwo", "gymnasium", "mbo", "hbo", "wo"
+    "Practical education", "Basic education", "Pre-vocational secondary education", "Senior general secondary education", "Pre-university education", "Secondary vocational education", "University of applied sciences", "Research university education"
 ]
 GENERATIONS = [
-    "Stille generatie", "Boomer", "Verloren generatie", "Patatgeneratie", "Millenial", "Gen Z", "Gen alpha"
+    "Stille generatie", "Boomer", "Gen X", "Millenial", "Gen Z", "Gen alpha"
 ]
 MARITAL_STATUSES = [
-    "Getrouwd", "Samenwonend", "Single"
+    "Married", "Living together / Cohabiting", "Single"
 ]
 
 FORMAT_TYPES = {
