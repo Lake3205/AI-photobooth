@@ -1,4 +1,5 @@
 import random
+import copy
 
 from constants.assumptions_constants import (
     EDUCATION_LEVELS, GENERATIONS, MARITAL_STATUSES, FORMAT_TYPES
@@ -64,63 +65,73 @@ defaultAssumptions = {
 
 
 class AssumptionsService:
+    def __init__(self):
+        pass
+    
+    def safe_randint(self, min_val, max_val):
+        if min_val >= max_val:
+            return min_val
+        return random.randint(min_val, max_val)
+    
     def get_assumptions(self):
+        assumptions = copy.deepcopy(defaultAssumptions)
+        
         minTheftRisk = 0
         maxTheftRisk = 100
         
-        minDebt = defaultAssumptions["Debt"]["min"] if "min" in defaultAssumptions["Debt"] else 0
-        maxDebt = defaultAssumptions["Debt"]["max"] if "max" in defaultAssumptions["Debt"] else 100000
+        minDebt = assumptions["Debt"]["min"] if "min" in assumptions["Debt"] else 0
+        maxDebt = assumptions["Debt"]["max"] if "max" in assumptions["Debt"] else 100000
         
-        minSalary = defaultAssumptions["Salary"]["min"] if "min" in defaultAssumptions["Salary"] else 0
-        maxSalary = defaultAssumptions["Salary"]["max"] if "max" in defaultAssumptions["Salary"] else 100000
+        minSalary = assumptions["Salary"]["min"] if "min" in assumptions["Salary"] else 0
+        maxSalary = assumptions["Salary"]["max"] if "max" in assumptions["Salary"] else 100000
         
-        minFitnessAge = defaultAssumptions["FitnessAge"]["min"] if "min" in defaultAssumptions["FitnessAge"] else 18
-        maxFitnessAge = defaultAssumptions["FitnessAge"]["max"] if "max" in defaultAssumptions["FitnessAge"] else 70
+        minFitnessAge = assumptions["FitnessAge"]["min"] if "min" in assumptions["FitnessAge"] else 18
+        maxFitnessAge = assumptions["FitnessAge"]["max"] if "max" in assumptions["FitnessAge"] else 70
         
-        defaultAssumptions["School"]["value"] = random.choice(EDUCATION_LEVELS)
-        defaultAssumptions["Generation"]["value"] = random.choice(GENERATIONS)
-        defaultAssumptions["Weight"]["value"] = random.randint(45, 120)
-        defaultAssumptions["CitizenState"]["value"] = random.choice(MARITAL_STATUSES)
-        defaultAssumptions["ScreenTime"]["value"] = random.randint(0, 12)
+        assumptions["School"]["value"] = random.choice(EDUCATION_LEVELS)
+        assumptions["Generation"]["value"] = random.choice(GENERATIONS)
+        assumptions["Weight"]["value"] = random.randint(45, 120)
+        assumptions["CitizenState"]["value"] = random.choice(MARITAL_STATUSES)
+        assumptions["ScreenTime"]["value"] = random.randint(0, 12)
          
-        if (defaultAssumptions["School"]["value"] == "Bachelor's degree"):
+        if (assumptions["School"]["value"] == "Bachelor's degree"):
             maxTheftRisk -= 10
             minDebt += 10000
-            minSalary += 5000
+            minSalary += 10000
             
-        elif (defaultAssumptions["School"]["value"] == "Master's degree" or
-            defaultAssumptions["School"]["value"] == "PhD"):
+        elif (assumptions["School"]["value"] == "Master's degree" or
+            assumptions["School"]["value"] == "PhD"):
             maxTheftRisk -= 20
             minDebt += 20000
             minSalary += 20000
         else:
             minTheftRisk += 30
             maxDebt -= 10000
-            maxSalary -= 45000
+            maxSalary -= 30000
             
-        if (defaultAssumptions["Generation"]["value"] == "Gen Z" or
-            defaultAssumptions["Generation"]["value"] == "Gen alpha"
+        if (assumptions["Generation"]["value"] == "Gen Z" or
+            assumptions["Generation"]["value"] == "Gen alpha"
         ):
             maxTheftRisk += 5
             maxDebt -= 20000
-            maxSalary -= 50000
-            defaultAssumptions["ScreenTime"]["value"] += 2 if defaultAssumptions["ScreenTime"]["value"] <= 10 else 12
+            maxSalary -= 30000
+            assumptions["ScreenTime"]["value"] += 2 if assumptions["ScreenTime"]["value"] <= 10 else 12
             maxFitnessAge -= 40
-            defaultAssumptions["CitizenState"]["value"] = "Single"
-        elif (defaultAssumptions["Generation"]["value"] == "Millenial"):
+            assumptions["CitizenState"]["value"] = "Single"
+        elif (assumptions["Generation"]["value"] == "Millenial"):
             maxDebt -= 10000
             maxSalary -= 20000
             maxFitnessAge -= 20
-        elif (defaultAssumptions["Generation"]["value"] == "Gen X"):
+        elif (assumptions["Generation"]["value"] == "Gen X"):
             maxFitnessAge -= 10
-        elif (defaultAssumptions["Generation"]["value"] == "Boomer" or
-              defaultAssumptions["Generation"]["value"] == "Stille generatie"):
+        elif (assumptions["Generation"]["value"] == "Boomer" or
+              assumptions["Generation"]["value"] == "Stille generatie"):
             minFitnessAge += 30
         
-        defaultAssumptions["Salary"]["value"] = random.randint(minSalary, maxSalary)
-        defaultAssumptions["FitnessAge"]["value"] = random.randint(minFitnessAge, maxFitnessAge)
-        defaultAssumptions["Debt"]["value"] = random.randint(minDebt, maxDebt)
-        defaultAssumptions["TheftRate"]["value"] = random.randint(minTheftRisk, maxTheftRisk)
+        assumptions["Salary"]["value"] = self.safe_randint(minSalary, maxSalary)
+        assumptions["FitnessAge"]["value"] = self.safe_randint(minFitnessAge, maxFitnessAge)
+        assumptions["Debt"]["value"] = self.safe_randint(minDebt, maxDebt)
+        assumptions["TheftRate"]["value"] = self.safe_randint(minTheftRisk, maxTheftRisk)
         
-        return defaultAssumptions
+        return assumptions
     
