@@ -3,13 +3,14 @@
 ## First sketch
 
 ### Dimensions
+
 - Width: 100 cm
 - Depth: 150 cm
 - Height: 200 cm
 
 ### Description
 
-The booth was designed to be big enough to fit a person and have some space for movement. The height was chosen to be 200 cm to ensure that most people can stand comfortably inside the booth. 
+The booth was designed to be big enough to fit a person and have some space for movement. The height was chosen to be 200 cm to ensure that most people can stand comfortably inside the booth.
 
 The booth will be made of wood and have walls on three sides. The side will be open with a curtain for easy access. The front of the booth can be decorated with posters and information about the project. The inside of the back wall will have a camera at eye level (120 cm from the ground) and a screen above it to display the user's photo. On the back side of the booth there will be a small box to hold the electronics and cables. The three walls will be held together will a cut in lid on the top. This will make it easy to assemble and disassemble the booth.
 
@@ -17,7 +18,7 @@ The booth will be made of wood and have walls on three sides. The side will be o
 
 ![sketch](./sketch.png)
 
-## Revision 
+## Revision
 
 ### Dimensions
 
@@ -44,7 +45,7 @@ The booth was built using wooden lats for the framing and 4mm MDF boards for the
 
 ### Back wall construction
 
-The most imporant part of the booth is the back wall, which holds the camera and screen. So I decided to build this part first. The outside framing is the same for both the front and back wall. So I used the front panel to measure and cut the framing for the back wall. The horizontal lats were screwed on top of the vertical ones. The MDF board is placed on the vertical lats, leaving a small gap at the bottom and top. This space is filled up with another row of horizontal lats. This way, the MDF board can be screwed on all four sides. 
+The most imporant part of the booth is the back wall, which holds the camera and screen. So I decided to build this part first. The outside framing is the same for both the front and back wall. So I used the front panel to measure and cut the framing for the back wall. The horizontal lats were screwed on top of the vertical ones. The MDF board is placed on the vertical lats, leaving a small gap at the bottom and top. This space is filled up with another row of horizontal lats. This way, the MDF board can be screwed on all four sides.
 
 ![wooden frame](./images/wooden_frame.jpeg)
 
@@ -56,9 +57,9 @@ After deattaching the front panel, I cut the two leftover pieces of MDF board (f
 
 _Later I will find out about the sticker still being on the MDF board._
 
-Then I decided to add the framing for both the monitor and camera as shown in the sketch. I made sure to measure the correct dimensions of the monitor and regularly check if the framing fit. 
+Then I decided to add the framing for both the monitor and camera as shown in the sketch. I made sure to measure the correct dimensions of the monitor and regularly check if the framing fit.
 
-The framing is set to be a bit more inward than the MDF board. This way, the monitor can rest against the MDF board and not fall through the hole. The same thing goes for the camera. 
+The framing is set to be a bit more inward than the MDF board. This way, the monitor can rest against the MDF board and not fall through the hole. The same thing goes for the camera.
 
 ![back wall with framing](./images/backwall_2_frame.jpeg)
 
@@ -72,11 +73,11 @@ After the framing was done, I added some panels to the wall. The panels are made
 
 ![back wall panels done back](./images/backwall_5_back.jpeg)
 
-The camera hole is 4 cm in diameter, which is big enough to fit the camera. It also has 1 cm of space on all sides around it. 
+The camera hole is 4 cm in diameter, which is big enough to fit the camera. It also has 1 cm of space on all sides around it.
 
 ![camera hole closeup](./images/camera_unit_closeup.jpeg)
 
-Heres a picture of the back wall with the monitor fitted in. It can be placed in from the back and rests on the lats and against the MDF board. Currently it can still fall out the back. 
+Heres a picture of the back wall with the monitor fitted in. It can be placed in from the back and rests on the lats and against the MDF board. Currently it can still fall out the back.
 
 ![monitor fitted](./images/backwall_6_monitor_inside.jpeg)
 
@@ -87,7 +88,7 @@ To prevent this, I added two small lats at the top monitor lat and screw it in u
 
 ### Product demo
 
-We used this wall to demonstrate the product at our school in Amsterdam. The booth was placed in front of a table with the laptop and other electronics on the side. 
+We used this wall to demonstrate the product at our school in Amsterdam. The booth was placed in front of a table with the laptop and other electronics on the side.
 
 ![booth demo](./images/backwall_9_product_showcase.jpeg)
 
@@ -113,7 +114,7 @@ After attaching the second panel the side wall was done.
 
 ### Front wall
 
-The front wall was made using the same method as the back wall. After the previous walls, this one was quite easy to make. 
+The front wall was made using the same method as the back wall. After the previous walls, this one was quite easy to make.
 
 ![front wall](./images/frontwall.jpeg)
 
@@ -121,7 +122,7 @@ The front wall was made using the same method as the back wall. After the previo
 
 After thinking about the assembly of the booth, I wanted to get started on the lid. But then the issue of light came up. The booth needs to be bright enough for the camera to take good pictures. So I decided to scrap the lid idea and make the booth open at the top. This way, there is enough light coming in from above. The walls can still be held together using corner braces.
 
-The back wall of the booth is still in Amsterdam, so I could only assemble the side and front wall. The side wall is attached to the front wall using corner braces on the top and bottom. 
+The back wall of the booth is still in Amsterdam, so I could only assemble the side and front wall. The side wall is attached to the front wall using corner braces on the top and bottom.
 
 ![booth assembly inside](./images/front_and_sidewall_inside.jpeg)
 
