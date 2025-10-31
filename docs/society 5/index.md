@@ -5,6 +5,7 @@
 - [Documentatie Society 5.0](#documentatie-society-50)
   - [Inhoudsopgave](#inhoudsopgave)
   - [Prototype](#prototype)
+  - [Bouw van het prototype](#bouw-van-het-prototype)
     - [Afbeeldingen](#afbeeldingen)
   - [Dag 1](#dag-1)
   - [Dag 2](#dag-2)
@@ -12,15 +13,27 @@
     - [Tijdens de expo hoopten we op de volgende resultaten](#tijdens-de-expo-hoopten-we-op-de-volgende-resultaten)
     - [Wat ging goed?](#wat-ging-goed)
     - [Wat gingen niet zoals verwacht](#wat-gingen-niet-zoals-verwacht)
-  - [Wat nemen we mee?](#wat-nemen-we-mee)
+    - [Wat nemen we mee?](#wat-nemen-we-mee)
+  - [Overzicht formulierdata](#overzicht-formulierdata)
+    - [Verdeling van sentiment](#verdeling-van-sentiment)
+    - [Populaire thema's tijdens Society 5.0](#populaire-themas-tijdens-society-50)
+    - [Was u bekend dat AI dit soort aannames bereid is te doen op basis van een foto?](#was-u-bekend-dat-ai-dit-soort-aannames-bereid-is-te-doen-op-basis-van-een-foto)
+    - [Hebben we uw mening kunnen veranderen over AI?](#hebben-we-uw-mening-kunnen-veranderen-over-ai)
+    - [Meest schokkende aanname](#meest-schokkende-aanname)
 
 ## Prototype
 
-Voor ons prototype hebben wij een 'photo booth' gemaakt. Het fotohokje heeft een camera en een beeldscherm. Voor de bouw van het prototype, zie [deze pagina](../booth/index.md).
+Voor ons prototype hebben wij een 'photo booth' gemaakt. Het fotohokje heeft een camera en een beeldscherm.
 
 De resultaten die uit de foto's kwamen waren niet gebaseerd op de gemaakte foto, maar puur op toeval. Dit kwam door de korte tijd die we hadden om het prototype te maken. Het doel van het prototype was dan ook niet om accurate voorspellingen te doen, maar om de gebruikers een bepaald gevoel te geven bij het maken van een foto.
 
 Tegenwoordig gebruiken veel mensen AI Chatbots zoals ChatGPT om informatie te verkrijgen. Het probleem hiervan is dat niet iedereen door heeft dat deze informatie van nature onbetrouwbaar is. Dit is blijkt echter niet altijd duidelijk voor de gebruikers wanneer zij een vraag stellen, het antwoord wordt vaak als feit verwoord. Ons doel met de photo booth is dan ook om mensen aan het denken te zetten over de betrouwbaarheid van AI en de informatie die zij verstrekken. Door aannames die je helemaal niet uit een foto kunt halen, te presenteren als feit, hopen we dat mensen zich bewust worden van de beperkingen van AI en kritisch gaan nadenken over de informatie die zij ontvangen.
+
+## Bouw van het prototype
+
+Voor de bouw van het prototype, zie onder het verslag na 'Overzicht formulierdata'.
+
+<div class="page"/>
 
 ### Afbeeldingen
 
@@ -104,7 +117,7 @@ Op dag 1 merkte we dat dat na de fotosessie mensen vaak even bleven hangen voor 
 
 Een aantal gebruikers hebben de Google Form niet ingevuld. Dit waren de mensen die hem later voor ons in zouden vullen. Dit is enigszins begrijpelijk wegens de vele activiteiten op de expo en de uitgebreide vragenlijst. De volgende keer zullen we ook kijken of we een deel van deze test mondeling kunnen afnemen en het formulier wat korter houden. Op deze manier kunnen we onze testresultaten na de vragenlijst veder aanvullen met specifiekere vragen.
 
-## Wat nemen we mee?
+### Wat nemen we mee?
 
 Door de ingevulde enquêtes hebben we nuttige feedback gekregen. Deze feedback zullen we dan ook meenemen in de verdere ontwikkeling van ons project.
 
@@ -114,7 +127,7 @@ Bovendien zullen we nadenken over hoe we de presentatie van ons project kunnen v
 
 Door de ervaringen tijdens de expo hebben we ook geleerd hoe we beter kunnen communiceren met bezoekers en hoe we onze presentatie kunnen aanpassen om meer interesse te wekken.
 
-# Overzicht formulierdata
+## Overzicht formulierdata
 
 De Photo Booth vroeg bezoekers om een foto te maken en ontving vervolgens door AI gegenereerde “aannames” over henzelf (bijv. fitheidsleeftijd, schermtijd, schulden, enz.).  
 Daarna vulden bezoekers een korte feedbackenquête in over hun ervaring.
@@ -124,7 +137,7 @@ Daarna vulden bezoekers een korte feedbackenquête in over hun ervaring.
 - **Meest voorkomende groep:** 18–25 (studenten)
 - **Technologische bekendheid:** Voornamelijk mensen die _werken of studeren in tech/AI_ of _af en toe AI-tools gebruiken_.
 
-## Verdeling van sentiment
+### Verdeling van sentiment
 
 Dit waren de gemiddelde gevoelens die mensen ervoeren bij het binnenkomen, interacteren of simpelweg in de buurt zijn van de photobooth.
 
@@ -133,67 +146,21 @@ _Bar Chart die gemiddelde emotie laat zien_
 
 ---
 
-## Populaire thema's tijdens Society 5.0
+### Populaire thema's tijdens Society 5.0
 
-```mermaid
-mindmap
-  root((Photo Booth Feedback))
-    Emoties
-      Grappig / Leuk
-      Interessant
-      Ongemakkelijk / Intrusief
-      Beangstigend
-    Onderwerpen
-      Fitnessleeftijd
-      Schulden / Salaris
-      Schermtijd
-      Diefstalrisico
-    Zorgen
-      Privacy / GDPR
-      Databeheer
-      AI bias
-      Misinterpretatie
-    Inzichten
-      AI kan veel meer dan ik dacht
-      AI is niet heel accuraat
-      Bewustzijn over grenzen
-    Verbeteringen
-      Betere verlichting
-      Comfortabelere stoel
-      Uitleg toevoegen / poster
-      Optie om de foto opnieuw te nemen
-      Groter scherm / touchscreen
-```
+![Mindmap](./mindmap.png)
 
-## Bestaande ervaring met AI
+### Was u bekend dat AI dit soort aannames bereid is te doen op basis van een foto?
 
-```mermaid
-pie title Wist je dat AI dit kan? (5 is ja, 1 is nee)
-    "5" : 2
-    "4" : 3
-    "3" : 3
-    "2" : 8
-    "1" : 8
-```
+![Ervaring ai taart diagram](./experience_ai.png)
 
-```mermaid
-pie title Hebben we je mening kunnen veranderen over AI?
-    "Ja" : 8
-    "Nee" : 16
-```
+### Hebben we uw mening kunnen veranderen over AI?
+
+![Mening veranderd taart diagram](./change_of_mind.png)
 
 Zoals te zien is, bleven de meeste bezoekers bij hun oorspronkelijke mening over AI.
-Toch slaagden we erin om ongeveer een derde (33%) van de deelnemers te overtuigen of hun kijk op AI te veranderen — een mooi resultaat gezien de korte interactietijd met de Photo Booth.
+Toch slaagden we erin om ongeveer een derde (33%) van de deelnemers te overtuigen of hun kijk op AI te veranderen — een mooi resultaat gezien de korte interactietijd met de Photo Booth en de al hoge grote kennis van de deelnemers.
 
-## Meest schokkende assumption
+### Meest schokkende aanname
 
-```mermaid
-pie title Wat is de meest schokkende aanname?
-    "Fitnessleeftijd": 10
-    "Diefstalrisico": 5
-    "Gewicht": 4
-    "Schulden": 3
-    "Schermtijd": 2
-    "Salaris": 1
-    "Burgerlijke staat": 1
-```
+![Meest schokkende aannames taart diagram](./shocking_assumptions.png)
