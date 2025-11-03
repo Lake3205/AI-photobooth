@@ -1,0 +1,5 @@
+CLIENTS = [
+    "openai",
+    "gemini",
+    "claude",
+]
