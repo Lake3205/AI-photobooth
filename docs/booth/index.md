@@ -17,6 +17,8 @@ The booth will be made of wood and have walls on three sides. The side will be o
 
 ![sketch](./sketch.png)
 
+<div class="page"/>
+
 ## Revision 
 
 ### Dimensions
@@ -38,19 +40,21 @@ The box for the electronics was also changed. Instead of having a box on the bac
 
 ![sketch](./sketch_v2.png)
 
+<div class="page"/>
+
 ## Building the booth
 
 The booth was built using wooden lats for the framing and 4mm MDF boards for the walls. The wooden lats were cut to size using a saw and then assembled using screws. The entire booth was built using 2 sheets of 122x244 cm MDF board. The first sheet was cut to fit the side wall which is 110x200 cm. The second sheet was used to create the front wall which is 75x200 cm. With the remaining pieces, the back wall was created which is 75x200 cm as well.
 
 ### Back wall construction
 
-The most imporant part of the booth is the back wall, which holds the camera and screen. So I decided to build this part first. The outside framing is the same for both the front and back wall. So I used the front panel to measure and cut the framing for the back wall. The horizontal lats were screwed on top of the vertical ones. The MDF board is placed on the vertical lats, leaving a small gap at the bottom and top. This space is filled up with another row of horizontal lats. This way, the MDF board can be screwed on all four sides. 
+The most important part of the booth is the back wall, which holds the camera and screen. So I decided to build this part first. The outside framing is the same for both the front and back wall. So I used the front panel to measure and cut the framing for the back wall. The horizontal lats were screwed on top of the vertical ones. The MDF board is placed on the vertical lats, leaving a small gap at the bottom and top. This space is filled up with another row of horizontal lats. This way, the MDF board can be screwed on all four sides. 
 
 ![wooden frame](./images/wooden_frame.jpeg)
 
 ![workspace and frame](./images/workspace_and_frame.jpeg)
 
-After deattaching the front panel, I cut the two leftover pieces of MDF board (from the 244 to 200cm cut) to the correct width of 75 cm. These pieces were then screwed onto the framing to start the back wall.
+After detaching the front panel, I cut the two leftover pieces of MDF board (from the 244 to 200cm cut) to the correct width of 75 cm. These pieces were then screwed onto the framing to start the back wall.
 
 ![back wall](./images/backwall_1.jpeg)
 
