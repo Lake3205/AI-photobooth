@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, status, HTTPException
+from fastapi import APIRouter, UploadFile, status, HTTPException
 
 from services.assumptions_service import AssumptionsService
 from clients.clients import CLIENTS

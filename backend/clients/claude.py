@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 from os import environ
-import anthropic
-import base64
+from anthropic import Anthropic
+from base64 import b64encode
 
 from models.assumptions import AssumptionsResponse
 from constants.prompt import SYSTEM_PROMPT, USER_PROMPT
@@ -26,10 +26,10 @@ class ClaudeClient:
 
         resized_bytes = ImageService().resize_image(original_bytes)
 
-        base64_image = base64.b64encode(resized_bytes).decode("utf-8")
+        base64_image = b64encode(resized_bytes).decode("utf-8")
         mime_type = getattr(image, "content_type", "") or ""
         
-        self.client = anthropic.Anthropic(api_key=self.api_key)
+        self.client = Anthropic(api_key=self.api_key)
         message = self.client.messages.create(
             model = version,
             max_tokens = self.max_tokens,
