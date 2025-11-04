@@ -1,6 +1,7 @@
 from fastapi import APIRouter, UploadFile, status, HTTPException
 
 from services.assumptions_service import AssumptionsService
+from services.test_service import TestService
 from clients.clients import CLIENTS
 from models.assumptions import AssumptionsModel
 
@@ -18,7 +19,6 @@ async def generate_assumptions(image: UploadFile, ai_model: str):
         case "claude":
             assumptions_model.model = ai_model
             assumptions_model.version = "claude-sonnet-4-5"
-            pass
         case _:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="AI model not supported yet.")
         
@@ -27,3 +27,17 @@ async def generate_assumptions(image: UploadFile, ai_model: str):
     assumptions_model.set_assumptions_json(assumptions)
     
     return assumptions_model.to_dict()
+
+# Endpoint for testing purposes that returns fixed assumptions
+@router.post("/test/generate", status_code=status.HTTP_200_OK)
+async def generate_test_assumptions():
+    assumptions_model = AssumptionsModel()
+    
+    assumptions = TestService.generate_assumptions()
+    
+    assumptions_model.model = "test_model"
+    assumptions_model.version = "1.0"
+    assumptions_model.set_assumptions_json(assumptions)
+    
+    return assumptions_model.to_dict()
+    
