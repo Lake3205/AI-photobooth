@@ -7,47 +7,47 @@ Though we're using different AI models, we want to maintain a consistent return 
     "model": "model_name",
     "version": "model_version",
     "assumptions": {
-        "Ethnicity": {
+        "ethnicity": {
             "name": "Ethnicity",
             "value": "ethnicity_value",
             "format": "text"
         },
-        "Religion": {
+        "religion": {
             "name": "Religion",
             "value": "religion_value",
             "format": "text",
         },
-        "PoliticalOpinion": {
+        "political_opinion": {
             "name": "Political opinion",
             "value": "political_opinion_value",
             "format": "text",
         },
-        "TheftRisk": {
+        "theft_risk": {
             "name": "Theft risk",
             "value": 0,
             "format": "percentage",    
         },
-        "Age": {
+        "age": {
             "name": "Age",
             "value": 0,
             "format": "years",
         },
-        "Weight": {
+        "weight": {
             "name": "Weight",
             "value": 0,
             "format": "weight",
         },
-        "School": {
+        "school": {
             "name": "Education level",
             "value": "education_level_value",
             "format": "text"
         },
-        "Salary": {
+        "salary": {
             "name": "Annual salary",
             "value": 0,
             "format": "currency",
         },
-        "Debt": {
+        "debt": {
             "name": "Debt",
             "value": 0,
             "format": "currency",

@@ -28,6 +28,6 @@ async def generate_assumptions(image: UploadFile, ai_model: str):
         
     assumptions = await assumptions_service.get_assumptions(assumptions_model, image)
         
-    assumptions_model.assumptions = assumptions
+    assumptions_model.set_assumptions_json(assumptions)
     
     return assumptions_model.to_dict()
