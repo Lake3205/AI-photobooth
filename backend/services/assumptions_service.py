@@ -1,7 +1,7 @@
 from clients.claude import ClaudeClient
 from models.assumptions import AssumptionsModel
 
-from clients.openai import OpenAIClient
+from clients.openai_client import OpenAIClient
 
 
 class AssumptionsService:

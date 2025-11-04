@@ -1,19 +1,37 @@
-from base64 import b64encode
 from os import environ
+
+import requests
 from dotenv import load_dotenv
 
 from constants.prompt import USER_PROMPT, SYSTEM_PROMPT
 from models.assumptions import AssumptionsResponse
-from openai.types.chat import ChatCompletionFunctionToolParam
+from openai.types.chat import ChatCompletionFunctionToolParam, ChatCompletionUserMessageParam, \
+    ChatCompletionContentPartTextParam, ChatCompletionContentPartImageParam
 from services.image_service import ImageService
 from openai import OpenAI
 
+load_dotenv()
+
+async def upload_image(image) -> str:
+    image_bytes = await image.read()
+    response = requests.post(
+        "https://catbox.moe/user/api.php",
+        data={"reqtype": "fileupload"},
+        files={"fileToUpload": (image.filename, image_bytes, image.content_type)}
+    )
+    if response.status_code == 200:
+        return response.text.strip()
+    else:
+        raise Exception(f"Catbox upload failed: {response.status_code} - {response.text}")
+
 
 class OpenAIClient:
-    load_dotenv()
-
     def __init__(self):
         self.api_key = environ.get('OPENAI_API_KEY')
+        self.client = OpenAI(
+            base_url=environ.get('OPENAI_API_BASE_URL'),
+            default_headers={'Authorization': f'Bearer {self.api_key}'}
+        )
         self.tools = [
             ChatCompletionFunctionToolParam(
                 type="function",
@@ -26,19 +44,27 @@ class OpenAIClient:
         ]
 
     async def generate_openai_response(self, image, version) -> dict:
-        original_bytes = await image.read()
+        image_url = await upload_image(image)
+        messages = [
+            ChatCompletionUserMessageParam(
+                    role="user",
+                    content=[
+                        ChatCompletionContentPartTextParam(
+                            type="text",
+                            text=USER_PROMPT
+                        ),
+                        ChatCompletionContentPartImageParam(
+                            type="image_url",
+                            image_url={"url": image_url}
+                        )
+                    ]
+            )]
 
-        resized_bytes = ImageService().resize_image(original_bytes)
-
-        base64_image = b64encode(resized_bytes).decode("utf-8")
-        mime_type = getattr(image, "content_type", "") or ""
-
-        self.client = OpenAI()
         response = self.client.chat.completions.create(
             model=version,
             tools=self.tools,
-            messages=[
-            ]
+            messages=messages,
+            tool_choice="auto"
         )
 
         function_call = None
@@ -50,3 +76,4 @@ class OpenAIClient:
                 function_call = None
 
         return function_call or {}
+
