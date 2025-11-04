@@ -1,3 +1,5 @@
+from enum import Enum
+
 EDUCATION_LEVELS = [
     "Dropout", "Middle school", "High school", "Bachelor's degree", "Master's degree", "PhD"
 ]
@@ -8,12 +10,12 @@ MARITAL_STATUSES = [
     "Married", "Living together / Cohabiting", "Single"
 ]
 
-FORMAT_TYPES = {
-    "percentage": "PERCENTAGE",
-    "currency": "CURRENCY",
-    "number": "NUMBER",
-    "weight": "WEIGHT",
-    "years": "YEARS",
-    "hoursPerDay": "HOURS_DAY",
-    "text": "TEXT",
-}
+class FormatType(Enum):
+    PERCENTAGE = "percentage"
+    CURRENCY = "currency"
+    NUMBER = "number"
+    WEIGHT = "weight"
+    YEARS = "years"
+    HOURS_DAY = "hours_per_day"
+    TEXT = "text"
+    

@@ -1,7 +1,3 @@
-from constants.assumptions_constants import (
-    EDUCATION_LEVELS, GENERATIONS, MARITAL_STATUSES, FORMAT_TYPES
-)
-
 from clients.claude import ClaudeClient
 from models.assumptions import AssumptionsModel
 
