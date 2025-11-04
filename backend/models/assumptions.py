@@ -2,6 +2,7 @@ from typing import Literal, Annotated
 
 from pydantic import BaseModel, Field
 from constants.assumptions_constants import FormatType
+from constants.clients import Clients
 
 # Response model for AI assumptions
 # Constraints the AI output where necessary to specific values or ranges
@@ -18,7 +19,7 @@ class AssumptionsResponse(BaseModel):
 
 # Model to hold the assumptions and configuration for sending back to the frontend
 class AssumptionsModel:
-    def __init__(self, model: str = None, version: str = None):
+    def __init__(self, model: Clients = None, version: str = None):
         self.model = model
         self.version = version
         self.assumptions = {
