@@ -3,6 +3,8 @@ from typing import Literal, Annotated
 from pydantic import BaseModel, Field
 from constants.assumptions_constants import FormatType
 
+# Response model for AI assumptions
+# Constraints the AI output where necessary to specific values or ranges
 class AssumptionsResponse(BaseModel):
     ethnicity: str = Field(description="Ethnicity of the person in the image, e.g., Caucasian, African, Asian, etc. In case of mixed, use the most dominant")
     religion: Literal["Christianity", "Islam", "Hinduism", "Buddhism", "Judaism", "Atheism", "Other"]
@@ -14,6 +16,7 @@ class AssumptionsResponse(BaseModel):
     salary: Annotated[int, Field(ge=0, description="Annual salary in EUR")]
     debt: Annotated[int, Field(ge=0, description="Total debt in EUR")]
 
+# Model to hold the assumptions and configuration for sending back to the frontend
 class AssumptionsModel:
     def __init__(self, model: str = None, version: str = None):
         self.model = model
@@ -64,12 +67,9 @@ class AssumptionsModel:
             "assumptions": self.assumptions
         }
     
+    # Set assumptions according to the general return format from a given JSON dict
     def set_assumptions_json(self, assumptions_json: dict):
         for assumption in assumptions_json:
             if assumption not in self.assumptions:
                 continue
             self.assumptions[assumption]['value'] = assumptions_json[assumption]
-        print(self.to_dict())
-        
-    def set_assumption_value(self, key: str, value):
-        self.assumptions[key]['value'] = value

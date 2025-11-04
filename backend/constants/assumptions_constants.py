@@ -10,6 +10,7 @@ MARITAL_STATUSES = [
     "Married", "Living together / Cohabiting", "Single"
 ]
 
+# Enumeration for different format types used in assumptions
 class FormatType(Enum):
     PERCENTAGE = "percentage"
     CURRENCY = "currency"
