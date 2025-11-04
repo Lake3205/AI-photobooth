@@ -1,5 +1,6 @@
 from clients.claude import ClaudeClient
 from models.assumptions import AssumptionsModel
+from constants.clients import Clients
 
 class AssumptionsService:
     def __init__(self):
@@ -9,7 +10,7 @@ class AssumptionsService:
         
 
         match assumptions_model.model:
-            case "claude":
+            case Clients.CLAUDE:
                 response = await self.claude_client.generate_response(image, version=assumptions_model.version)
             case _:
                 response = {}

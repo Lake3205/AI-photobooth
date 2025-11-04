@@ -33,6 +33,7 @@ class ClaudeClient:
         message = self.client.messages.create(
             model = version,
             tools = self.tools,
+            max_tokens=1000,
             tool_choice = {
                 "type": "tool", 
                 "name": "analyse_the_image"
