@@ -330,6 +330,27 @@ export const useWebcamService = () => {
     });
   }
 
+  const reload = async () => {
+    if (!latestImage.value) {
+      analysisError.value = 'No image to reload'
+      return
+    }
+
+    try {
+      isAnalyzing.value = true
+      analysisError.value = null
+
+      const assumptions = await assumptionsService.generateAssumptions(latestImage.value.blob)
+      analysisData.value = assumptions
+    } catch (error) {
+      console.error('Reload error:', error)
+      analysisError.value = error instanceof Error ? error.message : 'Reload failed'
+    } finally {
+      isAnalyzing.value = false
+    }
+  } 
+
+
   // Cleanup on unmount
   onUnmounted(() => {
     stopCamera()
@@ -375,6 +396,7 @@ export const useWebcamService = () => {
     getStringHash,
     getConsistentPercentage,
     getBarColorClass,
-    uploadFile
+    uploadFile,
+    reload,
   }
 }
