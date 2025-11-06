@@ -90,6 +90,18 @@ Voor de volgende sprint ga ik kijken naar hoe LLMs zoals GPT filters toepassen o
 
 ### Sjoerd
 
+Ik ben in deze sprint dieper gedoken in de werking van AI en mijn vergaarde kennis samengevat en gedocumenteerd voor in
+mijn PDP. Hierna ben ik begonnen met het onderzoeken van waarom en hoe AI hallucineert, wat een basis geeft voor mijn
+leerdoel. Ook heb ik deze sprint een voortgangsevaluatie gehad met Marise en mijn leergroep-buddy om de voortgang van
+mijn leerdoelen te bespreken en feedback te krijgen. Dit is verwerkt in de laatste versie van mijn PDP.
+Ik heb tijdens de sprint gewerkt met Google AI Studio om Gemini te implementeren in onze applicatie. Van de AI-modellen
+die we in onze applicatie willen verwerken zal deze het meest worden gebruikt omdat deze zonder kosten te gebruiken is.
+Tot slot heb ik deze sprint de retrospective geleid en het team geïntroduceerd met de retrospective methode zoals ik 
+deze heb geleerd tijdens mijn stage bij Albert Heijn, wat hopelijk leidt tot een betere en effectievere retrospective.
+
+Voor de volgende sprint wil ik me verdiepen in hoe AI effectiever kan worden aangeroepen, om zo hallicinaties te 
+verminderen en de consistentie van de output van AI-modellen te verbeteren.
+
 ### Senna
 
 ### Jay
