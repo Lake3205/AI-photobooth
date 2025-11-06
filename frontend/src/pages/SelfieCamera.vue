@@ -5,7 +5,6 @@ import {CameraIcon} from '@heroicons/vue/24/outline'
 import UploadButton from '@/components/UploadButton.vue'
 import AssumptionsPanel from '@/components/AssumptionsPanel.vue'
 import {useRouter} from "vue-router";
-import LandingButton from "@/components/LandingButton.vue";
 
 const router = useRouter()
 
@@ -43,10 +42,6 @@ const {
 const goBack = () => {
   stopCamera()
   router.push({name: 'landing'})
-}
-
-function goToDashboard() {
-  router.push({name: 'dashboard'})
 }
 
 // Auto-start camera when component mounts
@@ -134,7 +129,6 @@ onMounted(() => {
             >
               ← Back to start
             </button>
-            <LandingButton :label="'Get Started'" :onClick="goToDashboard" class="mt-5"/>
           </div>
         </div>
 
