@@ -2,6 +2,14 @@
 
 ## Inleiding
 
+Voor deze retrospective zijn we begonnen met allen een cijfer aan de sprint te geven om tastbare meting te maken van 
+hoe we vonden dat de sprint was verlopen. We hebben ook onze cijfers onderbouwd en samengevat, zonder hierin in 
+discussie te gaan. Vervolgens hebben we teruggeblikt op de actiepunten van de vorige sprint en gekeken in hoeverre we
+hier op vooruit zijn gegaan. Hierna hebben we allen de tijd genomen om zelf op post-its te schrijven wat er goed ging
+en wat er beter kan. Deze post-its hebben we vervolgens bij elkaar geplakt en geclusterd, waar nodig zijn de punten op 
+de post-its concreet uitgelegd. Tot slot voor het gezamenlijke deel hebben we aan de hand van de post-its met punten
+die minder goed gingen actiepunten opgesteld voor de volgende sprint. Daarna was er ruimte voor individuele reflecties.
+
 ## Sprintcijfers sprint 2
 
 | Teamlid | Sprintcijfer |
@@ -21,10 +29,9 @@ die heel leerzaam was.
 - De wekelijkse meetings zijn gehouden. Deze verliepen goed, maar werden niet gedocumenteerd.
 - Er is een taakverdeling en planning goed gemaakt, alleen was deze slecht bijgehouden in ons sprintboard.
 - Feature lock is niet toegepast. We willen de definitie van "feature lock" nog wat aanpassen, we zullen de high
-  priority
-  features max. 2 dagen van te voren pushen. Alle low priority features zullen nog worden geaccepteerd door de
-  feature lock heen. Uiteraard willen we als doel behouden dat alle features 2 dagen van te voren af zijn, gechekt zijn
-  en goed werken.
+  priority features max. 2 dagen van te voren pushen. Alle low priority features zullen nog worden geaccepteerd door de
+  feature lock heen. Uiteraard willen we als doel behouden dat alle features 2 dagen van te voren af zijn, gecheckt 
+  zijn en goed werken.
 
 ## Wat ging goed?
 
