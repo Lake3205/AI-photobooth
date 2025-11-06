@@ -22,7 +22,6 @@ class AssumptionsService {
 
   async generateAssumptions(imageBlob: Blob, filename: string = 'selfie.jpg'): Promise<AssumptionData> {
     try {
-      // Still send the image as FormData, but the backend will void it
       const formData = new FormData();
       formData.append('image', imageBlob, filename);
 
