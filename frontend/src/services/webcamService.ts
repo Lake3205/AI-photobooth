@@ -7,8 +7,10 @@ interface CapturedImage {
   blob: Blob
 }
 
-interface AnalysisResponse {
-  [filename: string]: AssumptionData;
+interface TestAnalysisResponse {
+  model: string;
+  version: string;
+  assumptions: AssumptionData;
 }
 
 class AssumptionsService {
@@ -20,10 +22,11 @@ class AssumptionsService {
 
   async generateAssumptions(imageBlob: Blob, filename: string = 'selfie.jpg'): Promise<AssumptionData> {
     try {
+      // Still send the image as FormData, but the backend will void it
       const formData = new FormData();
       formData.append('image', imageBlob, filename);
 
-      const response = await fetch(`${this.baseUrl}/assumptions/generate`, {
+      const response = await fetch(`${this.baseUrl}/assumptions/test/generate`, {
         method: 'POST',
         body: formData,
       });
@@ -32,14 +35,13 @@ class AssumptionsService {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data: AnalysisResponse = await response.json();
+      const data: TestAnalysisResponse = await response.json();
       
-      const assumptions = data[filename];
-      if (!assumptions) {
+      if (!data.assumptions) {
         return null as unknown as AssumptionData;
       }
       
-      return assumptions;
+      return data.assumptions;
     } catch (error) {
       console.error('Error generating assumptions:', error);
       throw new Error('Failed to generate assumptions');
