@@ -16,6 +16,9 @@ class AssumptionsResponse(BaseModel):
     school_level: Literal["Dropout", "Primary", "Secondary", "High School", "Vocational", "Bachelor's", "Master's", "PhD"]
     salary: Annotated[int, Field(ge=0, description="Annual salary in EUR")]
     debt: Annotated[int, Field(ge=0, description="Total debt in EUR")]
+    
+    def to_dict(self):
+        return self.model_dump()
 
 # Model to hold the assumptions and configuration for sending back to the frontend
 class AssumptionsModel:
@@ -37,7 +40,7 @@ class AssumptionsModel:
             },
             "theft_risk": {
                 "name": "Theft risk",
-                "format": FormatType.PERCENTAGE.value,    
+                "format": FormatType.PERCENTAGE.value,
             },
             "age": {
                 "name": "Age",
@@ -67,7 +70,7 @@ class AssumptionsModel:
             "version": self.version,
             "assumptions": self.assumptions
         }
-    
+
     # Set assumptions according to the general return format from a given JSON dict
     def set_assumptions_json(self, assumptions_json: dict):
         for assumption in assumptions_json:

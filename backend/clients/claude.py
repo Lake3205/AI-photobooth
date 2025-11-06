@@ -5,6 +5,7 @@ from base64 import b64encode
 
 from models.assumptions import AssumptionsResponse
 from constants.prompt import SYSTEM_PROMPT, USER_PROMPT
+from constants.model_version_constants import CLAUDE_MODEL_VERSION
 from services.image_service import ImageService
 
 # Client to interact with Claude AI, handles setup of API and request formatting
@@ -21,7 +22,7 @@ class ClaudeClient:
             }
         ]
         
-    async def generate_response(self, image, version) -> dict:
+    async def generate_response(self, image) -> dict:
         # Resize image to fit within 512x512 pixels to reduce token amount
         original_bytes = await image.read()
         resized_bytes = ImageService().resize_image(original_bytes)
@@ -31,7 +32,7 @@ class ClaudeClient:
         
         self.client = Anthropic(api_key=self.api_key)
         message = self.client.messages.create(
-            model = version,
+            model = CLAUDE_MODEL_VERSION,
             tools = self.tools,
             max_tokens=1000,
             tool_choice = {

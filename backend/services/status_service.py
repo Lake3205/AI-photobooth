@@ -14,7 +14,7 @@ class StatusService:
             case Clients.OPENAI:
                 return "OpenAI client is operational."
             case Clients.GEMINI:
-                return "Gemini client is operational."
+                return "Gemini client might be operational, check https://aistudio.google.com/status."
             case _:
                 return "Unknown AI model."
             
@@ -33,3 +33,4 @@ class StatusService:
             self.model_status.set_status(Clients.CLAUDE, Status.OFFLINE, str(e))
             return
         return
+    
