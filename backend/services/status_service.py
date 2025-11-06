@@ -33,3 +33,4 @@ class StatusService:
             self.model_status.set_status(Clients.CLAUDE, Status.OFFLINE, str(e))
             return
         return
+    

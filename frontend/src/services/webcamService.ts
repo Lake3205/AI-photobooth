@@ -7,8 +7,10 @@ interface CapturedImage {
   blob: Blob
 }
 
-interface AnalysisResponse {
-  [filename: string]: AssumptionData;
+interface TestAnalysisResponse {
+  model: string;
+  version: string;
+  assumptions: AssumptionData;
 }
 
 class AssumptionsService {
@@ -23,7 +25,7 @@ class AssumptionsService {
       const formData = new FormData();
       formData.append('image', imageBlob, filename);
 
-      const response = await fetch(`${this.baseUrl}/assumptions/generate`, {
+      const response = await fetch(`${this.baseUrl}/assumptions/generate?ai_model=gemini`, {
         method: 'POST',
         body: formData,
       });
@@ -32,14 +34,13 @@ class AssumptionsService {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data: AnalysisResponse = await response.json();
+      const data: TestAnalysisResponse = await response.json();
       
-      const assumptions = data[filename];
-      if (!assumptions) {
+      if (!data.assumptions) {
         return null as unknown as AssumptionData;
       }
       
-      return assumptions;
+      return data.assumptions;
     } catch (error) {
       console.error('Error generating assumptions:', error);
       throw new Error('Failed to generate assumptions');
@@ -132,17 +133,17 @@ export const useWebcamService = () => {
   }
 
   const formatField = (field: AssumptionType): string => {
-    if (field.format === 'PERCENTAGE' && typeof field.value === 'number') {
+    if (field.format === 'percentage' && typeof field.value === 'number') {
       return `${field.value.toFixed(1)}%`
-    } else if (field.format === 'CURRENCY' && typeof field.value === 'number') {
+    } else if (field.format === 'currency' && typeof field.value === 'number') {
       return `€${field.value.toLocaleString()}`
-    } else if (field.format === 'NUMBER' && typeof field.value === 'number') {
+    } else if (field.format === 'number' && typeof field.value === 'number') {
       return field.value.toString()
-    } else if (field.format === 'WEIGHT' && typeof field.value === 'number') {
+    } else if (field.format === 'weight' && typeof field.value === 'number') {
       return `${field.value.toFixed(1)} kg`
-    } else if (field.format === 'YEARS' && typeof field.value === 'number') {
+    } else if (field.format === 'years' && typeof field.value === 'number') {
       return `${field.value} years`
-    } else if (field.format === 'HOURS_DAY' && typeof field.value === 'number') {
+    } else if (field.format === 'hoursDay' && typeof field.value === 'number') {
       return `${field.value} hours per day`
     } 
     return String(field.value)
@@ -159,7 +160,7 @@ export const useWebcamService = () => {
 
   const getConsistentPercentage = (field: AssumptionType): number => {
     // If the field has a defined range, calculate percentage within that range
-    if (field.format === 'PERCENTAGE' && typeof field.value === 'number') {
+    if (field.format === 'percentage' && typeof field.value === 'number') {
       return Math.min(Math.max(field.value, 0), 100)
     }
 
@@ -329,6 +330,27 @@ export const useWebcamService = () => {
     });
   }
 
+  const reload = async () => {
+    if (!latestImage.value) {
+      analysisError.value = 'No image to reload'
+      return
+    }
+
+    try {
+      isAnalyzing.value = true
+      analysisError.value = null
+
+      const assumptions = await assumptionsService.generateAssumptions(latestImage.value.blob)
+      analysisData.value = assumptions
+    } catch (error) {
+      console.error('Reload error:', error)
+      analysisError.value = error instanceof Error ? error.message : 'Reload failed'
+    } finally {
+      isAnalyzing.value = false
+    }
+  } 
+
+
   // Cleanup on unmount
   onUnmounted(() => {
     stopCamera()
@@ -374,6 +396,7 @@ export const useWebcamService = () => {
     getStringHash,
     getConsistentPercentage,
     getBarColorClass,
-    uploadFile
+    uploadFile,
+    reload,
   }
 }

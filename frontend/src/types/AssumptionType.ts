@@ -5,7 +5,7 @@ export interface AssumptionData {
 export type AssumptionType = {
     name: string;
     value: string | number;
-    format:  "PERCENTAGE" | "CURRENCY" | "NUMBER" | "WEIGHT" | "YEARS" | "HOURS_DAY" | "TEXT",
+    format:  "percentage" | "currency" | "number" | "weight" | "years" | "hoursDay" | "text",
     min?: number;
     max?: number;
     ideal?: number;
