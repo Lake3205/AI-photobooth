@@ -1,6 +1,7 @@
 from clients.claude import ClaudeClient
 from models.assumptions import AssumptionsModel
 from constants.clients import Clients
+from services.database_service import log_assumption_to_db
 
 from clients.google_ai_client import GoogleAIClient
 
@@ -13,6 +14,7 @@ class AssumptionsService:
         match assumptions_model.model:
             case Clients.CLAUDE:
                 response = await self.claude_client.generate_response(image)
+                model_name = "claude"
             case Clients.GEMINI:
                 image_bytes = await image.read()
                 mime_type = image.content_type
@@ -21,7 +23,17 @@ class AssumptionsService:
                     mime_type=mime_type
                 )
                 response = response.to_dict()
+                model_name = "gemini"
             case _:
                 response = {}
+                model_name = "unknown"
+
+        # Log the assumption to the database
+        if response:
+            try:
+                assumption_id = log_assumption_to_db(ai_model=model_name, data=response)
+                response['id'] = assumption_id
+            except Exception as e:
+                print(f"failed to log assumption to database: {e}")
 
         return response
