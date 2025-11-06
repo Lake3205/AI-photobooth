@@ -133,17 +133,17 @@ export const useWebcamService = () => {
   }
 
   const formatField = (field: AssumptionType): string => {
-    if (field.format === 'PERCENTAGE' && typeof field.value === 'number') {
+    if (field.format === 'percentage' && typeof field.value === 'number') {
       return `${field.value.toFixed(1)}%`
-    } else if (field.format === 'CURRENCY' && typeof field.value === 'number') {
+    } else if (field.format === 'currency' && typeof field.value === 'number') {
       return `€${field.value.toLocaleString()}`
-    } else if (field.format === 'NUMBER' && typeof field.value === 'number') {
+    } else if (field.format === 'number' && typeof field.value === 'number') {
       return field.value.toString()
-    } else if (field.format === 'WEIGHT' && typeof field.value === 'number') {
+    } else if (field.format === 'weight' && typeof field.value === 'number') {
       return `${field.value.toFixed(1)} kg`
-    } else if (field.format === 'YEARS' && typeof field.value === 'number') {
+    } else if (field.format === 'years' && typeof field.value === 'number') {
       return `${field.value} years`
-    } else if (field.format === 'HOURS_DAY' && typeof field.value === 'number') {
+    } else if (field.format === 'hoursDay' && typeof field.value === 'number') {
       return `${field.value} hours per day`
     } 
     return String(field.value)
@@ -160,7 +160,7 @@ export const useWebcamService = () => {
 
   const getConsistentPercentage = (field: AssumptionType): number => {
     // If the field has a defined range, calculate percentage within that range
-    if (field.format === 'PERCENTAGE' && typeof field.value === 'number') {
+    if (field.format === 'percentage' && typeof field.value === 'number') {
       return Math.min(Math.max(field.value, 0), 100)
     }
 
