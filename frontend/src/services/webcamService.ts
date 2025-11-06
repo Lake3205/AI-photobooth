@@ -25,7 +25,7 @@ class AssumptionsService {
       const formData = new FormData();
       formData.append('image', imageBlob, filename);
 
-      const response = await fetch(`${this.baseUrl}/assumptions/test/generate`, {
+      const response = await fetch(`${this.baseUrl}/assumptions/generate?ai_model=gemini`, {
         method: 'POST',
         body: formData,
       });
