@@ -48,7 +48,7 @@ die heel leerzaam was.
 | Tip                                                                                                      | Hoeveelheid | 
 |----------------------------------------------------------------------------------------------------------|-------------|
 | Gebrek aan gebruik sprintboard                                                                           | 3           |
-| Onoficiele meetings worden niet gedocumenteerd                                                           | 1           |
+| Onofficiële meetings worden niet gedocumenteerd                                                          | 1           |
 | Niet bestaande frontend documentatie                                                                     | 1           |
 | Meteen beginnen met sprintplanning wanneer deze is afgesproken i.p.v. later thuis (Betere voorbereiding) | 1           |
 | Weinig initiatief om werk te leveren (iedereen behalve Tom)                                              | 2           |
@@ -60,7 +60,7 @@ die heel leerzaam was.
   bespreken, filteren, en in het sprintboard zetten. Daarna gaan we als team er ook voor zorgen dat het sprintboard
   correct en tijdig wordt bijgehouden.
     - Hierdoor kunnen we ook ervoor zorgen dat we meteen beginnen met de sprintplanning wanneer deze staat ingepland.
-- De documentatie moet echt stukke beter, met nadruk op onofficiele meetings en frontend. We gaan ervoor zorgen dat deze
+- De documentatie moet echt stukke beter, met nadruk op onofficiële meetings en frontend. We gaan ervoor zorgen dat deze
   documentatie compleet en correct is, en dat deze door elk teamlid wordt nagelezen.
 - Alle groepsleden moet gelijkaardige initiatief tonen om werk te leveren. We gaan ervoor zorgen dat iedereen zijn taken
   op tijd af heeft, en dat
@@ -78,11 +78,30 @@ die heel leerzaam was.
 
 ### Tom
 
+Over het algemeen ben ik tevreden met mijn persoonlijke voortgang deze sprint. Ik heb veel kunnen leren over het implementeren van AI en de backend architectuur. 
+
+Mijn ontwikkeldoel deze sprint was om mijn kennis van AI te verdiepen. Hier heb ik een ontwikkelplan voor opgesteld. Hier staan een aantal actiepunten in waaronder het bekijken van een tutorialserie, het lezen van een beginners vriendelijke introductie tot transformers, en tot slot mijn ouders uitleggen hoe AI werkt om mijn begrip te testen.
+
+De tutorialserie heb ik bekeken en per video in mijn persoonlijk ontwikkelplan genoteerd wat ik eruit heb gehaald. Deze videos hebben mij geholpen om een beter begrip te krijgen van de principes van AI en hoe dit in de praktijk wordt toegepast. Ook gingen de video's vrij diep in op de wiskundige en programmeer aspecten van AI.   
+Door de video's was het artikel over transformers een stuk makkelijker te begrijpen. Ik heb het artikel gelezen en samengevat.  
+Vanavond ga ik mijn ouders proberen uit te leggen hoe AI werkt. Ik noteer hun vragen en mijn antwoorden in mijn ontwikkelplan samen met een cijfer van hen over hoe goed ik het heb uitgelegd.
+
+Voor de volgende sprint ga ik kijken naar hoe LLMs zoals GPT filters toepassen op hun output en hoe ik dit eventueel kan omzeilen voor mijn project.
+
 ### Sjoerd
 
 ### Senna
 
 ### Jay
+
+Ik heb in sprint 2 kunnen werken aan mijn ontwikkelplan en heb ik verschillende taken uitgevoerd die bijdragen aan mijn persoonlijke en professionele groei als AI Developer.
+Tijdens de sprint heb ik gewerkt met OpenAI's GPT-4 API om met een foto assumpties te genereren voor de persoon die een foto wilt maken in de photo booth.  
+Ik heb dit met Marise besproken en daarna geïmplementeerd in de code. Enige waar ik tegen vast liep is dat je voor de API een betaalde account nodig hebt.  
+Daarnaast heb ik ook gewerkt aan het beter begrijpen van de ethische implicaties van AI-technologieën en hoe deze op een verantwoorde manier kunnen worden ingezet.  
+Hier heb ik tijdens society 5.0 veel van opgepikt tijdens dat mensen bij ons in de photo booth kwamen en ik met hun in gesprek ging over hoe we onze booth hebben gemaakt.
+
+Verder ben ik pas tevreden met het resultaat als het werkt. Op society 5.0 bijvoorbeeld hadden we al een werkend iets en daar was ik tevreden mee.
+Nu het volgende doel is dat met AI te maken en dan dat werkend te krijgen. Als dit werkt zou dit mijn bewijsstuk zijn dat ik het kan.
 
 ### Borys
 
