@@ -1,19 +1,12 @@
-EDUCATION_LEVELS = [
-    "Dropout", "Middle school", "High school", "Bachelor's degree", "Master's degree", "PhD"
-]
-GENERATIONS = [
-    "Stille generatie", "Boomer", "Gen X", "Millenial", "Gen Z", "Gen alpha"
-]
-MARITAL_STATUSES = [
-    "Married", "Living together / Cohabiting", "Single"
-]
+from enum import Enum
 
-FORMAT_TYPES = {
-    "percentage": "PERCENTAGE",
-    "currency": "CURRENCY",
-    "number": "NUMBER",
-    "weight": "WEIGHT",
-    "years": "YEARS",
-    "hoursPerDay": "HOURS_DAY",
-    "text": "TEXT",
-}
+# Enumeration for different format types used in assumptions
+class FormatType(Enum):
+    PERCENTAGE = "percentage"
+    CURRENCY = "currency"
+    NUMBER = "number"
+    WEIGHT = "weight"
+    YEARS = "years"
+    HOURS_DAY = "hours_per_day"
+    TEXT = "text"
+    
