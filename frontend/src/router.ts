@@ -1,7 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import Landing from '@/pages/Landing.vue';
-import Upload from '@/pages/Upload.vue';
 import SelfieCamera from '@/pages/SelfieCamera.vue';
+import Dashboard from '@/pages/Dashboard.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,9 +17,9 @@ const router = createRouter({
             component: SelfieCamera,
         },
         {
-            path: '/upload',
-            name: 'upload',
-            component: Upload,
+            path: '/dashboard',
+            name: 'dashboard',
+            component: Dashboard,
         }
     ],
 })
