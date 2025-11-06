@@ -124,9 +124,9 @@ onMounted(() => {
 
                   <div v-if="isStreaming" class="absolute bottom-8 left-1/2 transform -translate-x-1/2">
                     <button
-                        tabindex="1"
                         :disabled="countdown > 0"
                         class="group relative p-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full transition-all duration-200 hover:scale-110"
+                        tabindex="1"
                         @click="takeLatestPicture"
                     >
                       <div
@@ -283,8 +283,8 @@ onMounted(() => {
                     Delete Photo
                   </button>
                   <button
-                    class="fixed bottom-2 right-2 w-8 h-8 bg-gray-500/20 hover:bg-gray-500/30 rounded-full opacity-10 hover:opacity-50 transition-opacity"
-                    @click="reload"
+                      class="fixed bottom-2 right-2 w-8 h-8 bg-gray-500/20 hover:bg-gray-500/30 rounded-full opacity-10 hover:opacity-50 transition-opacity"
+                      @click="reload"
                   ></button>
 
                 </div>
