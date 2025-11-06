@@ -24,6 +24,16 @@ cd backend
 pip install -r requirements.txt
 ```
 
+### Add a Gemini API Key
+
+Get a free Gemini API Key from [Google AI Studio](https://aistudio.google.com/api-keys)
+
+Create a `.env` file in the `backend` directory and add your Gemini API key:
+
+```
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+
 ### Run the Backend Server
 Start the FastAPI server using Uvicorn:
 
