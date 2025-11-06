@@ -87,3 +87,8 @@ die heel leerzaam was.
 ### Borys
 
 ## Bijlagen
+
+<img src="post-its.png" alt="Post-its" style="transform: rotate(180deg);">
+<img src="post-its-cijfers.png" alt="Post-its" style="transform: rotate(180deg);">
+<img src="post-its-top.png" alt="Post-its">
+<img src="post-its-tip.png" alt="Post-its">
