@@ -5,6 +5,7 @@ import {CameraIcon} from '@heroicons/vue/24/outline'
 import UploadButton from '@/components/UploadButton.vue'
 import AssumptionsPanel from '@/components/AssumptionsPanel.vue'
 import {useRouter} from "vue-router";
+import LandingButton from "@/components/LandingButton.vue";
 
 const router = useRouter()
 
@@ -36,11 +37,16 @@ const {
   getBarColorClass,
   getConsistentPercentage,
   formatField,
+  reload,
 } = useWebcamService()
 
 const goBack = () => {
   stopCamera()
   router.push({name: 'landing'})
+}
+
+function goToDashboard() {
+  router.push({name: 'dashboard'})
 }
 
 // Auto-start camera when component mounts
@@ -128,6 +134,7 @@ onMounted(() => {
             >
               ← Back to start
             </button>
+            <LandingButton :label="'Get Started'" :onClick="goToDashboard" class="mt-5"/>
           </div>
         </div>
 
@@ -154,6 +161,10 @@ onMounted(() => {
                 :getConsistentPercentage="getConsistentPercentage"
                 :isAnalyzing="isAnalyzing"
             />
+            <button
+                class="fixed bottom-2 right-2 w-8 h-8 bg-gray-500/20 hover:bg-gray-500/30 rounded-full opacity-10 hover:opacity-50 transition-opacity"
+                @click="reload"
+            ></button>
           </div>
         </div>
       </div>
