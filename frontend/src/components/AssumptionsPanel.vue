@@ -47,31 +47,6 @@ const getIcon = (field: AssumptionType) => {
 
   return QuestionMarkCircleIcon
 }
-
-// Determine whether to show a progress bar for a field
-const percentForField = (field: AssumptionType): number | null => {
-  if (field.format === 'percentage' && typeof field.value === 'number') {
-    return Math.min(Math.max(field.value, 0), 100)
-  }
-  if (typeof field.value === 'number' && field.min !== undefined && field.max !== undefined) {
-    if (field.max === field.min) return 100
-    const clamped = Math.min(Math.max(field.value, field.min), field.max)
-    return ((clamped - field.min) / (field.max - field.min)) * 100
-  }
-
-  return null
-}
-
-const averageConfidence = computed(() => {
-  const percents: number[] = []
-  for (const f of entries.value) {
-    const p = percentForField(f)
-    if (p !== null) percents.push(p)
-  }
-  if (percents.length === 0) return null
-  const sum = percents.reduce((s, v) => s + v, 0)
-  return Math.round(sum / percents.length)
-})
 </script>
 
 <template>
@@ -91,36 +66,29 @@ const averageConfidence = computed(() => {
 
     <div v-else class="grid gap-6">
       <div
-          class="summary-card rounded-2xl p-3 bg-gradient-to-br from-white/6 to-transparent border border-white/10 flex items-center justify-between">
+          class="summary-card rounded-2xl p-3 bg-gradient-to-br from-white/6 to-transparent border border-white/10 flex items-center justify-start">
         <div>
           <h3 class="text-2xl md:text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-100 to-fuchsia-200 pb-2">
             Insights</h3>
         </div>
-
-        <div class="text-right">
-          <div class="text-sm text-white/70">Confidence</div>
-          <div class="text-3xl font-bold text-white mt-1">
-            <template v-if="averageConfidence !== null">{{ averageConfidence }}%</template>
-            <template v-else>—</template>
-          </div>
-        </div>
       </div>
 
       <div v-if="textFields.length > 0" class="text-section">
-        <div class="flex flex-wrap items-center gap-3">
-          <template v-for="field in textFields" :key="field.name">
-            <div :aria-label="field.name" :class="['assumption-chip', props.getBarColorClass(field.name)]" role="group">
-              <div class="chip-left">
-                <div class="chip-badge text-xs font-semibold">
-                  <component :is="getIcon(field)" class="h-5 w-5 text-white/90"/>
-                </div>
+        <div class="grid gap-3 grid-cols-1 sm:grid-cols-2">
+          <div v-for="field in textFields" :key="field.name" :aria-label="field.name" role="group">
+            <div
+                class="assumption-chip w-full flex items-center gap-3 p-3 rounded-xl bg-white/4 border border-white/8 shadow-sm">
+              <div
+                  :class="['chip-badge flex-shrink-0 h-10 w-10 rounded-lg flex items-center justify-center', props.getBarColorClass(field.name)]">
+                <component :is="getIcon(field)" class="h-5 w-5 text-white/95"/>
               </div>
-              <div class="chip-body">
-                <div class="chip-title text-sm font-semibold">{{ field.name }}</div>
-                <div class="chip-value text-xs text-white/90">{{ props.formatField(field) }}</div>
+
+              <div class="chip-body min-w-0">
+                <div class="chip-title text-sm font-semibold text-white truncate">{{ field.name }}</div>
+                <div class="chip-value text-xs text-white/80 truncate">{{ props.formatField(field) }}</div>
               </div>
             </div>
-          </template>
+          </div>
         </div>
       </div>
 
@@ -137,17 +105,6 @@ const averageConfidence = computed(() => {
                   <div class="text-sm text-white/70">{{ field.name }}</div>
                   <div class="text-2xl md:text-3xl font-extrabold text-white">{{ props.formatField(field) }}</div>
                 </div>
-              </div>
-            </div>
-
-            <div v-if="percentForField(field) !== null" class="mt-4">
-              <div class="flex items-center justify-between text-xs text-white/60 mb-2">
-                <div>Normalized</div>
-                <div class="font-semibold">{{ Math.round(percentForField(field) ?? 0) }}%</div>
-              </div>
-              <div class="w-full bg-white/8 h-2 rounded-full overflow-hidden">
-                <div :class="props.getBarColorClass(field.name)" :style="{ width: (percentForField(field) ?? 0) + '%' }"
-                     class="h-2 rounded-full transition-all"></div>
               </div>
             </div>
           </div>
