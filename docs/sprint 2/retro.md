@@ -78,13 +78,13 @@ die heel leerzaam was.
 
 ### Tom
 
-Over het algemeen ben ik tevreden met mijn persoonlijke voortgang deze sprint. Ik heb veel kunnen leren over het implementeren van AI en de backend architectuur. 
+Over het algemeen ben ik tevreden met mijn persoonlijke voortgang deze sprint. Ik heb veel kunnen leren over het implementeren van AI en de backend architectuur. Ik heb de controller/service/client structuur opgezet voor de AI integratie, met een oog op de uitbreidbaarheid van toekomstige AI modellen. Daarnaast heb ik gewerkt met het implementeren van de Claude AI API. Ik vond het erg interessant om te zien hoe de antwoorden van verschillende AI modellen verschilden. Ik ben tevreden over de communicatie, we hebben goed samengewerkt en elkaar geholpen waar nodig. Ook Society 5.0 was een leuke ervaring waar we als team goed hebben samengewerkt.
 
-Mijn ontwikkeldoel deze sprint was om mijn kennis van AI te verdiepen. Hier heb ik een ontwikkelplan voor opgesteld. Hier staan een aantal actiepunten in waaronder het bekijken van een tutorialserie, het lezen van een beginners vriendelijke introductie tot transformers, en tot slot mijn ouders uitleggen hoe AI werkt om mijn begrip te testen.
+Mijn ontwikkeldoel deze sprint was om mijn kennis van AI te verdiepen. Hier heb ik een ontwikkelplan voor opgesteld. Hier staan een aantal actiepunten in waaronder het bekijken van een tutorial-serie, het lezen van een beginners vriendelijke introductie tot transformers, en tot slot mijn ouders uitleggen hoe AI werkt om mijn begrip te testen.
 
-De tutorialserie heb ik bekeken en per video in mijn persoonlijk ontwikkelplan genoteerd wat ik eruit heb gehaald. Deze videos hebben mij geholpen om een beter begrip te krijgen van de principes van AI en hoe dit in de praktijk wordt toegepast. Ook gingen de video's vrij diep in op de wiskundige en programmeer aspecten van AI.   
+De tutorial-serie heb ik bekeken en per video in mijn persoonlijk ontwikkelplan genoteerd wat ik eruit heb gehaald. Deze videos hebben mij geholpen om een beter begrip te krijgen van de principes van AI en hoe dit in de praktijk wordt toegepast. Ook gingen de video's vrij diep in op de wiskundige en programmeer aspecten van AI.   
 Door de video's was het artikel over transformers een stuk makkelijker te begrijpen. Ik heb het artikel gelezen en samengevat.  
-Vanavond ga ik mijn ouders proberen uit te leggen hoe AI werkt. Ik noteer hun vragen en mijn antwoorden in mijn ontwikkelplan samen met een cijfer van hen over hoe goed ik het heb uitgelegd.
+Vanavond ga ik mijn ouders proberen uit te leggen hoe AI werkt. Ik noteer hun vragen en mijn antwoorden in mijn ontwikkelplan samen met een cijfer van hen over hoe goed ik het heb uitgelegd. Als ik zonder twijfel van hen kan horen dat ze begrepen hebben hoe AI werkt, dan beschouw ik mijn ontwikkeldoel als behaald.
 
 Voor de volgende sprint ga ik kijken naar hoe LLMs zoals GPT filters toepassen op hun output en hoe ik dit eventueel kan omzeilen voor mijn project.
 
