@@ -107,7 +107,7 @@ die we in onze applicatie willen verwerken zal deze het meest worden gebruikt om
 Tot slot heb ik deze sprint de retrospective geleid en het team geïntroduceerd met de retrospective methode zoals ik 
 deze heb geleerd tijdens mijn stage bij Albert Heijn, wat hopelijk leidt tot een betere en effectievere retrospective.
 
-Voor de volgende sprint wil ik me verdiepen in hoe AI effectiever kan worden aangeroepen, om zo hallicinaties te 
+Voor de volgende sprint wil ik mij verdiepen in hoe AI effectiever kan worden aangeroepen, om zo hallucinaties te 
 verminderen en de consistentie van de output van AI-modellen te verbeteren.
 
 ### Senna
