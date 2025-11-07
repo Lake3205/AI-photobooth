@@ -26,6 +26,8 @@ const {
   countdown,
   latestImage,
 
+  clearAllData,
+
   // Webcam functions
   startCamera,
   stopCamera,
@@ -160,6 +162,12 @@ onMounted(() => {
                 @click="reload"
             ></button>
           </div>
+          <button
+              class="w-full px-4 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 text-red-300 rounded-lg transition-colors"
+              @click="clearAllData"
+          >
+            Delete Photo
+          </button>
         </div>
       </div>
     </div>
