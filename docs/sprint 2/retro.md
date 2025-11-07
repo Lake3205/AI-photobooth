@@ -150,9 +150,8 @@ persoonlijke en professionele groei als AI Developer.
 Tijdens de sprint heb ik gewerkt met OpenAI's GPT-4 API om met een foto assumpties te genereren voor de persoon die een
 foto wilt maken in de photo booth.  
 Ik heb dit met Marise besproken en daarna geïmplementeerd in de code. Enige waar ik tegen vast liep is dat je voor de
-API een betaalde account nodig hebt.  
-Daarnaast heb ik ook gewerkt aan het beter begrijpen van de ethische implicaties van AI-technologieën en hoe deze op een
-verantwoorde manier kunnen worden ingezet.  
+API een betaalde account nodig hebt. Daarnaast heb ik ook gewerkt aan het beter begrijpen van de ethische implicaties
+van AI-technologieën en hoe deze op een verantwoorde manier kunnen worden ingezet.  
 Hier heb ik tijdens society 5.0 veel van opgepikt tijdens dat mensen bij ons in de photo booth kwamen en ik met hun in
 gesprek ging over hoe we onze booth hebben gemaakt.
 
