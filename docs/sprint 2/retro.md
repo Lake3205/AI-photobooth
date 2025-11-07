@@ -88,6 +88,14 @@ Vanavond ga ik mijn ouders proberen uit te leggen hoe AI werkt. Ik noteer hun vr
 
 Voor de volgende sprint ga ik kijken naar hoe LLMs zoals GPT filters toepassen op hun output en hoe ik dit eventueel kan omzeilen voor mijn project.
 
+Gebruikte middelen:
+
+- Video serie "Neural Networks" van 3Blue1Brown op YouTube [https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi](https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi)
+- Artikel "A Beginner-Friendly Look at Transformers" van Digital Ocean [https://www.digitalocean.com/community/tutorials/transformers-attention-is-all-you-need](https://www.digitalocean.com/community/tutorials/transformers-attention-is-all-you-need)
+- Artikel "What is attention" van Machine Learning Mastery [https://machinelearningmastery.com/what-is-attention/](https://machinelearningmastery.com/what-is-attention/)
+- Artikel "The Attention Mechanism from Scratch" van Machine Learning Mastery [https://machinelearningmastery.com/the-attention-mechanism-from-scratch/](https://machinelearningmastery.com/the-attention-mechanism-from-scratch/)
+- Online boek "Neural Networks and Deep Learning" van Michael Nielsen [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
+
 ### Sjoerd
 
 Ik ben in deze sprint dieper gedoken in de werking van AI en mijn vergaarde kennis samengevat en gedocumenteerd voor in
