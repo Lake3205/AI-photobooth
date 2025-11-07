@@ -104,6 +104,13 @@ verminderen en de consistentie van de output van AI-modellen te verbeteren.
 
 ### Senna
 
+Ik heb aan het begin van deze sprint tijd gesprendeerd om beter bekend te worden met rasbery PI ik ben daar echter tegen een blok aangelopen omdat mijn model PI niet werkte. deze stel ik uit tot sprint 4. hiernaast ben ik bezig geweest met mijn leerdoel om AI op gebruiks vriendelijke manier te implementeren voor de eindgebruiker. moet ik wel eerlijk zeggen dat ik deze sprint meer had kunnen doen want het werk dat ik in het midden van de sprint heb opgeleverd vrij minimaal was. 
+aan het eind van de sprint is dit beter gegaan wat wel een probleem op zich zelf aankaart. ik moet het werk in de komende sprint beter verdelen.
+waar ik wel erg trots op ben is dat ik een werkende database heb gemaakt op onze VPS, de logged alle restulataten zodat we deze later onderling kunnen verglijken. op deze manier op ik onze AI studenten te ondersteunen. dit word momenteel gedisplayd in een dashboard met chart.js. 
+
+voor komende sprint ga ik me focuses op mijn werk beter verdelen zodat het niet allemaal zo laat komt. en ga ik aan de slag met Domain en betere loggen van de data die onze Ai genereerd.
+
+
 ### Jay
 
 Ik heb in sprint 2 kunnen werken aan mijn ontwikkelplan en heb ik verschillende taken uitgevoerd die bijdragen aan mijn persoonlijke en professionele groei als AI Developer.
