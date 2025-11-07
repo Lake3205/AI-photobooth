@@ -2,11 +2,11 @@
 
 ## Inleiding
 
-Voor deze retrospective zijn we begonnen met allen een cijfer aan de sprint te geven om tastbare meting te maken van 
-hoe we vonden dat de sprint was verlopen. We hebben ook onze cijfers onderbouwd en samengevat, zonder hierin in 
+Voor deze retrospective zijn we begonnen met allen een cijfer aan de sprint te geven om tastbare meting te maken van
+hoe we vonden dat de sprint was verlopen. We hebben ook onze cijfers onderbouwd en samengevat, zonder hierin in
 discussie te gaan. Vervolgens hebben we teruggeblikt op de actiepunten van de vorige sprint en gekeken in hoeverre we
 hier op vooruit zijn gegaan. Hierna hebben we allen de tijd genomen om zelf op post-its te schrijven wat er goed ging
-en wat er beter kan. Deze post-its hebben we vervolgens bij elkaar geplakt en geclusterd, waar nodig zijn de punten op 
+en wat er beter kan. Deze post-its hebben we vervolgens bij elkaar geplakt en geclusterd, waar nodig zijn de punten op
 de post-its concreet uitgelegd. Tot slot voor het gezamenlijke deel hebben we aan de hand van de post-its met punten
 die minder goed gingen actiepunten opgesteld voor de volgende sprint. Daarna was er ruimte voor individuele reflecties.
 
@@ -30,7 +30,7 @@ die heel leerzaam was.
 - Er is een taakverdeling en planning goed gemaakt, alleen was deze slecht bijgehouden in ons sprintboard.
 - Feature lock is niet toegepast. We willen de definitie van "feature lock" nog wat aanpassen, we zullen de high
   priority features max. 2 dagen van te voren pushen. Alle low priority features zullen nog worden geaccepteerd door de
-  feature lock heen. Uiteraard willen we als doel behouden dat alle features 2 dagen van te voren af zijn, gecheckt 
+  feature lock heen. Uiteraard willen we als doel behouden dat alle features 2 dagen van te voren af zijn, gecheckt
   zijn en goed werken.
 
 ## Wat ging goed?
@@ -78,23 +78,41 @@ die heel leerzaam was.
 
 ### Tom
 
-Over het algemeen ben ik tevreden met mijn persoonlijke voortgang deze sprint. Ik heb veel kunnen leren over het implementeren van AI en de backend architectuur. Ik heb de controller/service/client structuur opgezet voor de AI integratie, met een oog op de uitbreidbaarheid van toekomstige AI modellen. Daarnaast heb ik gewerkt met het implementeren van de Claude AI API. Ik vond het erg interessant om te zien hoe de antwoorden van verschillende AI modellen verschilden. Ik ben tevreden over de communicatie, we hebben goed samengewerkt en elkaar geholpen waar nodig. Ook Society 5.0 was een leuke ervaring waar we als team goed hebben samengewerkt.
+Over het algemeen ben ik tevreden met mijn persoonlijke voortgang deze sprint. Ik heb veel kunnen leren over het
+implementeren van AI en de backend architectuur. Ik heb de controller/service/client structuur opgezet voor de AI
+integratie, met een oog op de uitbreidbaarheid van toekomstige AI modellen. Daarnaast heb ik gewerkt met het
+implementeren van de Claude AI API. Ik vond het erg interessant om te zien hoe de antwoorden van verschillende AI
+modellen verschilden. Ik ben tevreden over de communicatie, we hebben goed samengewerkt en elkaar geholpen waar nodig.
+Ook Society 5.0 was een leuke ervaring waar we als team goed hebben samengewerkt.
 
-Mijn ontwikkeldoel deze sprint was om mijn kennis van AI te verdiepen. Hier heb ik een ontwikkelplan voor opgesteld. Hier staan een aantal actiepunten in waaronder het bekijken van een tutorial-serie, het lezen van een beginners vriendelijke introductie tot transformers, en tot slot mijn ouders uitleggen hoe AI werkt om mijn begrip te testen.
+Mijn ontwikkeldoel deze sprint was om mijn kennis van AI te verdiepen. Hier heb ik een ontwikkelplan voor opgesteld.
+Hier staan een aantal actiepunten in waaronder het bekijken van een tutorial-serie, het lezen van een beginners
+vriendelijke introductie tot transformers, en tot slot mijn ouders uitleggen hoe AI werkt om mijn begrip te testen.
 
-De tutorial-serie heb ik bekeken en per video in mijn persoonlijk ontwikkelplan genoteerd wat ik eruit heb gehaald. Deze videos hebben mij geholpen om een beter begrip te krijgen van de principes van AI en hoe dit in de praktijk wordt toegepast. Ook gingen de video's vrij diep in op de wiskundige en programmeer aspecten van AI.   
-Door de video's was het artikel over transformers een stuk makkelijker te begrijpen. Ik heb het artikel gelezen en samengevat.  
-Vanavond ga ik mijn ouders proberen uit te leggen hoe AI werkt. Ik noteer hun vragen en mijn antwoorden in mijn ontwikkelplan samen met een cijfer van hen over hoe goed ik het heb uitgelegd. Als ik zonder twijfel van hen kan horen dat ze begrepen hebben hoe AI werkt, dan beschouw ik mijn ontwikkeldoel als behaald.
+De tutorial-serie heb ik bekeken en per video in mijn persoonlijk ontwikkelplan genoteerd wat ik eruit heb gehaald. Deze
+videos hebben mij geholpen om een beter begrip te krijgen van de principes van AI en hoe dit in de praktijk wordt
+toegepast. Ook gingen de video's vrij diep in op de wiskundige en programmeer aspecten van AI.   
+Door de video's was het artikel over transformers een stuk makkelijker te begrijpen. Ik heb het artikel gelezen en
+samengevat.  
+Vanavond ga ik mijn ouders proberen uit te leggen hoe AI werkt. Ik noteer hun vragen en mijn antwoorden in mijn
+ontwikkelplan samen met een cijfer van hen over hoe goed ik het heb uitgelegd. Als ik zonder twijfel van hen kan horen
+dat ze begrepen hebben hoe AI werkt, dan beschouw ik mijn ontwikkeldoel als behaald.
 
-Voor de volgende sprint ga ik kijken naar hoe LLMs zoals GPT filters toepassen op hun output en hoe ik dit eventueel kan omzeilen voor mijn project.
+Voor de volgende sprint ga ik kijken naar hoe LLMs zoals GPT filters toepassen op hun output en hoe ik dit eventueel kan
+omzeilen voor mijn project.
 
 Gebruikte middelen:
 
-- Video serie "Neural Networks" van 3Blue1Brown op YouTube [https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi](https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi)
-- Artikel "A Beginner-Friendly Look at Transformers" van Digital Ocean [https://www.digitalocean.com/community/tutorials/transformers-attention-is-all-you-need](https://www.digitalocean.com/community/tutorials/transformers-attention-is-all-you-need)
-- Artikel "What is attention" van Machine Learning Mastery [https://machinelearningmastery.com/what-is-attention/](https://machinelearningmastery.com/what-is-attention/)
-- Artikel "The Attention Mechanism from Scratch" van Machine Learning Mastery [https://machinelearningmastery.com/the-attention-mechanism-from-scratch/](https://machinelearningmastery.com/the-attention-mechanism-from-scratch/)
-- Online boek "Neural Networks and Deep Learning" van Michael Nielsen [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
+- Video serie "Neural Networks" van 3Blue1Brown op
+  YouTube [https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi](https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi)
+- Artikel "A Beginner-Friendly Look at Transformers" van Digital
+  Ocean [https://www.digitalocean.com/community/tutorials/transformers-attention-is-all-you-need](https://www.digitalocean.com/community/tutorials/transformers-attention-is-all-you-need)
+- Artikel "What is attention" van Machine Learning
+  Mastery [https://machinelearningmastery.com/what-is-attention/](https://machinelearningmastery.com/what-is-attention/)
+- Artikel "The Attention Mechanism from Scratch" van Machine Learning
+  Mastery [https://machinelearningmastery.com/the-attention-mechanism-from-scratch/](https://machinelearningmastery.com/the-attention-mechanism-from-scratch/)
+- Online boek "Neural Networks and Deep Learning" van Michael
+  Nielsen [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
 
 ### Sjoerd
 
@@ -104,33 +122,58 @@ leerdoel. Ook heb ik deze sprint een voortgangsevaluatie gehad met Marise en mij
 mijn leerdoelen te bespreken en feedback te krijgen. Dit is verwerkt in de laatste versie van mijn PDP.
 Ik heb tijdens de sprint gewerkt met Google AI Studio om Gemini te implementeren in onze applicatie. Van de AI-modellen
 die we in onze applicatie willen verwerken zal deze het meest worden gebruikt omdat deze zonder kosten te gebruiken is.
-Tot slot heb ik deze sprint de retrospective geleid en het team geïntroduceerd met de retrospective methode zoals ik 
+Tot slot heb ik deze sprint de retrospective geleid en het team geïntroduceerd met de retrospective methode zoals ik
 deze heb geleerd tijdens mijn stage bij Albert Heijn, wat hopelijk leidt tot een betere en effectievere retrospective.
 
-Voor de volgende sprint wil ik me verdiepen in hoe AI effectiever kan worden aangeroepen, om zo hallicinaties te 
+Voor de volgende sprint wil ik me verdiepen in hoe AI effectiever kan worden aangeroepen, om zo hallicinaties te
 verminderen en de consistentie van de output van AI-modellen te verbeteren.
 
 ### Senna
 
-Ik heb aan het begin van deze sprint tijd gesprendeerd om beter bekend te worden met rasbery PI ik ben daar echter tegen een blok aangelopen omdat mijn model PI niet werkte. deze stel ik uit tot sprint 4. hiernaast ben ik bezig geweest met mijn leerdoel om AI op gebruiks vriendelijke manier te implementeren voor de eindgebruiker. moet ik wel eerlijk zeggen dat ik deze sprint meer had kunnen doen want het werk dat ik in het midden van de sprint heb opgeleverd vrij minimaal was. 
-aan het eind van de sprint is dit beter gegaan wat wel een probleem op zich zelf aankaart. ik moet het werk in de komende sprint beter verdelen.
-waar ik wel erg trots op ben is dat ik een werkende database heb gemaakt op onze VPS, de logged alle restulataten zodat we deze later onderling kunnen verglijken. op deze manier op ik onze AI studenten te ondersteunen. dit word momenteel gedisplayd in een dashboard met chart.js. 
+Ik heb aan het begin van deze sprint tijd gesprendeerd om beter bekend te worden met rasbery PI ik ben daar echter tegen
+een blok aangelopen omdat mijn model PI niet werkte. deze stel ik uit tot sprint 4. hiernaast ben ik bezig geweest met
+mijn leerdoel om AI op gebruiks vriendelijke manier te implementeren voor de eindgebruiker. moet ik wel eerlijk zeggen
+dat ik deze sprint meer had kunnen doen want het werk dat ik in het midden van de sprint heb opgeleverd vrij minimaal
+was. aan het eind van de sprint is dit beter gegaan wat wel een probleem op zich zelf aankaart. ik moet het werk in de
+komende sprint beter verdelen.
+waar ik wel erg trots op ben is dat ik een werkende database heb gemaakt op onze VPS, de logged alle restulataten zodat
+we deze later onderling kunnen verglijken. op deze manier op ik onze AI studenten te ondersteunen. dit word momenteel
+gedisplayd in een dashboard met chart.js.
 
-voor komende sprint ga ik me focuses op mijn werk beter verdelen zodat het niet allemaal zo laat komt. en ga ik aan de slag met Domain en betere loggen van de data die onze Ai genereerd.
-
+voor komende sprint ga ik me focuses op mijn werk beter verdelen zodat het niet allemaal zo laat komt. en ga ik aan de
+slag met Domain en betere loggen van de data die onze Ai genereerd.
 
 ### Jay
 
-Ik heb in sprint 2 kunnen werken aan mijn ontwikkelplan en heb ik verschillende taken uitgevoerd die bijdragen aan mijn persoonlijke en professionele groei als AI Developer.
-Tijdens de sprint heb ik gewerkt met OpenAI's GPT-4 API om met een foto assumpties te genereren voor de persoon die een foto wilt maken in de photo booth.  
-Ik heb dit met Marise besproken en daarna geïmplementeerd in de code. Enige waar ik tegen vast liep is dat je voor de API een betaalde account nodig hebt.  
-Daarnaast heb ik ook gewerkt aan het beter begrijpen van de ethische implicaties van AI-technologieën en hoe deze op een verantwoorde manier kunnen worden ingezet.  
-Hier heb ik tijdens society 5.0 veel van opgepikt tijdens dat mensen bij ons in de photo booth kwamen en ik met hun in gesprek ging over hoe we onze booth hebben gemaakt.
+Ik heb in sprint 2 kunnen werken aan mijn ontwikkelplan en heb ik verschillende taken uitgevoerd die bijdragen aan mijn
+persoonlijke en professionele groei als AI Developer.
+Tijdens de sprint heb ik gewerkt met OpenAI's GPT-4 API om met een foto assumpties te genereren voor de persoon die een
+foto wilt maken in de photo booth.  
+Ik heb dit met Marise besproken en daarna geïmplementeerd in de code. Enige waar ik tegen vast liep is dat je voor de
+API een betaalde account nodig hebt.  
+Daarnaast heb ik ook gewerkt aan het beter begrijpen van de ethische implicaties van AI-technologieën en hoe deze op een
+verantwoorde manier kunnen worden ingezet.  
+Hier heb ik tijdens society 5.0 veel van opgepikt tijdens dat mensen bij ons in de photo booth kwamen en ik met hun in
+gesprek ging over hoe we onze booth hebben gemaakt.
 
-Verder ben ik pas tevreden met het resultaat als het werkt. Op society 5.0 bijvoorbeeld hadden we al een werkend iets en daar was ik tevreden mee.
-Nu het volgende doel is dat met AI te maken en dan dat werkend te krijgen. Als dit werkt zou dit mijn bewijsstuk zijn dat ik het kan.
+Verder ben ik pas tevreden met het resultaat als het werkt. Op society 5.0 bijvoorbeeld hadden we al een werkend iets en
+daar was ik tevreden mee.
+Nu het volgende doel is dat met AI te maken en dan dat werkend te krijgen. Als dit werkt zou dit mijn bewijsstuk zijn
+dat ik het kan.
 
 ### Borys
+
+Ik heb deze sprint gewerkt aan het opzetten van de frontend, het aanpassen van de designs van sommige elementen en een
+basic framework gemaakt voor Senna zodat hij het dashboard kan maken. Ik heb me een klein beetje verdiept in hoe CI/CD
+werkt, maar hier is weinig voortgang uit gebleken.
+Ik heb zelf in mijn mening veel werk verricht tijdens Society 5.0, ik heb heel veel mensen aangesproken en onze booth
+echt "verkocht" aan mensen. Ik merkte dat mensen heel enthousiast waren over de booth en de AI erachter, wat mij ook
+veel plezier bracht.
+
+Voor komende sprint wil ik me nog meer verdiepen in CI/CD en hoe we dit kunnen toepassen op ons project. Ook wil ik de
+frontend verder afmaken en zorgen dat alles er netjes uitziet en goed werkt. Mogelijks wil ook kijken naar een algeheler
+strakker design voor de pagina's, maar dit zal ik nog bespreken met het team. Als laatste wil ook ook kijken naar
+deployment automation, dit gaat in samenhang met Jay gebeuren.
 
 ## Bijlagen
 
