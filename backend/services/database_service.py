@@ -14,7 +14,7 @@ DB_CONFIG = {
     "host": os.getenv("DB_HOST"),
     "port": int(os.getenv("DB_PORT", 3306)),
     "database": os.getenv("DB_NAME"),
-    "connect_timeout": 5,  # 5 second connection timeout
+    "connect_timeout": 5,
     "autocommit": False
 }
 
