@@ -51,20 +51,20 @@ def log_assumption_to_db(ai_model: str, data: dict):
         if conn:
             try:
                 conn.rollback()
-            except Exception:
-                pass
+            except Exception as rollback_error:
+                print(f"Error during rollback: {rollback_error}")
         raise
     finally:
         if cur:
             try:
                 cur.close()
-            except Exception:
-                pass
+            except Exception as close_cur_error:
+                print(f"Error closing cursor: {close_cur_error}")
         if conn:
             try:
                 conn.close()
-            except Exception:
-                pass
+            except Exception as close_conn_error:
+                print(f"Error closing connection: {close_conn_error}")
 
 def get_assumptions_by_model(ai_model: str):
     conn = get_db_connection()
@@ -102,6 +102,12 @@ def get_assumptions_by_model(ai_model: str):
         
         return assumptions
     finally:
-        cur.close()
-        conn.close()
+        try:
+            cur.close()
+        except Exception as close_cur_error:
+            print(f"Error closing cursor: {close_cur_error}")
+        try:
+            conn.close()
+        except Exception as close_conn_error:
+            print(f"Error closing connection: {close_conn_error}")
 
