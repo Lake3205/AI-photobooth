@@ -13,7 +13,9 @@ DB_CONFIG = {
     "password": os.getenv("DB_PASSWORD"),
     "host": os.getenv("DB_HOST"),
     "port": int(os.getenv("DB_PORT", 3306)),
-    "database": os.getenv("DB_NAME")
+    "database": os.getenv("DB_NAME"),
+    "connect_timeout": 5,  # 5 second connection timeout
+    "autocommit": False
 }
 
 def get_db_connection():
@@ -22,11 +24,17 @@ def get_db_connection():
         return conn
     except mariadb.Error as e:
         raise HTTPException(status_code=500, detail=f"DB connection error: {e}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Unexpected DB error: {e}")
 
 def log_assumption_to_db(ai_model: str, data: dict):
-    conn = get_db_connection()
-    cur = conn.cursor()
+    conn = None
+    cur = None
+    
     try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        
         data_json = json.dumps(data)
         
         query = """
@@ -39,9 +47,24 @@ def log_assumption_to_db(ai_model: str, data: dict):
         assumption_id = cur.lastrowid
         return assumption_id
         
+    except Exception as e:
+        if conn:
+            try:
+                conn.rollback()
+            except Exception:
+                pass
+        raise
     finally:
-        cur.close()
-        conn.close()
+        if cur:
+            try:
+                cur.close()
+            except Exception:
+                pass
+        if conn:
+            try:
+                conn.close()
+            except Exception:
+                pass
 
 def get_assumptions_by_model(ai_model: str):
     conn = get_db_connection()

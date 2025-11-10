@@ -22,7 +22,10 @@ class AssumptionsService:
                     image_bytes=image_bytes,
                     mime_type=mime_type
                 )
-                response = response.to_dict()
+                if response is not None:
+                    response = response.to_dict()
+                else:
+                    response = {}
                 model_name = "gemini"
             case _:
                 response = {}
