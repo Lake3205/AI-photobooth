@@ -6,7 +6,7 @@ from constants.clients import Clients
 from models.assumptions import AssumptionsModel
 from constants.model_version_constants import GEMINI_MODEL_VERSION, CLAUDE_MODEL_VERSION
 
-router = APIRouter(prefix="/assumptions")
+router = APIRouter(prefix="/assumptions", tags=["AI assumptions"])
 assumptions_service = AssumptionsService()
 
 @router.post("/generate", status_code=status.HTTP_200_OK)

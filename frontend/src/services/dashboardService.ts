@@ -1,5 +1,6 @@
-import type {ChartConfiguration} from 'chart.js';
-import {Chart, registerables} from 'chart.js';
+import { Chart, registerables } from 'chart.js';
+import type { ChartConfiguration } from 'chart.js';
+import { authService } from './authService';
 
 Chart.register(...registerables);
 
@@ -19,7 +20,10 @@ export interface AssumptionRecord {
 // Get data fom backend API
 export async function fetchAssumptions(aiModel: string): Promise<AssumptionRecord[]> {
     try {
-        const response = await fetch(`http://localhost:8000/database/assumptions/${aiModel}`);
+        // Use authenticated fetch to get data
+        const response = await authService.authenticatedFetch(
+            `http://localhost:8000/database/assumptions/${aiModel}`
+        );
         if (!response.ok) {
             throw new Error(`Failed to fetch assumptions: ${response.statusText}`);
         }

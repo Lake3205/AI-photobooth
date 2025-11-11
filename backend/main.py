@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from controllers.assumptions_controller import router as assumptions_controller
 from controllers.status_controller import router as status_controller
 from controllers.database_controller import router as database_controller
+from controllers.auth_controller import router as auth_controller
 
 app = FastAPI()
 
@@ -21,3 +22,4 @@ app.add_middleware(
 app.include_router(assumptions_controller)
 app.include_router(status_controller)
 app.include_router(database_controller)
+app.include_router(auth_controller)

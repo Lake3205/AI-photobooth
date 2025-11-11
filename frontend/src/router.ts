@@ -1,8 +1,9 @@
 import {createRouter, createWebHistory} from 'vue-router';
+import { authService } from '@/services/authService';
+import Login from '@/pages/Login.vue';
 import Landing from '@/pages/Landing.vue';
 import SelfieCamera from '@/pages/SelfieCamera.vue';
 import Dashboard from '@/pages/Dashboard.vue';
-import TermsOfService from "@/pages/TermsOfService.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,16 +19,39 @@ const router = createRouter({
             component: SelfieCamera,
         },
         {
+            path: '/login',
+            name: 'login',
+            component: Login,
+        },
+        {
             path: '/dashboard',
             name: 'dashboard',
             component: Dashboard,
-        },
-        {
-            path: '/terms-of-service',
-            name: 'terms-of-service',
-            component: TermsOfService,
-        },
+            meta: { requiresAuth: true, requiredRole: 'admin' }
+        }
     ],
+})
+
+
+// JWT-based route guard
+router.beforeEach(async (to, _from, next) => {
+    if (to.meta.requiresAuth) {
+        const isAuthenticated = authService.isAuthenticated()
+        
+        if (!isAuthenticated) {
+            next('/login')
+            return
+        }
+        
+        // Verify token with backend
+        const isValid = await authService.verifyToken()
+        if (!isValid) {
+            next('/login')
+            return
+        }
+    }
+    
+    next()
 })
 
 export default router

@@ -111,3 +111,41 @@ def get_assumptions_by_model(ai_model: str):
         except Exception as close_conn_error:
             print(f"Error closing connection: {close_conn_error}")
 
+def get_user_by_username(username: str):
+    conn = None
+    cur = None
+    
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        
+        query = """
+            SELECT id, username, hashed_password, role
+            FROM users
+            WHERE username = ?
+        """
+        cur.execute(query, (username,))
+        row = cur.fetchone()
+        
+        if row:
+            return {
+                "id": row[0],
+                "username": row[1],
+                "hashed_password": row[2],
+                "role": row[3] if len(row) > 3 else "admin"
+            }
+        return None
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {e}")
+    finally:
+        if cur:
+            try:
+                cur.close()
+            except Exception as close_cur_error:
+                print(f"Error closing cursor: {close_cur_error}")
+        if conn:
+            try:
+                conn.close()
+            except Exception as close_conn_error:
+                print(f"Error closing connection: {close_conn_error}")

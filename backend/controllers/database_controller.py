@@ -1,9 +1,11 @@
-from fastapi import APIRouter, status, HTTPException
+from fastapi import APIRouter, status, HTTPException, Depends
 
 from services.database_service import get_db_connection, get_assumptions_by_model
+from controllers.auth_controller import get_current_user, require_admin
 
-router = APIRouter(prefix="/database")
+router = APIRouter(prefix="/database", tags=["Database"])
 
+# Endpoint to test database connection
 @router.get("/test", status_code=status.HTTP_200_OK)
 async def test_database_connection():
     try:
@@ -26,8 +28,9 @@ async def test_database_connection():
             detail=f"Database connection failed: {str(e)}"
         )
 
+# Endpoint to get assumptions by AI model, with user authentication
 @router.get("/assumptions/{ai_model}", status_code=status.HTTP_200_OK)
-async def get_assumptions_by_model_endpoint(ai_model: str):
+async def get_assumptions_by_model_endpoint(ai_model: str, user = Depends(require_admin)): # Require admin role
     try:
         result = get_assumptions_by_model(ai_model)
         if result is None:
