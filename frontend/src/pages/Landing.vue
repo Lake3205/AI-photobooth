@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {useRouter} from 'vue-router'
 import LandingButton from '@/components/LandingButton.vue'
+import TermsButton from '@/components/TermsButton.vue'
 
 const router = useRouter()
 
@@ -33,6 +34,7 @@ function goToSelfie() {
 
       <LandingButton :label="'Get Started'" :onClick="goToSelfie" class="mt-5"/>
     </section>
+    <TermsButton class="terms-btn-fixed"/>
   </main>
 </template>
 

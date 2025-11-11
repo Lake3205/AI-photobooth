@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { onMounted, ref, watch } from 'vue'
+import {onMounted, ref, watch} from 'vue'
 import BaseCard from '../components/BaseCard.vue'
-import { fetchAssumptions, groupAssumptionsByFormat, createChartForAssumption } from '../services/dashboardService'
-import type { Chart } from 'chart.js'
+import {createChartForAssumption, fetchAssumptions, groupAssumptionsByFormat} from '../services/dashboardService'
+import type {Chart} from 'chart.js'
 
 const loading = ref(true)
 const error = ref<string | null>(null)
@@ -15,22 +15,22 @@ const loadDashboardData = async () => {
   try {
     loading.value = true
     error.value = null
-    
+
     charts.value.forEach(chart => chart.destroy())
     charts.value = []
-    
+
     const assumptions = await fetchAssumptions(selectedModel.value)
-    
+
     if (assumptions.length === 0) {
       error.value = 'No data available yet!'
       loading.value = false
       return
     }
-    
+
     groupedAssumptions.value = groupAssumptionsByFormat(assumptions)
-    
+
     loading.value = false
-    
+
     setTimeout(() => {
       Object.entries(groupedAssumptions.value).forEach(([key, assumption]) => {
         const canvas = document.getElementById(`chart-${key}`) as HTMLCanvasElement
@@ -42,7 +42,7 @@ const loadDashboardData = async () => {
         }
       })
     }, 100)
-    
+
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to load'
     loading.value = false
@@ -63,13 +63,13 @@ watch(selectedModel, loadDashboardData)
         </h1>
         <p class="mt-2 text-gray-400">Analytics and insights from AI assumptions</p>
       </div>
-      
+
       <div class="flex items-center gap-3">
-        <label for="model-select" class="text-white/70 text-sm font-medium">AI Model:</label>
-        <select 
-          id="model-select"
-          v-model="selectedModel"
-          class="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+        <label class="text-white/70 text-sm font-medium" for="model-select">AI Model:</label>
+        <select
+            id="model-select"
+            v-model="selectedModel"
+            class="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
         >
           <option v-for="model in availableModels" :key="model" :value="model">
             {{ model.charAt(0).toUpperCase() + model.slice(1) }}
@@ -87,17 +87,17 @@ watch(selectedModel, loadDashboardData)
     </div>
 
     <div v-else class="grid gap-6 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2">
-      <BaseCard 
-        v-for="(assumption, key) in groupedAssumptions" 
-        :key="key"
-        class="p-6"
+      <BaseCard
+          v-for="(assumption, key) in groupedAssumptions"
+          :key="key"
+          class="p-6"
       >
         <h2 class="text-xl font-semibold mb-4 text-white">{{ assumption.name }}</h2>
         <div class="h-80">
           <canvas :id="`chart-${key}`"></canvas>
         </div>
       </BaseCard>
-    </div>  
+    </div>
   </section>
 </template>
 
