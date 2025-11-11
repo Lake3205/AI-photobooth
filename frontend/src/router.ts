@@ -1,9 +1,9 @@
 import {createRouter, createWebHistory} from 'vue-router';
+import { authService } from '@/services/authService';
+import Login from '@/pages/Login.vue';
 import Landing from '@/pages/Landing.vue';
 import SelfieCamera from '@/pages/SelfieCamera.vue';
 import Dashboard from '@/pages/Dashboard.vue';
-import Login from '@/pages/Login.vue';
-import { authService } from '@/services/authService';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,7 +27,6 @@ const router = createRouter({
             path: '/dashboard',
             name: 'dashboard',
             component: Dashboard,
-            meta: { requiresAuth: true, requiredRole: 'admin' }
         }
     ],
 })
