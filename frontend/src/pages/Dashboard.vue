@@ -1,9 +1,12 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import BaseCard from '../components/BaseCard.vue'
 import { fetchAssumptions, groupAssumptionsByFormat, createChartForAssumption } from '../services/dashboardService'
+import { authService } from '../services/authService'
 import type { Chart } from 'chart.js'
 
+const router = useRouter()
 const loading = ref(true)
 const error = ref<string | null>(null)
 const charts = ref<Chart[]>([])
@@ -49,6 +52,11 @@ const loadDashboardData = async () => {
   }
 }
 
+const handleLogout = () => {
+  authService.logout()
+  router.push('/login')
+}
+
 onMounted(loadDashboardData)
 
 watch(selectedModel, loadDashboardData)
@@ -75,6 +83,13 @@ watch(selectedModel, loadDashboardData)
             {{ model.charAt(0).toUpperCase() + model.slice(1) }}
           </option>
         </select>
+        
+        <button
+          @click="handleLogout"
+          class="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 rounded-lg text-red-300 hover:text-red-200 transition"
+        >
+          Logout
+        </button>
       </div>
     </header>
 

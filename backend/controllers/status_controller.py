@@ -3,7 +3,7 @@ from fastapi import APIRouter, status
 from services.status_service import StatusService
 from constants.clients import Clients
 
-router = APIRouter(prefix="/status")
+router = APIRouter(prefix="/status", tags=["Status"])
 status_service = StatusService()
 
 # Endpoint for testing purposes that returns fixed assumptions
