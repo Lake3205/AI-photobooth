@@ -27,6 +27,7 @@ const router = createRouter({
             path: '/dashboard',
             name: 'dashboard',
             component: Dashboard,
+            meta: { requiresAuth: true, requiredRole: 'admin' }
         }
     ],
 })
