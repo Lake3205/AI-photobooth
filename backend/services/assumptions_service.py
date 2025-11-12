@@ -1,7 +1,7 @@
 from clients.claude import ClaudeClient
 from models.assumptions import AssumptionsModel
 from constants.clients import Clients
-from services.database_service import log_assumption_to_db
+from services.database_service import DatabaseService
 
 from clients.google_ai_client import GoogleAIClient
 
@@ -9,6 +9,7 @@ class AssumptionsService:
     def __init__(self):
         self.claude_client = ClaudeClient()
         self.google_client = GoogleAIClient()
+        self.db_service = DatabaseService()
 
     async def get_assumptions(self, assumptions_model: AssumptionsModel, image) -> dict:
         match assumptions_model.model:
@@ -34,9 +35,12 @@ class AssumptionsService:
         # Log the assumption to the database
         if response:
             try:
-                assumption_id = log_assumption_to_db(ai_model=model_name, data=response)
+                assumption_id = self.db_service.log_assumption_to_db(ai_model=model_name, data=response)
                 response['id'] = assumption_id
             except Exception as e:
                 print(f"failed to log assumption to database: {e}")
 
         return response
+    
+    async def get_assumptions_by_id(self, assumption_id: int) -> dict:
+        pass
