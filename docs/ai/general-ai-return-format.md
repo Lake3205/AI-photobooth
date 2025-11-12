@@ -37,9 +37,14 @@ Though we're using different AI models, we want to maintain a consistent return 
             "format": "weight",
             "value": null
         },
-        "school": {
-            "name": "Education level",
+        "gender": {
+            "name": "Gender",
             "format": "text",
+            "value": null
+        },
+        "iq": {
+            "name": "IQ score",
+            "format": "number",
             "value": null
         },
         "salary": {

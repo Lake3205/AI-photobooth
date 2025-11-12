@@ -9,13 +9,14 @@ classDiagram
 
     %% Models
     class AssumptionsResponse {
-      +ethnicity: Enum
+      +ethnicity: string
       +religion: Enum
       +political_opinion: Enum
       +theft_risk: float
       +age: int
       +weight: int
-      +school_level: Enum
+      +gender: string
+      +iq: int
       +salary: int
       +debt: int
     }
