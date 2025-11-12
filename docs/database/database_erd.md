@@ -18,6 +18,7 @@ erDiagram
 
     assumption_constants {
         INT id PK
+        INT format_id FK
         VARCHAR value
     }
 
@@ -46,13 +47,17 @@ erDiagram
         VARCHAR value
     }
 
-    
+    formats {
+        INT id PK
+        VARCHAR value
+    }
+
     %% Relationships
-    %% assumption_values links assumption <-> constants
     assumptions ||--o{ assumption_values : "has values"
     assumption_constants ||--o{ assumption_values : "defines"
+    
+    assumption_constants }|..|{ formats : "has format"
 
-    %% forms and their questions/results
     assumptions ||--o{ forms : "has forms"
     assumption_constants ||--o{ form_questions : "used in questions"
     form_questions ||--o{ form_results : "receives answers"

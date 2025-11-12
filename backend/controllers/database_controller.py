@@ -5,6 +5,7 @@ from services.database_service import (
     get_assumptions_by_model, 
     get_all_assumptions,
     get_assumption_constants,
+    get_formats,
     delete_assumption
 )
 from controllers.auth_controller import get_current_user, require_admin
@@ -75,6 +76,18 @@ async def get_assumption_constants_endpoint(user = Depends(require_admin)):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to retrieve assumption constants: {str(e)}"
+        )
+
+# Endpoint to get all formats
+@router.get("/formats", status_code=status.HTTP_200_OK)
+async def get_formats_endpoint(user = Depends(require_admin)):
+    try:
+        result = get_formats()
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve formats: {str(e)}"
         )
 
 # Endpoint to delete an assumption

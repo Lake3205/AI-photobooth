@@ -54,15 +54,28 @@ def log_assumption_to_db(ai_model: str, data: dict):
             if constant_row:
                 constant_id = constant_row[0]
             else:
-                # Create new constant
+                assumptions_model = AssumptionsModel()
+                # Default format is "text"
+                format_value = assumptions_model.assumptions.get(key, {}).get("format", "text")
+                
+                format_query = "SELECT id FROM formats WHERE value = ?"
+                cur.execute(format_query, (format_value,))
+                format_row = cur.fetchone()
+                
+                if format_row:
+                    format_id = format_row[0]
+                else:
+                    insert_format_query = "INSERT INTO formats (value) VALUES (?)"
+                    cur.execute(insert_format_query, (format_value,))
+                    format_id = cur.lastrowid
+                
                 insert_constant_query = """
-                    INSERT INTO assumption_constants (value)
-                    VALUES (?)
+                    INSERT INTO assumption_constants (value, format_id)
+                    VALUES (?, ?)
                 """
-                cur.execute(insert_constant_query, (key,))
+                cur.execute(insert_constant_query, (key, format_id))
                 constant_id = cur.lastrowid
             
-            # Insert the assumption value
             value_query = """
                 INSERT INTO assumption_values (assumption_id, assumption_constant_id, value)
                 VALUES (?, ?, ?)
@@ -278,11 +291,36 @@ def get_all_assumptions():
             print(f"Error closing connection: {close_conn_error}")
 
 def get_assumption_constants():
-    """Get all assumption constants"""
+    """Get all assumption constants with their format information"""
     conn = get_db_connection()
     cur = conn.cursor()
     try:
-        query = "SELECT id, value FROM assumption_constants ORDER BY value"
+        query = """
+            SELECT ac.id, ac.value, f.value as format
+            FROM assumption_constants ac
+            LEFT JOIN formats f ON ac.format_id = f.id
+            ORDER BY ac.value
+        """
+        cur.execute(query)
+        rows = cur.fetchall()
+        
+        return [{"id": row[0], "value": row[1], "format": row[2]} for row in rows]
+    finally:
+        try:
+            cur.close()
+        except Exception as close_cur_error:
+            print(f"Error closing cursor: {close_cur_error}")
+        try:
+            conn.close()
+        except Exception as close_conn_error:
+            print(f"Error closing connection: {close_conn_error}")
+
+def get_formats():
+    """Get all formats"""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    try:
+        query = "SELECT id, value FROM formats ORDER BY value"
         cur.execute(query)
         rows = cur.fetchall()
         

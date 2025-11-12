@@ -4,9 +4,19 @@ CREATE TABLE assumptions (
     ai_model VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE formats (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    value VARCHAR(255) NOT NULL UNIQUE
+);
+
 CREATE TABLE assumption_constants (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    value VARCHAR(255) NOT NULL
+    format_id INT NOT NULL,
+    value VARCHAR(255) NOT NULL,
+    CONSTRAINT fk_format
+        FOREIGN KEY (format_id)
+        REFERENCES formats(id)
+        ON DELETE RESTRICT
 );
 
 CREATE TABLE assumption_values (
@@ -61,6 +71,9 @@ CREATE TABLE form_results (
     CONSTRAINT ux_form_result_unique
         UNIQUE (form_id, form_question_id)
 );
+
+CREATE INDEX idx_assumption_constants_format_id
+    ON assumption_constants(format_id);
 
 CREATE INDEX idx_assumption_values_assumption_id
     ON assumption_values(assumption_id);
