@@ -2,7 +2,6 @@
 import {computed} from 'vue'
 import type {AssumptionData, AssumptionType} from '@/types/AssumptionType'
 import {
-  AcademicCapIcon,
   ChartBarIcon,
   CurrencyDollarIcon,
   GlobeAltIcon,
@@ -11,6 +10,7 @@ import {
   ShieldExclamationIcon,
   UserIcon,
   UsersIcon,
+  FlagIcon,
 } from '@heroicons/vue/24/outline'
 
 const props = defineProps<{
@@ -36,14 +36,14 @@ const getIcon = (field: AssumptionType) => {
   const name = field.name.toLowerCase()
 
   if (name.includes('age')) return UserIcon
-  if (name.includes('ethnic') || name.includes('ethnicity') || name.includes('people')) return UsersIcon
+  if (name.includes('ethnic') || name.includes('ethnicity') || name.includes('people')) return FlagIcon
   if (name.includes('relig') || name.includes('belief')) return GlobeAltIcon
   if (name.includes('polit') || name.includes('opinion')) return ChartBarIcon
   if (name.includes('theft') || name.includes('risk')) return ShieldExclamationIcon
   if (name.includes('weight')) return ScaleIcon
-  if (name.includes('school') || name.includes('education') || name.includes('level')) return AcademicCapIcon
+  if (name.includes('gender')) return UsersIcon
   if (name.includes('salary') || name.includes('debt') || name.includes('currency') || name.includes('annual')) return CurrencyDollarIcon
-  if (field.format === 'percentage' || name.includes('score')) return ChartBarIcon
+  if (field.format === 'percentage' || name.includes('score') || name.includes('iq')) return ChartBarIcon
 
   return QuestionMarkCircleIcon
 }
@@ -122,10 +122,6 @@ const getIcon = (field: AssumptionType) => {
 .summary-card {
   backdrop-filter: blur(6px);
   transition: transform 220ms ease, box-shadow 220ms ease;
-}
-
-.summary-card:hover {
-  transform: translateY(-6px)
 }
 
 .assumption-chip {

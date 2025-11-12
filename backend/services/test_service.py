@@ -7,7 +7,8 @@ class TestService:
             "theft_risk": 0,
             "age": 0,
             "weight": 0,
-            "school_level": "Unknown",
+            "gender": "Unknown",
+            "iq": 0,
             "salary": 0,
             "debt": 0,
         }

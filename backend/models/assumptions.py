@@ -9,11 +9,12 @@ from constants.clients import Clients
 class AssumptionsResponse(BaseModel):
     ethnicity: str = Field(description="Ethnicity of the person in the image, e.g., Caucasian, African, Asian, etc. In case of mixed, use the most dominant")
     religion: Literal["Christianity", "Islam", "Hinduism", "Buddhism", "Judaism", "Atheism", "Other"]
-    political_opinion: Literal["Left", "Center", "Right", "Libertarian", "Authoritarian", "Other"]
+    political_opinion: Annotated[str, Field(description="Political opinion of the person in the image.")]
     theft_risk: Annotated[float, Field(ge=0, le=100, description="Percentage risk the person might engage in theft based on profile and facial features")]
     age: Annotated[int, Field(ge=0, le=120)]
     weight: Annotated[int, Field(ge=0, description="Weight in kilograms")]
-    school_level: Literal["Dropout", "Primary", "Secondary", "High School", "Vocational", "Bachelor's", "Master's", "PhD"]
+    gender: Literal["Male", "Female", "Other"]
+    iq: Annotated[int, Field(ge=0, description="Estimated IQ score")]
     salary: Annotated[int, Field(ge=0, description="Annual salary in EUR")]
     debt: Annotated[int, Field(ge=0, description="Total debt in EUR")]
     
@@ -50,9 +51,13 @@ class AssumptionsModel:
                 "name": "Weight",
                 "format": FormatType.WEIGHT.value,
             },
-            "school_level": {
-                "name": "Education level",
+            "gender": {
+                "name": "Gender",
                 "format": FormatType.TEXT.value
+            },
+            "iq": {
+                "name": "IQ score",
+                "format": FormatType.NUMBER.value,
             },
             "salary": {
                 "name": "Annual salary",
