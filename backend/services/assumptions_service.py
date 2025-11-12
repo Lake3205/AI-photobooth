@@ -43,4 +43,35 @@ class AssumptionsService:
         return response
     
     async def get_assumptions_by_id(self, assumption_id: int) -> dict:
-        pass
+        conn = None
+        cur = None
+        
+        try:
+            conn = self.db_service.get_db_connection()
+            cur = conn.cursor()
+            
+            query = """
+            SELECT a.ai_model, a.created_at, av.value, av.reasoning, ac.id AS constant_id, ac.value AS constant_value, f.value AS format_value
+            FROM assumptions a 
+            LEFT JOIN assumption_values av ON a.id = av.assumption_id 
+            LEFT JOIN assumption_constants ac ON av.assumption_constant_id = ac.id
+            LEFT JOIN formats f ON ac.format_id = f.id
+            WHERE a.id = ?
+            """
+            
+            
+            cur.execute(query, (assumption_id))
+            rows = cur.fetchall()
+            
+            if not rows:
+                raise Exception(f"No assumption found with ID: {assumption_id}")
+            
+        except Exception as e:
+            if conn:
+                try:
+                    conn.rollback()
+                except Exception as rollback_error:
+                    print(f"Error during rollback: {rollback_error}")
+            raise
+        finally:
+            self.db_service.close_resources(cur, conn)

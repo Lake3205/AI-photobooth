@@ -27,7 +27,7 @@ class DatabaseSingleton:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Unexpected DB error: {e}")
     
-    def _close_resources(self, cursor=None, connection=None):
+    def close_resources(self, cursor=None, connection=None):
         if cursor:
             try:
                 cursor.close()
@@ -106,7 +106,7 @@ class DatabaseSingleton:
                     print(f"Error during rollback: {rollback_error}")
             raise
         finally:
-            self._close_resources(cur, conn)
+            self.close_resources(cur, conn)
 
     def get_assumptions_by_model(self, ai_model: str):
         conn = self.get_connection()
@@ -134,10 +134,9 @@ class DatabaseSingleton:
             
             return self._format_assumptions(rows)
         finally:
-            self._close_resources(cur, conn)
+            self.close_resources(cur, conn)
 
     def _format_assumptions(self, rows):
-        """Helper method to format assumption rows from database"""
         assumptions_model = AssumptionsModel()
         
         # Group assumptions by id
@@ -199,7 +198,6 @@ class DatabaseSingleton:
         return assumptions
     
     def get_all_assumptions(self):
-        """Get all assumptions from the database"""
         conn = self.get_connection()
         cur = conn.cursor()
         try:
@@ -224,10 +222,9 @@ class DatabaseSingleton:
             
             return self._format_assumptions(rows)
         finally:
-            self._close_resources(cur, conn)
+            self.close_resources(cur, conn)
 
     def get_assumption_constants(self):
-        """Get all assumption constants with their format information"""
         conn = self.get_connection()
         cur = conn.cursor()
         try:
@@ -242,10 +239,9 @@ class DatabaseSingleton:
             
             return [{"id": row[0], "value": row[1], "format": row[2]} for row in rows]
         finally:
-            self._close_resources(cur, conn)
+            self.close_resources(cur, conn)
 
     def get_formats(self):
-        """Get all formats"""
         conn = self.get_connection()
         cur = conn.cursor()
         try:
@@ -255,10 +251,9 @@ class DatabaseSingleton:
             
             return [{"id": row[0], "value": row[1]} for row in rows]
         finally:
-            self._close_resources(cur, conn)
+            self.close_resources(cur, conn)
 
     def delete_assumption(self, assumption_id: int):
-        """Delete an assumption and all its related data"""
         conn = None
         cur = None
         
@@ -284,10 +279,9 @@ class DatabaseSingleton:
                     print(f"Error during rollback: {rollback_error}")
             raise
         finally:
-            self._close_resources(cur, conn)
+            self.close_resources(cur, conn)
 
     def get_user_by_username(self, username: str):
-        """Get a user by username"""
         conn = None
         cur = None
         
@@ -315,7 +309,7 @@ class DatabaseSingleton:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Database error: {e}")
         finally:
-            self._close_resources(cur, conn)
+            self.close_resources(cur, conn)
 
 class DatabaseService:
     _instance = None
@@ -329,6 +323,9 @@ class DatabaseService:
 
     def get_db_connection(self):
         return self._db_singleton.get_connection()
+    
+    def close_resources(self, cursor=None, connection=None):
+        self._db_singleton.close_resources(cursor, connection)
 
     def log_assumption_to_db(self, ai_model: str, data: dict):
         return self._db_singleton.log_assumption(ai_model, data)
