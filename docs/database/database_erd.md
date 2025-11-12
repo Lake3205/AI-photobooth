@@ -27,6 +27,7 @@ erDiagram
         INT assumption_id FK
         INT assumption_constant_id FK
         VARCHAR value
+        VARCHAR reasoning
     }
 
     forms {
