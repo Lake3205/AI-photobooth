@@ -1,4 +1,4 @@
-from typing import Literal, Annotated
+from typing import Literal, Annotated, Generic, TypeVar
 
 from pydantic import BaseModel, Field
 from constants.assumptions_constants import FormatType
@@ -6,18 +6,24 @@ from constants.clients import Clients
 
 # Response model for AI assumptions
 # Constraints the AI output where necessary to specific values or ranges
+T = TypeVar("T")
+
+class AssumptionFields(BaseModel, Generic[T]):
+    value: T
+    reasoning: str = Field(description="Reasoning behind the value of the assumption.")
+
 class AssumptionsResponse(BaseModel):
-    ethnicity: str = Field(description="Ethnicity of the person in the image, e.g., Caucasian, African, Asian, etc. In case of mixed, use the most dominant")
-    religion: Literal["Christianity", "Islam", "Hinduism", "Buddhism", "Judaism", "Atheism", "Other"]
-    political_opinion: Annotated[str, Field(description="Political opinion of the person in the image.")]
-    theft_risk: Annotated[float, Field(ge=0, le=100, description="Percentage risk the person might engage in theft based on profile and facial features")]
-    age: Annotated[int, Field(ge=0, le=120)]
-    weight: Annotated[int, Field(ge=0, description="Weight in kilograms")]
-    gender: Literal["Male", "Female", "Other"]
-    iq: Annotated[int, Field(ge=0, description="Estimated IQ score")]
-    salary: Annotated[int, Field(ge=0, description="Annual salary in EUR")]
-    debt: Annotated[int, Field(ge=0, description="Total debt in EUR")]
-    
+    ethnicity: AssumptionFields[Annotated[str, Field(description="Ethnicity of the person in the image.")]]
+    religion: AssumptionFields[Literal["Christianity", "Islam", "Hinduism", "Buddhism", "Judaism", "Atheism", "Other"]]
+    political_opinion: AssumptionFields[Annotated[str, Field(description="Political opinion of the person in the image.")]]
+    theft_risk: AssumptionFields[Annotated[float, Field(ge=0, le=100, description="Percentage risk the person might engage in theft based on profile and facial features")]]
+    age: AssumptionFields[Annotated[int, Field(ge=0, le=120)]]
+    weight: AssumptionFields[Annotated[int, Field(ge=0, description="Weight in kilograms.")]]
+    gender: AssumptionFields[Literal["Male", "Female", "Other"]]
+    iq: AssumptionFields[Annotated[int, Field(ge=0, description="Estimated IQ score")]]
+    salary: AssumptionFields[Annotated[int, Field(ge=0, description="Annual salary in EUR")]]
+    debt: AssumptionFields[Annotated[int, Field(ge=0, description="Total debt in EUR")]]
+
     def to_dict(self):
         return self.model_dump()
 
@@ -81,4 +87,5 @@ class AssumptionsModel:
         for assumption in assumptions_json:
             if assumption not in self.assumptions:
                 continue
-            self.assumptions[assumption]['value'] = assumptions_json[assumption]
+            self.assumptions[assumption]['value'] = assumptions_json[assumption]['value']
+            self.assumptions[assumption]['reasoning'] = assumptions_json[assumption]['reasoning']
