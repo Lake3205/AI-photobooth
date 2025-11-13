@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {computed} from 'vue'
 import type {AssumptionData, AssumptionType} from '@/types/AssumptionType'
+import { useCookieService } from '@/services/cookieService';
 import {
   ChartBarIcon,
   CurrencyDollarIcon,
@@ -21,6 +22,8 @@ const props = defineProps<{
   getConsistentPercentage: (f: AssumptionType) => number,
   getBarColorClass: (k: string) => string,
 }>()
+
+const { getCookie } = useCookieService();
 
 const entries = computed(() => {
   if (!props.analysisData) return []
@@ -109,6 +112,10 @@ const getIcon = (field: AssumptionType) => {
             </div>
           </div>
         </div>
+      </div>
+
+      <div class="w-full mb-3 flex items-center justify-center">
+        <router-link :to="'/form?token=' + getCookie('form_token')" class="text-center hover:underline">The AI made some bold guesses... care to correct it?</router-link>
       </div>
     </div>
   </section>

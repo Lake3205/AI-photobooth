@@ -1,5 +1,6 @@
 import type {AssumptionData, AssumptionType} from '@/types/AssumptionType';
 import {computed, onUnmounted, ref, watch} from 'vue'
+import { useCookieService } from './cookieService';
 
 interface CapturedImage {
     dataUrl: string
@@ -11,7 +12,10 @@ interface TestAnalysisResponse {
     model: string;
     version: string;
     assumptions: AssumptionData;
+    token?: string;
 }
+
+const { setCookie } = useCookieService();
 
 class AssumptionsService {
     private baseUrl: string;
@@ -38,6 +42,10 @@ class AssumptionsService {
 
             if (!data.assumptions) {
                 return null as unknown as AssumptionData;
+            }
+
+            if (data.token) {
+                setCookie("form_token", data.token, 1);
             }
 
             return data.assumptions;
