@@ -8,7 +8,7 @@ build_dev:
     - hva
   image:
     name: emetain/kaniko-wrapper:latest
-    entrypoint: [""]
+    entrypoint: [ "" ]
   rules:
     - if: '$CI_COMMIT_BRANCH == "dev"'
       when: always
@@ -44,10 +44,10 @@ deploy_dev:
     - echo "$VPS_SSH_KEY" | tr -d '\r' > id_rsa
     - chmod 400 id_rsa
     - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 "
-        docker pull ${DOCKER_USERNAME}/dark-tech-frontend-dev:dev &&
-        docker pull ${DOCKER_USERNAME}/dark-tech-backend-dev:dev &&
-        cd /home/dark-tech &&
-        docker-compose -f docker-compose.dev.yml up -d --remove-orphans
+      docker pull ${DOCKER_USERNAME}/dark-tech-frontend-dev:dev &&
+      docker pull ${DOCKER_USERNAME}/dark-tech-backend-dev:dev &&
+      cd /home/dark-tech &&
+      docker-compose -f docker-compose.dev.yml up -d --remove-orphans
       "
     - rm id_rsa
   rules:
@@ -95,10 +95,10 @@ deploy_main:
     - echo "$VPS_SSH_KEY" | tr -d '\r' > id_rsa
     - chmod 400 id_rsa
     - ssh -o StrictHostKeyChecking=no -i id_rsa root@185.228.82.235 "
-        docker pull ${DOCKER_USERNAME}/dark-tech-frontend:latest &&
-        docker pull ${DOCKER_USERNAME}/dark-tech-backend:latest &&
-        cd /home/dark-tech &&
-        docker-compose -f docker-compose.prod.yml up -d --remove-orphans
+      docker pull ${DOCKER_USERNAME}/dark-tech-frontend:latest &&
+      docker pull ${DOCKER_USERNAME}/dark-tech-backend:latest &&
+      cd /home/dark-tech &&
+      docker-compose -f docker-compose.prod.yml up -d --remove-orphans
       "
     - rm id_rsa
   rules:

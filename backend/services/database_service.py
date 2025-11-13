@@ -90,10 +90,10 @@ class DatabaseSingleton:
                     constant_id = cur.lastrowid
                 
                 value_query = """
-                    INSERT INTO assumption_values (assumption_id, assumption_constant_id, value)
-                    VALUES (?, ?, ?)
+                    INSERT INTO assumption_values (assumption_id, assumption_constant_id, value, reasoning)
+                    VALUES (?, ?, ?, ?)
                 """
-                cur.execute(value_query, (assumption_id, constant_id, str(value) if value is not None else None))
+                cur.execute(value_query, (assumption_id, constant_id, str(value["value"]) if value is not None else None, value["reasoning"]))
             
             conn.commit()
             return assumption_id
