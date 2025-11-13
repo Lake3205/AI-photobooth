@@ -4,12 +4,14 @@ from constants.clients import Clients
 from services.database_service import DatabaseService
 
 from clients.google_ai_client import GoogleAIClient
+from services.form_service import FormService
 
 class AssumptionsService:
     def __init__(self):
         self.claude_client = ClaudeClient()
         self.google_client = GoogleAIClient()
         self.db_service = DatabaseService()
+        self.form_service = FormService()
 
     async def get_assumptions(self, assumptions_model: AssumptionsModel, image) -> dict:
         match assumptions_model.model:
@@ -36,6 +38,7 @@ class AssumptionsService:
         if response:
             try:
                 assumption_id = self.db_service.log_assumption_to_db(ai_model=model_name, data=response)
+                self.form_service.log_form_token(assumption_id)
                 response['id'] = assumption_id
             except Exception as e:
                 print(f"failed to log assumption to database: {e}")

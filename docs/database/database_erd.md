@@ -12,7 +12,6 @@ erDiagram
 
     assumptions {
         INT id PK
-        VARCHAR form_token FK
         DATETIME created_at
         VARCHAR ai_model
     }

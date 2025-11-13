@@ -6,4 +6,3 @@ from services.database_service import DatabaseService
 
 router = APIRouter(prefix="/form", tags=["Form"])
 assumptions_service = AssumptionsService()
-
