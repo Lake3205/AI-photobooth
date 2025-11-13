@@ -50,21 +50,32 @@ class AssumptionsService:
             conn = self.db_service.get_db_connection()
             cur = conn.cursor()
             
+            assumptions_model = AssumptionsModel()
+            
             query = """
-            SELECT a.ai_model, a.created_at, av.value, av.reasoning, ac.id AS constant_id, ac.value AS constant_value, f.value AS format_value
+            SELECT ac.id, ac.value, av.value, av.reasoning
             FROM assumptions a 
             LEFT JOIN assumption_values av ON a.id = av.assumption_id 
             LEFT JOIN assumption_constants ac ON av.assumption_constant_id = ac.id
-            LEFT JOIN formats f ON ac.format_id = f.id
             WHERE a.id = ?
             """
             
-            
-            cur.execute(query, (assumption_id))
+            cur.execute(query, (assumption_id,))
             rows = cur.fetchall()
             
             if not rows:
                 raise Exception(f"No assumption found with ID: {assumption_id}")
+            
+            
+            for row in rows:
+                assumption = row[1]
+                value = row[2]
+                reasoning = row[3]
+                if (assumption in assumptions_model.assumptions):
+                    assumptions_model.assumptions[assumption]["value"] = value
+                    assumptions_model.assumptions[assumption]["reasoning"] = reasoning
+            
+            return assumptions_model.assumptions
             
         except Exception as e:
             if conn:

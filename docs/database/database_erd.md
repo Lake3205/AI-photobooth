@@ -12,6 +12,7 @@ erDiagram
 
     assumptions {
         INT id PK
+        VARCHAR form_token FK
         DATETIME created_at
         VARCHAR ai_model
     }
@@ -53,6 +54,14 @@ erDiagram
         VARCHAR value
     }
 
+    form_tokens {
+        VARCHAR token PK
+        INT assumption_id FK
+        DATETIME expires_at
+        TINYINT used
+        DATETIME created_at
+    }
+
     %% Relationships
     assumptions ||--o{ assumption_values : "has values"
     assumption_constants ||--o{ assumption_values : "defines"
@@ -63,4 +72,5 @@ erDiagram
     assumption_constants ||--o{ form_questions : "used in questions"
     form_questions ||--o{ form_results : "receives answers"
     forms ||--o{ form_results : "contains results"
+    assumptions ||--o{ form_tokens : "has tokens"
 ```

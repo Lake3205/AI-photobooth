@@ -32,6 +32,11 @@ async def generate_assumptions(image: UploadFile, ai_model: Clients):
 
     return assumptions_model.to_dict()
 
+@router.get("/assumptions/{assumption_id}", status_code=status.HTTP_200_OK)
+async def get_assumptions(assumption_id: int):
+    return await assumptions_service.get_assumptions_by_id(assumption_id)
+    
+
 # Endpoint for testing purposes that returns fixed assumptions
 @router.post("/test/generate", status_code=status.HTTP_200_OK)
 async def generate_test_assumptions():

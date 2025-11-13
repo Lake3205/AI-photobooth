@@ -13,7 +13,7 @@ class AssumptionFields(BaseModel, Generic[T]):
     reasoning: str = Field(description="Reasoning behind the value of the assumption.")
 
 class AssumptionsResponse(BaseModel):
-    ethnicity: AssumptionFields[Annotated[str, Field(description="Ethnicity of the person in the image.")]]
+    ethnicity: AssumptionFields[Annotated[str, Field(description="Ethnicity of the person in the image, e.g., Caucasian, African, Asian, etc. In case of mixed, use the most dominant.")]]
     religion: AssumptionFields[Literal["Christianity", "Islam", "Hinduism", "Buddhism", "Judaism", "Atheism", "Other"]]
     political_opinion: AssumptionFields[Annotated[str, Field(description="Political opinion of the person in the image.")]]
     theft_risk: AssumptionFields[Annotated[float, Field(ge=0, le=100, description="Percentage risk the person might engage in theft based on profile and facial features")]]
