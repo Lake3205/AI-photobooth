@@ -10,10 +10,24 @@ form_service = FormService()
 bearer_scheme = HTTPBearer()
 
 @router.get("/token/verify", status_code=status.HTTP_200_OK)
-async def verify_form_token(token: Annotated[HTTPAuthorizationCredentials, Depends(bearer_scheme)]):
+def verify_form_token(token: Annotated[HTTPAuthorizationCredentials, Depends(bearer_scheme)]):
     try:
         form_service.verify_form_token(token.credentials)
         return {"valid": True}
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        print(e)
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid form token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+        
+@router.get("/assumptions", status_code=status.HTTP_200_OK)
+def get_assumptions(token: Annotated[HTTPAuthorizationCredentials, Depends(bearer_scheme)]):
+    try:
+        return form_service.get_assumptions_by_token(token.credentials)
     except HTTPException as e:
         raise e
     except Exception as e:

@@ -10,6 +10,8 @@ if (token) {
   setCookie('form_token', token, 1);
 }
 
+
+
 </script>
 
 <template>

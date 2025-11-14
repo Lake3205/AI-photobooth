@@ -2,11 +2,11 @@
 from services.auth_service import create_access_token
 from datetime import timedelta, datetime, timezone
 from services.database_service import DatabaseService
-
 from fastapi import HTTPException, status
 from jose import JWTError, jwt
 from dotenv import load_dotenv
 from os import getenv
+from models.assumptions import AssumptionsModel
 
 class FormService:
     load_dotenv()
@@ -44,8 +44,8 @@ class FormService:
             assumption_id = int(payload.get("sub"))
             
             query = """
-            SELECT expires_at, used FROM form_tokens
-            WHERE token = ? AND assumption_id = ?
+            SELECT expires_at FROM form_tokens
+            WHERE token = ? AND assumption_id = ? AND used = 0
             """
             
             cur.execute(query, (token, assumption_id))
@@ -55,10 +55,8 @@ class FormService:
             if cur.rowcount > 1:
                 raise Exception("Multiple form tokens found")
             
-            (expires_at, used) = cur.fetchone()
+            (expires_at) = cur.fetchone()
             
-            if used:
-                raise Exception("Form token has already been used")
             if expires_at < datetime.utcnow():
                 raise Exception("Form token has expired")
             return True
@@ -96,6 +94,53 @@ class FormService:
             return access_token
             
         except Exception as e:
+            if conn:
+                try:
+                    conn.rollback()
+                except Exception as rollback_error:
+                    print(f"Error during rollback: {rollback_error}")
+            raise
+        finally:
+            self.db_service.close_resources(cur, conn)
+            
+    def get_assumptions_by_token(self, token: str):
+        conn = None
+        cur = None
+        
+        try:
+            payload = self.get_token_data(token)
+            
+            conn = self.db_service.get_db_connection()
+            cur = conn.cursor()
+            
+            assumption_id = int(payload.get("sub"))
+            assumptions_model = AssumptionsModel()
+            
+            query = """
+            SELECT ac.id, ac.value, av.value, av.reasoning
+            FROM assumptions a
+            LEFT JOIN assumption_values av ON a.id = av.assumption_id
+            JOIN assumption_constants ac ON av.assumption_constant_id = ac.id
+            JOIN form_tokens ft ON a.id = ft.assumption_id
+            WHERE ft.token = ? AND ft.assumption_id = ? AND ft.used = 0
+            """
+            
+            cur.execute(query, (token, assumption_id))
+            
+            result = cur.fetchall()
+            if not result:
+                raise Exception("No assumptions found for the provided token")
+            
+            for row in result:
+                (id, assumption, value, reasoning) = row
+                if (assumption in assumptions_model.assumptions):
+                    assumptions_model.assumptions[assumption]["value"] = value
+                    assumptions_model.assumptions[assumption]["reasoning"] = reasoning
+            
+            return assumptions_model.assumptions
+        except JWTError:
+            raise self.credentials_exception
+        except Exception:
             if conn:
                 try:
                     conn.rollback()
