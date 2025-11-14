@@ -24,4 +24,4 @@ app.include_router(assumptions_controller)
 app.include_router(status_controller)
 app.include_router(database_controller)
 app.include_router(auth_controller)
-app.include_router
+app.include_router(form_controller)

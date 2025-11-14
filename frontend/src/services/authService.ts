@@ -91,6 +91,29 @@ export const authService = {
     }
   },
 
+  async verifyFormToken(formToken: string): Promise<boolean> {
+    if (!formToken) return false
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/form/token/verify`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${formToken}`,
+        },
+      })
+      if (!response.ok) {
+        return false
+      }
+
+      const data = await response.json()
+
+      return data.valid === true
+    } catch (error) {
+      console.error('Form token error:', error)
+      return false
+    }
+  },
+
   async authenticatedFetch(url: string, options: RequestInit = {}): Promise<Response> {
     const token = this.getToken()
     

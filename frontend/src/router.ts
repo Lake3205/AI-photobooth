@@ -34,6 +34,12 @@ const router = createRouter({
             path: '/terms-of-service',
             name: 'terms-of-service',
             component: TermsOfService,
+        },
+        {
+            path: '/form',
+            name: 'form',
+            component: () => import('@/pages/Form.vue'),
+            meta: { requiresToken: true }
         }
     ],
 })
@@ -54,6 +60,21 @@ router.beforeEach(async (to, _from, next) => {
         if (!isValid) {
             next('/login')
             return
+        }
+    }
+
+    if (to.meta.requiresToken) {
+        const token = to.query.token as string | undefined;
+        
+        if (!token) {
+            next('/');
+            return;
+        }
+
+        const isValidToken = await authService.verifyFormToken(token);
+        if (!isValidToken) {
+            next('/');
+            return;
         }
     }
     
