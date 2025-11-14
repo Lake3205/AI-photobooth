@@ -1,6 +1,6 @@
 const TOKEN_KEY = 'user_token'
 const USERNAME_KEY = 'username'
-const API_BASE_URL = 'http://localhost:8000'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 export interface LoginCredentials {
   username: string

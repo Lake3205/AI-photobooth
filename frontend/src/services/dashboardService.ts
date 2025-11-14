@@ -22,7 +22,7 @@ export async function fetchAssumptions(aiModel: string): Promise<AssumptionRecor
     try {
         // Use authenticated fetch to get data
         const response = await authService.authenticatedFetch(
-            `http://localhost:8000/database/assumptions/${aiModel}`
+            `${import.meta.env.VITE_API_URL}/database/assumptions/${aiModel}`
         );
         if (!response.ok) {
             throw new Error(`Failed to fetch assumptions: ${response.statusText}`);
