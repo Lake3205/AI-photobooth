@@ -1,4 +1,14 @@
 <script lang="ts" setup>
+import { useCookieService } from '@/services/cookieService';
+
+const { setCookie } = useCookieService();
+
+const token = new URLSearchParams(location.search).get('token');
+
+if (token) {
+  window.history.replaceState({}, document.title, window.location.pathname);
+  setCookie('form_token', token, 1);
+}
 
 </script>
 
@@ -14,9 +24,9 @@
           class="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:24px_24px]"></div>
     </div>
 
-    in
+    <div class="w-full">
 
-    <canvas ref="canvasElement" class="hidden"></canvas>
+    </div>
   </main>
 </template>
 
