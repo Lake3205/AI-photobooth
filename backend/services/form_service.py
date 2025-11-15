@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 from os import getenv
 from models.assumptions import AssumptionsModel
 
+from constants.form_constants import ALLOWED_QUESTIONS
+
 class FormService:
     load_dotenv()
     
@@ -20,6 +22,10 @@ class FormService:
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
+        )
+        self.form_exception = HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid form data",
         )
         
     def create_form_token(self, assumption_id: int):
@@ -166,7 +172,7 @@ class FormService:
             
             # Process each question in the form data
             for question_key, question_data in form_data.items():
-                question_text = question_data.get("questions", "")
+                question_text = question_data.get("question", "")
                 question_type = question_data.get("type", "")
                 answer = question_data.get("answer", "")
                 explanation = question_data.get("explanation", "")
@@ -246,20 +252,27 @@ class FormService:
             
     def validate_form_data(self, form_data: dict):
         try:
-            for _, question_data in form_data.items():
+            for key, question_data in form_data.items():
+                if key not in ALLOWED_QUESTIONS:
+                    raise self.form_exception
+                question = question_data.get("question", "")
                 question_type = question_data.get("type", "")
                 answer = question_data.get("answer", "")
                 scale = question_data.get("scale", None)
+                
+                if question != ALLOWED_QUESTIONS[key]["question"]:
+                    raise self.form_exception
+                if (question_type != ALLOWED_QUESTIONS[key]["type"]):
+                    raise self.form_exception
+                if (scale and scale != ALLOWED_QUESTIONS[key].get("scale", None)):
+                    raise self.form_exception
                 
                 if question_type == "scale":
                     self._validate_scale_answer(answer, scale)
                 elif question_type == "yes_no_explain":
                     self._validate_yes_no_explain_answer(answer)
-        except ValueError as ve:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=str(ve)
-            )
+        except ValueError or HTTPException:
+            raise self.form_exception
              
     def _validate_scale_answer(self, answer: int, scale: list[int]):
         try:

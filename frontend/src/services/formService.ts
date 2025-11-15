@@ -42,7 +42,7 @@ export function useFormService() {
                 case "scale":
                     const scaleAnswer = formData.get(question.id) as string;
                     responsePayload[question.id] = {
-                        questions: question.question,
+                        question: question.question,
                         type: question.type,
                         answer: scaleAnswer,
                         scale: question.scale
@@ -52,7 +52,7 @@ export function useFormService() {
                     const yesNoAnswer = formData.get(question.id) as string;
                     const explanation = formData.get(question.id + "_explanation") as string | null;
                     responsePayload[question.id] = {
-                        questions: question.question,
+                        question: question.question,
                         type: question.type,
                         answer: yesNoAnswer,
                         explanation: explanation || undefined

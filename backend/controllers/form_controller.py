@@ -43,7 +43,6 @@ def submit_form(form_data: dict, token: Annotated[HTTPAuthorizationCredentials, 
     try:
         response = form_service.verify_form_token(token.credentials)
         form_service.validate_form_data(form_data)
-        return True
         if not response.get("valid"):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

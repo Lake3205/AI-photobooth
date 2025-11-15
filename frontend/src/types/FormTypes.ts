@@ -6,7 +6,7 @@ export type FormQuestion = {
     scale?: [number, number];
 }
 export type formResponsePayload = Record<string, {
-    questions: string;
+    question: string;
     type: questionType;
     answer: string;
     explanation?: string;
