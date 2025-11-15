@@ -44,7 +44,7 @@ class FormService:
             assumption_id = int(payload.get("sub"))
             
             query = """
-            SELECT expires_at FROM form_tokens
+            SELECT assumption_id FROM form_tokens
             WHERE token = ? AND assumption_id = ? AND used = 0
             """
             
@@ -55,10 +55,6 @@ class FormService:
             if cur.rowcount > 1:
                 raise Exception("Multiple form tokens found")
             
-            (expires_at) = cur.fetchone()
-            
-            if expires_at < datetime.utcnow():
-                raise Exception("Form token has expired")
             return True
         except JWTError:
             raise self.credentials_exception

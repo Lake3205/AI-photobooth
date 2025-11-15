@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 import { useCookieService } from '@/services/cookieService';
+import { useFormService } from '@/services/formService';
 
-const { setCookie } = useCookieService();
+const { setCookie, getCookie } = useCookieService();
+const { getAssumptions, isLoading, assumptions } = useFormService();
 
 const token = new URLSearchParams(location.search).get('token');
 
@@ -10,7 +12,7 @@ if (token) {
   setCookie('form_token', token, 1);
 }
 
-
+void getAssumptions(getCookie('form_token') || '');
 
 </script>
 
@@ -26,8 +28,32 @@ if (token) {
           class="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:24px_24px]"></div>
     </div>
 
-    <div class="w-full">
-
+    <div class="w-full flex flex-col gap-4 justify-center items-center">
+      <div class="w-full max-w-3xl py-16 px-4">
+        <h1 class="mb-8 bg-gradient-to-b from-white to-blue-300 bg-clip-text tracking-tight text-transparent font-bold text-center">Assumption Form</h1>
+        <div v-if="isLoading" class="text-center">
+          <p class="text-xl">Loading form...</p>
+        </div>
+        <div v-else-if="assumptions">
+          <form class="flex flex-col gap-6">
+            <div v-for="(assumption, key) in assumptions" :key="key" class="flex flex-col gap-2">
+              <label :for="key.toString()" class="font-medium">{{ assumption.name.toString() }}</label>
+              <div>
+                {{ assumption.value.toString() }}<br/>
+              </div>
+              <div>
+                {{ assumption.reasoning.toString() }}
+              </div>
+            </div>
+            <button
+                type="submit"
+                class="self-end rounded-md bg-blue-600 px-6 py-2 font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
+      </div> 
     </div>
   </main>
 </template>
