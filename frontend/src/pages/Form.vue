@@ -45,6 +45,9 @@ void getAssumptions(getCookie('form_token') || '');
                 {{ assumption.reasoning.toString() }}
               </div>
             </div>
+            <div>
+              
+            </div>
             <button
                 type="submit"
                 class="self-end rounded-md bg-blue-600 px-6 py-2 font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"

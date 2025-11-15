@@ -19,7 +19,6 @@ const props = defineProps<{
   isAnalyzing: boolean,
   analysisError: string | null,
   formatField: (f: AssumptionType) => string,
-  getConsistentPercentage: (f: AssumptionType) => number,
   getBarColorClass: (k: string) => string,
 }>()
 
