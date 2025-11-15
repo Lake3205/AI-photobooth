@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { useCookieService } from '@/services/cookieService';
 import { useFormService } from '@/services/formService';
+import FormQuestions from '@/components/FormQuestions.vue';
 
 const { setCookie, getCookie } = useCookieService();
-const { getAssumptions, isLoading, assumptions } = useFormService();
+const { getAssumptions, getFormQuestions, isLoading, assumptions } = useFormService();
 
 const token = new URLSearchParams(location.search).get('token');
 
@@ -13,6 +14,8 @@ if (token) {
 }
 
 void getAssumptions(getCookie('form_token') || '');
+
+const formQuestions = getFormQuestions();
 
 </script>
 
@@ -45,8 +48,9 @@ void getAssumptions(getCookie('form_token') || '');
                 {{ assumption.reasoning.toString() }}
               </div>
             </div>
-            <div>
-              
+            <hr>
+            <div class="flex flex-col gap-6">
+              <FormQuestions :form-questions="formQuestions"></FormQuestions>
             </div>
             <button
                 type="submit"
