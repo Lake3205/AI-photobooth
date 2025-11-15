@@ -31,7 +31,7 @@ class FormService:
         except JWTError:
             raise self.credentials_exception
         
-    def verify_form_token(self, token: str):
+    def verify_form_token(self, token: str, revoke: bool = False):
         conn = None
         cur = None
         
@@ -55,7 +55,19 @@ class FormService:
             if cur.rowcount > 1:
                 raise Exception("Multiple form tokens found")
             
-            return True
+            if revoke:
+                update_query = """
+                UPDATE form_tokens
+                SET used = 1
+                WHERE token = ? AND assumption_id = ?
+                """
+                
+                cur.execute(update_query, (token, assumption_id))
+                conn.commit()
+            return {
+                "assumption_id": assumption_id,
+                "valid": True
+            }
         except JWTError:
             raise self.credentials_exception
         except Exception:
@@ -64,7 +76,7 @@ class FormService:
                     conn.rollback()
                 except Exception as rollback_error:
                     print(f"Error during rollback: {rollback_error}")
-            raise
+            raise self.credentials_exception
         finally:
             self.db_service.close_resources(cur, conn)
         
@@ -145,4 +157,92 @@ class FormService:
             raise
         finally:
             self.db_service.close_resources(cur, conn)
+            
+    def submit_form_responses(self, form_data: dict, assumption_id: int):
+        conn = None
+        cur = None
+        
+        try:
+            conn = self.db_service.get_db_connection()
+            cur = conn.cursor()
+            
+            create_form_query = """
+            INSERT INTO forms (assumption_id)
+            VALUES (?)
+            """
+            cur.execute(create_form_query, (assumption_id,))
+            form_id = cur.lastrowid
+            
+            # Process each question in the form data
+            for question_key, question_data in form_data.items():
+                question_text = question_data.get("questions", "")
+                question_type = question_data.get("type", "")
+                answer = question_data.get("answer", "")
+                explanation = question_data.get("explanation", "")
+                scale = question_data.get("scale", None)
+                
+                # Get or create form_question_type
+                type_query = """
+                SELECT id FROM form_question_types
+                WHERE value = ?
+                """
+                cur.execute(type_query, (question_type,))
+                type_result = cur.fetchone()
+                
+                if type_result:
+                    question_type_id = type_result[0]
+                else:
+                    min_val = scale[0] if scale and len(scale) > 0 else None
+                    max_val = scale[1] if scale and len(scale) > 1 else None
+                    
+                    create_type_query = """
+                    INSERT INTO form_question_types (value, min, max)
+                    VALUES (?, ?, ?)
+                    """
+                    cur.execute(create_type_query, (question_type, min_val, max_val))
+                    question_type_id = cur.lastrowid
+                
+                question_query = """
+                SELECT id FROM form_questions
+                WHERE question_type_id = ? AND question = ?
+                """
+                cur.execute(question_query, (question_type_id, question_text))
+                question_result = cur.fetchone()
+                
+                if question_result:
+                    form_question_id = question_result[0]
+                else:
+                    create_question_query = """
+                    INSERT INTO form_questions (question_type_id, question)
+                    VALUES (?, ?)
+                    """
+                    cur.execute(create_question_query, (question_type_id, question_text))
+                    form_question_id = cur.lastrowid
+                
+                insert_result_query = """
+                INSERT INTO form_results (form_id, form_question_id, value, explanation)
+                VALUES (?, ?, ?, ?)
+                """
+                cur.execute(insert_result_query, (form_id, form_question_id, answer, explanation if explanation else None))
+            
+            conn.commit()
+            return {"success": True, "form_id": form_id}
+            
+        except JWTError:
+            if conn:
+                try:
+                    conn.rollback()
+                except Exception as rollback_error:
+                    print(f"Error during rollback: {rollback_error}")
+            raise self.credentials_exception
+        except Exception as e:
+            if conn:
+                try:
+                    conn.rollback()
+                except Exception as rollback_error:
+                    print(f"Error during rollback: {rollback_error}")
+            raise
+        finally:
+            self.db_service.close_resources(cur, conn)
+            
     
