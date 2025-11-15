@@ -19,12 +19,13 @@ function tacMidpoint(scale: [number, number]): number {
 </script>
 
 <template>
-  <div v-for="question in formQuestions">
+  <div v-for="question in formQuestions" :key="question.id">
     <label :for="question.id" class="font-medium text-lg">{{ question.question }}</label>
     <div v-if="question.type === 'scale'" class="relative pb-5">
         <input
           type="range"
           :id="question.id"
+          :name="question.id"
           :min="question.scale ? question.scale[0] : 1"
           :max="question.scale ? question.scale[1] : 5"
           :value="tacMidpoint(question.scale ? question.scale : [1,5])"
@@ -39,11 +40,11 @@ function tacMidpoint(scale: [number, number]): number {
     </div>
     <div v-else-if="question.type === 'yes_no_explain'" class="flex flex-col gap-2">
         <div class="flex items-center gap-4">
-            <label :for="question.id + '_yes'" class="flex items-center gap-2">
+            <label :for="question.id + '_yes'" class="flex items-center gap-2 cursor-pointer">
                 <input type="radio" :id="question.id + '_yes'" :name="question.id" value="yes" required />
                 <span>Yes</span>
             </label>
-            <label :for="question.id + '_no'" class="flex items-center gap-2">
+            <label :for="question.id + '_no'" class="flex items-center gap-2 cursor-pointer">
                 <input type="radio" :id="question.id + '_no'" :name="question.id" value="no" required />
                 <span>No</span>
             </label>
@@ -54,7 +55,7 @@ function tacMidpoint(scale: [number, number]): number {
                 :id="question.id + '_explanation'"
                 :name="question.id + '_explanation'"
                 rows="4"
-                class="w-full rounded-md border border-gray-300 bg-white/10 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                class="w-full min-h-[42px] rounded-md border border-gray-300 bg-white/10 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             ></textarea>
         </div>
     </div>

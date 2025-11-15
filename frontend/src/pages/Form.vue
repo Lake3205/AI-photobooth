@@ -3,8 +3,8 @@ import { useCookieService } from '@/services/cookieService';
 import { useFormService } from '@/services/formService';
 import FormQuestions from '@/components/FormQuestions.vue';
 
-const { setCookie, getCookie } = useCookieService();
-const { getAssumptions, getFormQuestions, isLoading, assumptions } = useFormService();
+const { setCookie } = useCookieService();
+const { getAssumptions, getFormQuestions, submitForm, isLoading, assumptions, isSubmitting, submitSuccess } = useFormService();
 
 const token = new URLSearchParams(location.search).get('token');
 
@@ -13,7 +13,7 @@ if (token) {
   setCookie('form_token', token, 1);
 }
 
-void getAssumptions(getCookie('form_token') || '');
+void getAssumptions();
 
 const formQuestions = getFormQuestions();
 
@@ -38,9 +38,9 @@ const formQuestions = getFormQuestions();
           <p class="text-xl">Loading form...</p>
         </div>
         <div v-else-if="assumptions">
-          <form class="flex flex-col gap-6">
+          <form class="flex flex-col gap-6" @submit.prevent="submitForm($event.currentTarget as HTMLFormElement)">
             <div v-for="(assumption, key) in assumptions" :key="key" class="flex flex-col gap-2">
-              <label :for="key.toString()" class="font-medium">{{ assumption.name.toString() }}</label>
+              <span class="font-medium">{{ assumption.name.toString() }}</span>
               <div>
                 {{ assumption.value.toString() }}<br/>
               </div>
@@ -54,7 +54,7 @@ const formQuestions = getFormQuestions();
             </div>
             <button
                 type="submit"
-                class="self-end rounded-md bg-blue-600 px-6 py-2 font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="rounded-md cursor-pointer bg-blue-600 px-6 py-2 font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               Submit
             </button>

@@ -5,3 +5,10 @@ export type FormQuestion = {
     type: questionType;
     scale?: [number, number];
 }
+export type formResponsePayload = Record<string, {
+    questions: string;
+    type: questionType;
+    answer: string;
+    explanation?: string;
+    scale?: [number, number];
+}>;
