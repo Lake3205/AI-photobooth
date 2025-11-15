@@ -1,12 +1,7 @@
 <script lang="ts" setup>
-import type { FormQuestion } from "@/types/FormTypes";
+import { useFormService } from "@/services/formService";
 
-defineProps({
-  formQuestions: {
-    type: Array as () => FormQuestion[],
-    required: true
-  }
-})
+const { questions } = useFormService();
 
 function tacAmount(scale: [number, number]): number {
   return (scale[1] - (scale[0] - 1));
@@ -19,13 +14,13 @@ function tacMidpoint(scale: [number, number]): number {
 </script>
 
 <template>
-  <div v-for="question in formQuestions" :key="question.id">
-    <label :for="question.id" class="font-medium text-lg">{{ question.question }}</label>
+  <div v-for="(question, id) in questions" :key="id">
+    <label :for="id.toString()" class="font-medium text-lg">{{ question.question }}</label>
     <div v-if="question.type === 'scale'" class="relative pb-5">
         <input
           type="range"
-          :id="question.id"
-          :name="question.id"
+          :id="id.toString()"
+          :name="id.toString()"
           :min="question.scale ? question.scale[0] : 1"
           :max="question.scale ? question.scale[1] : 5"
           :value="tacMidpoint(question.scale ? question.scale : [1,5])"
@@ -40,20 +35,20 @@ function tacMidpoint(scale: [number, number]): number {
     </div>
     <div v-else-if="question.type === 'yes_no_explain'" class="flex flex-col gap-2">
         <div class="flex items-center gap-4">
-            <label :for="question.id + '_yes'" class="flex items-center gap-2 cursor-pointer">
-                <input type="radio" :id="question.id + '_yes'" :name="question.id" value="yes" required />
+            <label :for="id.toString() + '_yes'" class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" :id="id.toString() + '_yes'" :name="id.toString()" value="yes" required />
                 <span>Yes</span>
             </label>
-            <label :for="question.id + '_no'" class="flex items-center gap-2 cursor-pointer">
-                <input type="radio" :id="question.id + '_no'" :name="question.id" value="no" required />
+            <label :for="id.toString() + '_no'" class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" :id="id.toString() + '_no'" :name="id.toString()" value="no" required />
                 <span>No</span>
             </label>
         </div>
         <div>
-            <label :for="question.id + '_explanation'" class="block font-medium mb-1">Please explain your choice:</label>
+            <label :for="id.toString() + '_explanation'" class="block font-medium mb-1">Please explain your choice:</label>
             <textarea
-                :id="question.id + '_explanation'"
-                :name="question.id + '_explanation'"
+                :id="id.toString() + '_explanation'"
+                :name="id.toString() + '_explanation'"
                 rows="4"
                 class="w-full min-h-[42px] rounded-md border border-gray-300 bg-white/10 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             ></textarea>

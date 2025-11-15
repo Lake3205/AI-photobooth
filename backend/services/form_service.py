@@ -288,3 +288,6 @@ class FormService:
     def _validate_yes_no_explain_answer(self, answer: str):
         if answer not in ["yes", "no"]:
             raise ValueError(f"Answer {answer} is not valid for yes/no question")
+
+    def get_form_questions(self):
+        return ALLOWED_QUESTIONS

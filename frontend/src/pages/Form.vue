@@ -4,7 +4,7 @@ import { useFormService } from '@/services/formService';
 import FormQuestions from '@/components/FormQuestions.vue';
 
 const { setCookie } = useCookieService();
-const { getAssumptions, getFormQuestions, submitForm, isLoading, assumptions, isSubmitting, submitSuccess } = useFormService();
+const { submitForm, isLoading, assumptions } = useFormService();
 
 const token = new URLSearchParams(location.search).get('token');
 
@@ -12,10 +12,6 @@ if (token) {
   window.history.replaceState({}, document.title, window.location.pathname);
   setCookie('form_token', token, 1);
 }
-
-void getAssumptions();
-
-const formQuestions = getFormQuestions();
 
 </script>
 
@@ -50,7 +46,7 @@ const formQuestions = getFormQuestions();
             </div>
             <hr>
             <div class="flex flex-col gap-6">
-              <FormQuestions :form-questions="formQuestions"></FormQuestions>
+              <FormQuestions></FormQuestions>
             </div>
             <button
                 type="submit"

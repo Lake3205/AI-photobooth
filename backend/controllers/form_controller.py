@@ -38,6 +38,10 @@ def get_assumptions(token: Annotated[HTTPAuthorizationCredentials, Depends(beare
             headers={"WWW-Authenticate": "Bearer"},
         )
         
+@router.get("/questions", status_code=status.HTTP_200_OK)
+def get_form_questions():
+    return form_service.get_form_questions()
+        
 @router.post("/submit", status_code=status.HTTP_200_OK)
 def submit_form(form_data: dict, token: Annotated[HTTPAuthorizationCredentials, Depends(bearer_scheme)]):
     try:

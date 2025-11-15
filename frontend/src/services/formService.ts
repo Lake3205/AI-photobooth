@@ -1,6 +1,6 @@
 import type { AssumptionData } from "@/types/AssumptionType";
-import type { FormQuestion, formResponsePayload } from "@/types/FormTypes";
-import { ref } from "vue";
+import type { FormQuestions, formResponsePayload } from "@/types/FormTypes";
+import { onMounted, ref } from "vue";
 import { useCookieService } from "@/services/cookieService";
 
 const { getCookie } = useCookieService();
@@ -10,6 +10,7 @@ export function useFormService() {
     const isSubmitting = ref(false);
     const assumptions = ref<null | AssumptionData>(null);
     const submitSuccess = ref(false);
+    const questions = ref<FormQuestions>({});
 
     async function getAssumptions(): Promise<any> {
         const token = getCookie("form_token") || "";
@@ -37,11 +38,11 @@ export function useFormService() {
         const questions = getFormQuestions();
         const responsePayload: formResponsePayload = {};
 
-        questions.forEach((question) => {
+        Object.entries(questions).forEach(([id, question]) => {
             switch (question.type) {
                 case "scale":
-                    const scaleAnswer = formData.get(question.id) as string;
-                    responsePayload[question.id] = {
+                    const scaleAnswer = formData.get(id) as string;
+                    responsePayload[id] = {
                         question: question.question,
                         type: question.type,
                         answer: scaleAnswer,
@@ -49,9 +50,9 @@ export function useFormService() {
                     };
                     break;
                 case "yes_no_explain":
-                    const yesNoAnswer = formData.get(question.id) as string;
-                    const explanation = formData.get(question.id + "_explanation") as string | null;
-                    responsePayload[question.id] = {
+                    const yesNoAnswer = formData.get(id) as string;
+                    const explanation = formData.get(id + "_explanation") as string | null;
+                    responsePayload[id] = {
                         question: question.question,
                         type: question.type,
                         answer: yesNoAnswer,
@@ -81,37 +82,21 @@ export function useFormService() {
         submitSuccess.value = await response.json();        
     }
 
-    function getFormQuestions(): FormQuestion[] {
-        return [
-            {
-                id: "shock",
-                question: "On a scale from 1 to 10, how shocked are you by the results?",
-                type: "scale",
-                scale: [1, 10]
-            },
-            {
-                id: "happiness",
-                question: "On a scale from 1 to 10, how happy are you with the results?",
-                type: "scale",
-                scale: [1, 10]
-            },
-            {
-                id: "accuracy",
-                question: "On a scale from 1 to 10, how accurate do you feel the results are?",
-                type: "scale",
-                scale: [1, 10]
-            },
-            {
-                id: "viewpoint_change",
-                question: "Have you changed your viewpoint on AI after seeing the results?",
-                type: "yes_no_explain"
-            },
-            {
-                id: "regulation_opinion",
-                question: "Do you feel there should be more regulation on AI?",
-                type: "yes_no_explain"
-            }
-        ]
+    async function getFormQuestions(): Promise<FormQuestions> {
+        isLoading.value = true;
+
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/form/questions`, {
+            method: "GET",
+        });
+        isLoading.value = false;
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch form questions");
+        }
+
+        questions.value = (await response.json()) as FormQuestions;
+        
+        return questions.value;
     }
 
     function validateScaleInput(value: string, scale: [number, number]): boolean {
@@ -129,19 +114,18 @@ export function useFormService() {
     function submitForm(form: HTMLFormElement) {
         const token = getCookie("form_token") || "";
         const formData = new FormData(form);
-        const formQuestions = getFormQuestions();
         let valid = true;
 
-        formQuestions.forEach((question) => {
+        Object.entries(questions).forEach(([id, question]) => {
             switch (question.type) {
                 case "scale":
-                    const scaleAnswer = formData.get(question.id) as string;
+                    const scaleAnswer = formData.get(id) as string;
                     if (!question.scale || !validateScaleInput(scaleAnswer, question.scale)) {
                         valid = false;
                     }
                     break;
                 case "yes_no_explain":
-                    const yesNoAnswer = formData.get(question.id);
+                    const yesNoAnswer = formData.get(id);
                     if (!validateYesNoExplainInput(yesNoAnswer as string | null)) {
                         valid = false;
                     }
@@ -156,8 +140,13 @@ export function useFormService() {
         void sendFormResponse(formData, token);
     }
 
+    onMounted(() => {
+        void getAssumptions();
+        void getFormQuestions();
+    });
+
     return {
-        assumptions, isLoading, isSubmitting, submitSuccess, getAssumptions, getFormQuestions, submitForm
+        assumptions, questions, isLoading, isSubmitting, submitSuccess, getAssumptions, getFormQuestions, submitForm
     };
                 
 }
