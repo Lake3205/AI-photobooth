@@ -2,6 +2,7 @@ import type { AssumptionData } from "@/types/AssumptionType";
 import type { FormQuestions, formResponsePayload } from "@/types/FormTypes";
 import { onMounted, ref } from "vue";
 import { useCookieService } from "@/services/cookieService";
+import router from "@/router";
 
 const { getCookie } = useCookieService();
 
@@ -23,6 +24,7 @@ export function useFormService() {
         });
 
         if (!response.ok) {
+            router.push({ name: "home" });
             throw new Error("Failed to fetch assumptions");
         }
 
