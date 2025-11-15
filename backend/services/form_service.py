@@ -31,7 +31,7 @@ class FormService:
         except JWTError:
             raise self.credentials_exception
         
-    def verify_form_token(self, token: str, revoke: bool = False):
+    def verify_form_token(self, token: str):
         conn = None
         cur = None
         
@@ -55,15 +55,6 @@ class FormService:
             if cur.rowcount > 1:
                 raise Exception("Multiple form tokens found")
             
-            if revoke:
-                update_query = """
-                UPDATE form_tokens
-                SET used = 1
-                WHERE token = ? AND assumption_id = ?
-                """
-                
-                cur.execute(update_query, (token, assumption_id))
-                conn.commit()
             return {
                 "assumption_id": assumption_id,
                 "valid": True
@@ -225,6 +216,14 @@ class FormService:
                 """
                 cur.execute(insert_result_query, (form_id, form_question_id, answer, explanation if explanation else None))
             
+            # Mark the token as used
+            update_token_query = """
+            UPDATE form_tokens
+            SET used = 1
+            WHERE assumption_id = ?
+            """
+            cur.execute(update_token_query, (assumption_id,))
+            
             conn.commit()
             return {"success": True, "form_id": form_id}
             
@@ -245,4 +244,34 @@ class FormService:
         finally:
             self.db_service.close_resources(cur, conn)
             
-    
+    def validate_form_data(self, form_data: dict):
+        try:
+            for _, question_data in form_data.items():
+                question_type = question_data.get("type", "")
+                answer = question_data.get("answer", "")
+                scale = question_data.get("scale", None)
+                
+                if question_type == "scale":
+                    self._validate_scale_answer(answer, scale)
+                elif question_type == "yes_no_explain":
+                    self._validate_yes_no_explain_answer(answer)
+        except ValueError as ve:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(ve)
+            )
+             
+    def _validate_scale_answer(self, answer: int, scale: list[int]):
+        try:
+            answer = int(answer)
+        except ValueError:
+            raise ValueError(f"Answer {answer} is not a valid integer")
+        if not scale or len(scale) != 2:
+            raise ValueError("Scale must be a list of two integers [min, max]")
+        min_val, max_val = scale
+        if not (min_val <= answer <= max_val):
+            raise ValueError(f"Answer {answer} is out of scale range [{min_val}, {max_val}]")
+        
+    def _validate_yes_no_explain_answer(self, answer: str):
+        if answer not in ["yes", "no"]:
+            raise ValueError(f"Answer {answer} is not valid for yes/no question")

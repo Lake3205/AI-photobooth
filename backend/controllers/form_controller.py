@@ -41,7 +41,9 @@ def get_assumptions(token: Annotated[HTTPAuthorizationCredentials, Depends(beare
 @router.post("/submit", status_code=status.HTTP_200_OK)
 def submit_form(form_data: dict, token: Annotated[HTTPAuthorizationCredentials, Depends(bearer_scheme)]):
     try:
-        response = form_service.verify_form_token(token.credentials, revoke=True) # TODO change to True when in production
+        response = form_service.verify_form_token(token.credentials)
+        form_service.validate_form_data(form_data)
+        return True
         if not response.get("valid"):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
