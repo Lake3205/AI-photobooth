@@ -37,7 +37,6 @@ const {
   // Helper functions
   uploadFile,
   getBarColorClass,
-  getConsistentPercentage,
   formatField,
   reload,
 } = useWebcamService()
@@ -192,7 +191,6 @@ onMounted(() => {
                 :analysisError="analysisError"
                 :formatField="formatField"
                 :getBarColorClass="getBarColorClass"
-                :getConsistentPercentage="getConsistentPercentage"
                 :isAnalyzing="isAnalyzing"
             />
             <button

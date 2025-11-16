@@ -10,18 +10,18 @@ T = TypeVar("T")
 
 class AssumptionFields(BaseModel, Generic[T]):
     value: T
-    reasoning: str = Field(description="Reasoning behind the value of the assumption.")
+    reasoning: str = Field(description="Reasoning behind the value of the assumption. Give the explanation in 'you' form. Don't mention the lack of certainty.")
 
 class AssumptionsResponse(BaseModel):
-    ethnicity: AssumptionFields[Annotated[str, Field(description="Ethnicity of the person in the image.")]]
-    religion: AssumptionFields[Literal["Christianity", "Islam", "Hinduism", "Buddhism", "Judaism", "Atheism", "Other"]]
-    political_opinion: AssumptionFields[Annotated[str, Field(description="Political opinion of the person in the image.")]]
-    theft_risk: AssumptionFields[Annotated[float, Field(ge=0, le=100, description="Percentage risk the person might engage in theft based on profile and facial features")]]
+    ethnicity: AssumptionFields[Annotated[str, Field(description="Ethnicity of the person in the image, e.g., Caucasian, African, Asian, etc. In case of mixed, use the most dominant.")]]
+    religion: AssumptionFields[Annotated[str, Field(description="Religion of the person in the image. If uncertain, take a guess.")]]
+    political_opinion: AssumptionFields[Annotated[str, Field(description="Political opinion of the person in the image. If uncertain, take a guess.")]]
+    theft_risk: AssumptionFields[Annotated[float, Field(ge=0, le=100, description="Percentage risk the person might engage in theft.")]]
     age: AssumptionFields[Annotated[int, Field(ge=0, le=120)]]
     weight: AssumptionFields[Annotated[int, Field(ge=0, description="Weight in kilograms.")]]
     gender: AssumptionFields[Literal["Male", "Female", "Other"]]
     iq: AssumptionFields[Annotated[int, Field(ge=0, description="Estimated IQ score")]]
-    salary: AssumptionFields[Annotated[int, Field(ge=0, description="Annual salary in EUR")]]
+    salary: AssumptionFields[Annotated[int, Field(ge=0, description="Annual salary in EUR, the modal income is around 30,000 EUR.")]]
     debt: AssumptionFields[Annotated[int, Field(ge=0, description="Total debt in EUR")]]
 
     def to_dict(self):
@@ -32,6 +32,7 @@ class AssumptionsModel:
     def __init__(self, model: Clients = None, version: str = None):
         self.model = model
         self.version = version
+        self.token = None
         self.assumptions = {
             "ethnicity": {
                 "name": "Ethnicity",
@@ -79,7 +80,8 @@ class AssumptionsModel:
         return {
             "model": self.model,
             "version": self.version,
-            "assumptions": self.assumptions
+            "assumptions": self.assumptions,
+            "token": self.token
         }
 
     # Set assumptions according to the general return format from a given JSON dict
@@ -89,3 +91,6 @@ class AssumptionsModel:
                 continue
             self.assumptions[assumption]['value'] = assumptions_json[assumption]['value']
             self.assumptions[assumption]['reasoning'] = assumptions_json[assumption]['reasoning']
+            
+    def set_token(self, token: str):
+        self.token = token

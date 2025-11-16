@@ -1,7 +1,7 @@
 from clients.claude import ClaudeClient
 from models.assumptions import AssumptionsModel
 from constants.clients import Clients
-from services.database_service import log_assumption_to_db
+from services.database_service import DatabaseService
 
 from clients.google_ai_client import GoogleAIClient
 
@@ -9,6 +9,7 @@ class AssumptionsService:
     def __init__(self):
         self.claude_client = ClaudeClient()
         self.google_client = GoogleAIClient()
+        self.db_service = DatabaseService()
 
     async def get_assumptions(self, assumptions_model: AssumptionsModel, image) -> dict:
         match assumptions_model.model:
@@ -34,9 +35,54 @@ class AssumptionsService:
         # Log the assumption to the database
         if response:
             try:
-                assumption_id = log_assumption_to_db(ai_model=model_name, data=response)
+                assumption_id = self.db_service.log_assumption_to_db(ai_model=model_name, data=response)
                 response['id'] = assumption_id
             except Exception as e:
                 print(f"failed to log assumption to database: {e}")
 
         return response
+    
+    async def get_assumptions_by_id(self, assumption_id: int) -> dict:
+        conn = None
+        cur = None
+        
+        try:
+            conn = self.db_service.get_db_connection()
+            cur = conn.cursor()
+            
+            assumptions_model = AssumptionsModel()
+            
+            query = """
+            SELECT ac.id, ac.value, av.value, av.reasoning
+            FROM assumptions a 
+            LEFT JOIN assumption_values av ON a.id = av.assumption_id 
+            LEFT JOIN assumption_constants ac ON av.assumption_constant_id = ac.id
+            WHERE a.id = ?
+            """
+            
+            cur.execute(query, (assumption_id,))
+            rows = cur.fetchall()
+            
+            if not rows:
+                raise Exception(f"No assumption found with ID: {assumption_id}")
+            
+            
+            for row in rows:
+                assumption = row[1]
+                value = row[2]
+                reasoning = row[3]
+                if (assumption in assumptions_model.assumptions):
+                    assumptions_model.assumptions[assumption]["value"] = value
+                    assumptions_model.assumptions[assumption]["reasoning"] = reasoning
+            
+            return assumptions_model.assumptions
+            
+        except Exception as e:
+            if conn:
+                try:
+                    conn.rollback()
+                except Exception as rollback_error:
+                    print(f"Error during rollback: {rollback_error}")
+            raise
+        finally:
+            self.db_service.close_resources(cur, conn)

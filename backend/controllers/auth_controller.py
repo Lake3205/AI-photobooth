@@ -2,15 +2,16 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from models.user import UserLogin, Token
 from services.auth_service import verify_password, create_access_token, verify_token
-from services.database_service import get_user_by_username
+from services.database_service import DatabaseService
 
 router = APIRouter(prefix="/api/auth", tags=["Auth"])
 security = HTTPBearer()
+db_service = DatabaseService()
 
 # Login endpoint
 @router.post("/login", response_model=Token)
 async def login(user_login: UserLogin):
-    user = get_user_by_username(user_login.username)
+    user = db_service.get_user_by_username(user_login.username)
     
     if not user or not verify_password(user_login.password, user["hashed_password"]):
         raise HTTPException(
@@ -27,7 +28,7 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     token = credentials.credentials
     token_data = verify_token(token)
     
-    user = get_user_by_username(token_data.username)
+    user = db_service.get_user_by_username(token_data.username)
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

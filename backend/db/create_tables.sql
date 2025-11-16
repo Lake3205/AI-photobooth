@@ -45,13 +45,20 @@ CREATE TABLE forms (
         ON DELETE CASCADE
 );
 
+CREATE TABLE form_question_types (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    value VARCHAR(255) NOT NULL UNIQUE,
+    min INT,
+    max INT
+);
+
 CREATE TABLE form_questions (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    assumption_constant_id INT NOT NULL,
+    question_type_id INT NOT NULL,
     question TEXT NOT NULL,
-    CONSTRAINT fk_form_question_constant
-        FOREIGN KEY (assumption_constant_id)
-        REFERENCES assumption_constants(id)
+    CONSTRAINT fk_form_question_type
+        FOREIGN KEY (question_type_id)
+        REFERENCES form_question_types(id)
         ON DELETE RESTRICT
 );
 
@@ -60,6 +67,7 @@ CREATE TABLE form_results (
     form_id INT NOT NULL,
     form_question_id INT NOT NULL,
     value TEXT,
+    explanation TEXT,
     CONSTRAINT fk_form_result_form
         FOREIGN KEY (form_id)
         REFERENCES forms(id)
@@ -70,6 +78,18 @@ CREATE TABLE form_results (
         ON DELETE CASCADE,
     CONSTRAINT ux_form_result_unique
         UNIQUE (form_id, form_question_id)
+);
+
+CREATE TABLE form_tokens (
+    token VARCHAR(512) PRIMARY KEY,
+    assumption_id INT NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    used TINYINT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_form_tokens_assumption
+        FOREIGN KEY (assumption_id)
+        REFERENCES assumptions(id)
+        ON DELETE CASCADE
 );
 
 CREATE INDEX idx_assumption_constants_format_id
@@ -84,11 +104,14 @@ CREATE INDEX idx_assumption_values_constant_id
 CREATE INDEX idx_forms_assumption_id
     ON forms(assumption_id);
 
-CREATE INDEX idx_form_questions_constant_id
-    ON form_questions(assumption_constant_id);
+CREATE INDEX idx_form_questions_type_id
+    ON form_questions(question_type_id);
 
 CREATE INDEX idx_form_results_form_id
     ON form_results(form_id);
 
 CREATE INDEX idx_form_results_question_id
     ON form_results(form_question_id);
+
+CREATE INDEX idx_form_tokens_assumption_id
+    ON form_tokens(assumption_id);

@@ -1,22 +1,16 @@
 from fastapi import APIRouter, status, HTTPException, Depends
 
-from services.database_service import (
-    get_db_connection, 
-    get_assumptions_by_model, 
-    get_all_assumptions,
-    get_assumption_constants,
-    get_formats,
-    delete_assumption
-)
+from services.database_service import DatabaseService
 from controllers.auth_controller import get_current_user, require_admin
 
 router = APIRouter(prefix="/database", tags=["Database"])
+db_service = DatabaseService()
 
 # Endpoint to test database connection
 @router.get("/test", status_code=status.HTTP_200_OK)
 async def test_database_connection():
     try:
-        conn = get_db_connection()
+        conn = db_service.get_db_connection()
         cur = conn.cursor()
         try:
             cur.execute("SELECT 1")
@@ -39,7 +33,7 @@ async def test_database_connection():
 @router.get("/assumptions/{ai_model}", status_code=status.HTTP_200_OK)
 async def get_assumptions_by_model_endpoint(ai_model: str, user = Depends(require_admin)): # Require admin role
     try:
-        result = get_assumptions_by_model(ai_model)
+        result = db_service.get_assumptions_by_model(ai_model)
         if result is None or len(result) == 0:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -58,7 +52,7 @@ async def get_assumptions_by_model_endpoint(ai_model: str, user = Depends(requir
 @router.get("/assumptions", status_code=status.HTTP_200_OK)
 async def get_all_assumptions_endpoint(user = Depends(require_admin)):
     try:
-        result = get_all_assumptions()
+        result = db_service.get_all_assumptions()
         return result
     except Exception as e:
         raise HTTPException(
@@ -70,7 +64,7 @@ async def get_all_assumptions_endpoint(user = Depends(require_admin)):
 @router.get("/constants", status_code=status.HTTP_200_OK)
 async def get_assumption_constants_endpoint(user = Depends(require_admin)):
     try:
-        result = get_assumption_constants()
+        result = db_service.get_assumption_constants()
         return result
     except Exception as e:
         raise HTTPException(
@@ -82,7 +76,7 @@ async def get_assumption_constants_endpoint(user = Depends(require_admin)):
 @router.get("/formats", status_code=status.HTTP_200_OK)
 async def get_formats_endpoint(user = Depends(require_admin)):
     try:
-        result = get_formats()
+        result = db_service.get_formats()
         return result
     except Exception as e:
         raise HTTPException(
@@ -94,7 +88,7 @@ async def get_formats_endpoint(user = Depends(require_admin)):
 @router.delete("/assumptions/{assumption_id}", status_code=status.HTTP_200_OK)
 async def delete_assumption_endpoint(assumption_id: int, user = Depends(require_admin)):
     try:
-        result = delete_assumption(assumption_id)
+        result = db_service.delete_assumption(assumption_id)
         return result
     except HTTPException:
         raise

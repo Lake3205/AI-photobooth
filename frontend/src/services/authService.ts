@@ -1,6 +1,6 @@
 const TOKEN_KEY = 'user_token'
 const USERNAME_KEY = 'username'
-const API_BASE_URL = 'http://localhost:8000'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 export interface LoginCredentials {
   username: string
@@ -87,6 +87,29 @@ export const authService = {
     } catch (error) {
       console.error('Token error:', error)
       this.logout()
+      return false
+    }
+  },
+
+  async verifyFormToken(formToken: string): Promise<boolean> {
+    if (!formToken) return false
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/form/token/verify`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${formToken}`,
+        },
+      })
+      if (!response.ok) {
+        return false
+      }
+
+      const data = await response.json()
+
+      return data.valid === true
+    } catch (error) {
+      console.error('Form token error:', error)
       return false
     }
   },

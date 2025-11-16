@@ -4,6 +4,7 @@ from controllers.assumptions_controller import router as assumptions_controller
 from controllers.status_controller import router as status_controller
 from controllers.database_controller import router as database_controller
 from controllers.auth_controller import router as auth_controller
+from controllers.form_controller import router as form_controller
 
 app = FastAPI()
 
@@ -23,3 +24,4 @@ app.include_router(assumptions_controller)
 app.include_router(status_controller)
 app.include_router(database_controller)
 app.include_router(auth_controller)
+app.include_router(form_controller)

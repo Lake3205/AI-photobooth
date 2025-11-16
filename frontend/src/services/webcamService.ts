@@ -1,5 +1,6 @@
 import type {AssumptionData, AssumptionType} from '@/types/AssumptionType';
 import {computed, onUnmounted, ref, watch} from 'vue'
+import { useCookieService } from './cookieService';
 
 interface CapturedImage {
     dataUrl: string
@@ -11,7 +12,10 @@ interface TestAnalysisResponse {
     model: string;
     version: string;
     assumptions: AssumptionData;
+    token?: string;
 }
+
+const { setCookie } = useCookieService();
 
 class AssumptionsService {
     private baseUrl: string;
@@ -38,6 +42,10 @@ class AssumptionsService {
 
             if (!data.assumptions) {
                 return null as unknown as AssumptionData;
+            }
+
+            if (data.token) {
+                setCookie("form_token", data.token, 1);
             }
 
             return data.assumptions;
@@ -156,32 +164,6 @@ export const useWebcamService = () => {
             hash = ((hash << 5) - hash + str.charCodeAt(i)) & 0xffffffff
         }
         return Math.abs(hash)
-    }
-
-    const getConsistentPercentage = (field: AssumptionType): number => {
-        // If the field has a defined range, calculate percentage within that range
-        if (field.format === 'percentage' && typeof field.value === 'number') {
-            return Math.min(Math.max(field.value, 0), 100)
-        }
-
-        if (field.min !== undefined && field.max !== undefined && typeof field.value === 'number') {
-            if (field.max === field.min) return 100
-
-            // If ideal is defined, adjust calculation to reflect distance from ideal
-            if (field.ideal !== undefined) {
-                if (field.ideal === field.min) {
-                    if (field.value <= field.min) return 100
-                    if (field.value >= field.max) return 0
-                    return ((field.max - field.value) / (field.max - field.min)) * 100;
-                }
-            }
-
-            const clampedValue = Math.min(Math.max(field.value, field.min), field.max)
-            return ((clampedValue - field.min) / (field.max - field.min)) * 100
-        }
-
-        // Fallback: use hash-based percentage for consistent but arbitrary value
-        return getStringHash(field.name) % 80 + 20 // Range from 20-100%
     }
 
     const getBarColorClass = (key: string): string => {
@@ -394,7 +376,6 @@ export const useWebcamService = () => {
         // Helper
         formatField,
         getStringHash,
-        getConsistentPercentage,
         getBarColorClass,
         uploadFile,
         reload,

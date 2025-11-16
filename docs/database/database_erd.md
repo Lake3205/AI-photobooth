@@ -35,22 +35,38 @@ erDiagram
         INT assumption_id FK
     }
 
+    form_question_types {
+        INT id PK
+        VARCHAR value
+        INT min
+        INT max
+    }
+
     form_questions {
         INT id PK
-        INT assumption_constant_id FK
-        VARCHAR question
+        INT question_type_id FK
+        TEXT question
     }
 
     form_results {
         INT id PK
         INT form_id FK
         INT form_question_id FK
-        VARCHAR value
+        TEXT value
+        TEXT explanation
     }
 
     formats {
         INT id PK
         VARCHAR value
+    }
+
+    form_tokens {
+        VARCHAR token PK
+        INT assumption_id FK
+        DATETIME expires_at
+        TINYINT used
+        DATETIME created_at
     }
 
     %% Relationships
@@ -63,4 +79,5 @@ erDiagram
     assumption_constants ||--o{ form_questions : "used in questions"
     form_questions ||--o{ form_results : "receives answers"
     forms ||--o{ form_results : "contains results"
+    assumptions ||--o{ form_tokens : "has tokens"
 ```
