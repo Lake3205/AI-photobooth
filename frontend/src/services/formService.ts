@@ -80,8 +80,8 @@ export function useFormService() {
         if (!response.ok) {
             throw new Error("Failed to submit form");
         }
-
-        submitSuccess.value = await response.json();        
+        submitSuccess.value = await response.ok;        
+        return submitSuccess.value;
     }
 
     async function getFormQuestions(): Promise<FormQuestions> {
@@ -113,7 +113,7 @@ export function useFormService() {
         return true;
     }
 
-    function submitForm(form: HTMLFormElement) {
+    async function submitForm(form: HTMLFormElement) {
         const token = getCookie("form_token") || "";
         const formData = new FormData(form);
         let valid = true;
@@ -138,8 +138,14 @@ export function useFormService() {
         if (!valid) {
             return;
         }
-
-        void sendFormResponse(formData, token);
+        
+        const response = await sendFormResponse(formData, token);
+        if (response === true) {
+        router.push({ name: "selfie" });
+        }
+         else {
+            return
+         }
     }
 
     onMounted(() => {
