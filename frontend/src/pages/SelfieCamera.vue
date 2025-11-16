@@ -160,15 +160,6 @@ onMounted(() => {
 
             </div>
           </div>
-
-          <div class="mt-8 text-center">
-            <button
-                class="text-blue-300 hover:text-white transition-colors"
-                @click="goBack"
-            >
-              ← Back to start
-            </button>
-          </div>
         </div>
 
         <!-- Right column: small captured image + assumptions -->
