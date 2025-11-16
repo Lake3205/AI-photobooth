@@ -4,10 +4,6 @@ import {useRouter} from 'vue-router'
 
 const router = useRouter()
 
-function goToTerms() {
-  router.push({name: 'terms-of-service'})
-}
-
 const mouseX = ref(0)
 const mouseY = ref(0)
 const isHovering = ref(false)
@@ -27,7 +23,7 @@ function handleMouseLeave() {
 <template>
   <button
       class="group relative inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2 text-sm font-semibold text-white ring-1 ring-white/20 backdrop-blur transition-all hover:bg-white/15 focus:outline-none focus:ring-white/40 cursor-pointer"
-      @click="goToTerms"
+      @click=" router.push({name: 'terms-of-service'})"
       @mouseleave="handleMouseLeave"
       @mousemove="handleMouseMove"
   >

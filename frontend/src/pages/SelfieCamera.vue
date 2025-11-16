@@ -41,15 +41,7 @@ const {
   reload,
 } = useWebcamService()
 
-const goBack = () => {
-  stopCamera()
-  router.push({name: 'landing'})
-}
 
-const goToTerms = () => {
-  stopCamera()
-  router.push({name: 'terms-of-service'})
-}
 
 // Terms of Service agreement state
 const hasAgreedToTerms = ref(false)
@@ -82,7 +74,7 @@ onMounted(() => {
     <div v-if="!hasAgreedToTerms" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
       <div class="bg-neutral-900/85 rounded-xl shadow-xl p-8 max-w-md w-full text-center text-blue-100/90">
         <h2 class="text-2xl font-bold mb-4">Terms of Service</h2>
-        <p class="mb-6">Please read and agree to our <span class="underline cursor-pointer" @click="goToTerms">Terms of Service</span>
+        <p class="mb-6">Please read and agree to our <span class="underline cursor-pointer" @click="router.push({name: 'terms-of-service'})">Terms of Service</span>
           before using the selfie camera.</p>
         <button class="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
                 @click="agreeToTerms">

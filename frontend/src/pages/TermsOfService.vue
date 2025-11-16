@@ -3,10 +3,6 @@ import {useRouter} from "vue-router";
 
 const router = useRouter()
 
-const goBack = () => {
-  router.push({name: 'landing'})
-}
-
 </script>
 
 <template>
@@ -95,7 +91,7 @@ const goBack = () => {
         <div class="mt-8 text-center">
           <button
               class="text-blue-300 hover:text-white transition-colors"
-              @click="goBack"
+              @click="router.push({name: 'selfie'})"
           >
             ← Back to start
           </button>
