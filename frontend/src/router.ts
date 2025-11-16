@@ -1,7 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import { authService } from '@/services/authService';
 import Login from '@/pages/Login.vue';
-import Landing from '@/pages/Landing.vue';
 import SelfieCamera from '@/pages/SelfieCamera.vue';
 import Dashboard from '@/pages/Dashboard.vue';
 import TermsOfService from '@/pages/TermsOfService.vue';
@@ -14,11 +13,6 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            name: 'landing',
-            component: Landing,
-        },
-        {
-            path: '/selfie',
             name: 'selfie',
             component: SelfieCamera,
         },
