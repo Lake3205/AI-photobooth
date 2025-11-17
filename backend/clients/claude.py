@@ -1,5 +1,3 @@
-from dotenv import load_dotenv
-from os import environ
 from anthropic import Anthropic
 from base64 import b64encode
 
@@ -7,13 +5,13 @@ from models.assumptions import AssumptionsResponse
 from constants.prompt import SYSTEM_PROMPT, USER_PROMPT
 from constants.model_version_constants import CLAUDE_MODEL_VERSION
 from services.image_service import ImageService
+import config  # Load environment configuration
 
 # Client to interact with Claude AI, handles setup of API and request formatting
 class ClaudeClient:
-    load_dotenv()
     
     def __init__(self):
-        self.api_key = environ.get("CLAUDE_API_KEY")
+        self.api_key = config.CLAUDE_API_KEY
         self.tools = [
             {
                 "name": "analyse_the_image",

@@ -1,3 +1,5 @@
+import config  # Load environment configuration FIRST
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from controllers.assumptions_controller import router as assumptions_controller

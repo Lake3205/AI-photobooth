@@ -1,6 +1,3 @@
-from dotenv import load_dotenv
-import os
-
 from google import genai
 from google.genai import types
 
@@ -9,12 +6,12 @@ from models.assumptions import AssumptionsResponse
 from constants.prompt import USER_PROMPT, SYSTEM_PROMPT
 
 from constants.model_version_constants import GEMINI_MODEL_VERSION
+import config  # Load environment configuration
 
 
 class GoogleAIClient:
-    load_dotenv()
     def __init__(self):
-        self.API_KEY = os.environ.get('GEMINI_API_KEY')
+        self.API_KEY = config.GEMINI_API_KEY
         self.MODEL = GEMINI_MODEL_VERSION
 
     async def call_gemini_api(self, image_bytes: bytes, mime_type: str):

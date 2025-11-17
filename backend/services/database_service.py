@@ -1,19 +1,16 @@
 from fastapi import HTTPException
 import mariadb
-from dotenv import load_dotenv
-import os
 from models.assumptions import AssumptionsModel
-
-load_dotenv()
+import config  # Load environment configuration
 
 class DatabaseSingleton:
     def __init__(self):
         self.db_config = {
-            "user": os.getenv("DB_USER"),
-            "password": os.getenv("DB_PASSWORD"),
-            "host": os.getenv("DB_HOST"),
-            "port": int(os.getenv("DB_PORT", 3306)),
-            "database": os.getenv("DB_NAME"),
+            "user": config.DB_USER,
+            "password": config.DB_PASSWORD,
+            "host": config.DB_HOST,
+            "port": config.DB_PORT,
+            "database": config.DB_NAME,
             "connect_timeout": 5,
             "autocommit": False
         }
