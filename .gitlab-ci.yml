@@ -70,16 +70,30 @@ build_main:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"username\":\"$DOCKER_USERNAME\",\"password\":\"$DOCKER_PASSWORD\"}}}" > /kaniko/.docker/config.json
 
+    # Create .env.production from GitLab CI/CD variables
+    - echo "GEMINI_API_KEY=${PROD_GEMINI_API_KEY}" > .env.production
+    - echo "CLAUDE_API_KEY=${PROD_CLAUDE_API_KEY}" >> .env.production
+    - echo "DB_HOST=${PROD_DB_HOST}" >> .env.production
+    - echo "DB_PORT=${PROD_DB_PORT}" >> .env.production
+    - echo "DB_USER=${PROD_DB_USER}" >> .env.production
+    - echo "DB_PASSWORD=${PROD_DB_PASSWORD}" >> .env.production
+    - echo "DB_NAME=${PROD_DB_NAME}" >> .env.production
+    - echo "JWT_SECRET_KEY=${PROD_JWT_SECRET_KEY}" >> .env.production
+    - echo "VITE_API_URL=${PROD_VITE_API_URL}" >> .env.production
+    - echo "VITE_ENV=production" >> .env.production
+
     - >
       /kaniko/executor
       --context ./frontend
       --dockerfile ./frontend/Dockerfile
+      --build-arg ENV_FILE=.env.production
       --destination emetain/dark-tech-frontend:latest
 
     - >
       /kaniko/executor
       --context ./backend
       --dockerfile ./backend/Dockerfile
+      --build-arg ENV_FILE=.env.production
       --destination emetain/dark-tech-backend:latest
 
 deploy_main:

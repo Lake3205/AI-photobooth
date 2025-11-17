@@ -1,9 +1,13 @@
 FROM node:22-alpine AS builder
 
+ARG ENV_FILE=.env
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
+
+# Copy environment file if it exists
+COPY ${ENV_FILE} .env* ./
 
 RUN npm run build
 
