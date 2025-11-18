@@ -24,7 +24,7 @@ export function useFormService() {
         });
 
         if (!response.ok) {
-            router.push({ name: "home" });
+            router.push({ name: "selfie" });
             throw new Error("Failed to fetch assumptions");
         }
 
@@ -37,10 +37,9 @@ export function useFormService() {
     };
 
     async function sendFormResponse(formData: FormData, token: string) {
-        const questions = getFormQuestions();
         const responsePayload: formResponsePayload = {};
 
-        Object.entries(questions).forEach(([id, question]) => {
+        Object.entries(questions.value).forEach(([id, question]) => {
             switch (question.type) {
                 case "scale":
                     const scaleAnswer = formData.get(id) as string;
@@ -118,7 +117,7 @@ export function useFormService() {
         const formData = new FormData(form);
         let valid = true;
 
-        Object.entries(questions).forEach(([id, question]) => {
+        Object.entries(questions.value).forEach(([id, question]) => {
             switch (question.type) {
                 case "scale":
                     const scaleAnswer = formData.get(id) as string;
@@ -132,6 +131,9 @@ export function useFormService() {
                         valid = false;
                     }
                     break;
+                default: 
+                    valid = false;
+                    break;
             }
         });
 
@@ -141,11 +143,11 @@ export function useFormService() {
         
         const response = await sendFormResponse(formData, token);
         if (response === true) {
-        router.push({ name: "selfie" });
+            router.push({ name: "selfie" });
         }
-         else {
-            return
-         }
+        else {
+            return;
+        }
     }
 
     onMounted(() => {
