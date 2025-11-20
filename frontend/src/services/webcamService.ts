@@ -35,7 +35,8 @@ class AssumptionsService {
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorDetail = (await response.json()).detail;
+                throw new Error(`${errorDetail}`);
             }
 
             const data: TestAnalysisResponse = await response.json();
@@ -51,7 +52,7 @@ class AssumptionsService {
             return data.assumptions;
         } catch (error) {
             console.error('Error generating assumptions:', error);
-            throw new Error('Failed to generate assumptions');
+            throw new Error(error instanceof Error ? error.message : 'Failed to generate assumptions');
         }
     }
 }

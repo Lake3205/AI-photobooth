@@ -10,6 +10,8 @@ from constants.prompt import USER_PROMPT, SYSTEM_PROMPT
 
 from constants.model_version_constants import GEMINI_MODEL_VERSION
 
+from models.face_detection import FaceDetectionResponse
+
 
 class GoogleAIClient:
     load_dotenv()
@@ -32,6 +34,25 @@ class GoogleAIClient:
                     mime_type=mime_type
                 ),
                 USER_PROMPT
+            ],
+        )
+
+        return response.parsed
+
+    async def detect_face(self, image_bytes: bytes, mime_type: str):
+        genai_client = genai.Client()
+        response = genai_client.models.generate_content(
+            model=self.MODEL,
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+                response_schema=FaceDetectionResponse,
+            ),
+            contents=[
+                types.Part.from_bytes(
+                    data=image_bytes,
+                    mime_type=mime_type
+                ),
+                "Analyze the given image and detect whether there's a human face or not."
             ],
         )
 
