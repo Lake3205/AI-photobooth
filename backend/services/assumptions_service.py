@@ -1,3 +1,5 @@
+from fastapi import HTTPException, status
+
 from clients.claude import ClaudeClient
 from models.assumptions import AssumptionsModel
 from constants.clients import Clients
@@ -12,13 +14,17 @@ class AssumptionsService:
         self.db_service = DatabaseService()
 
     async def get_assumptions(self, assumptions_model: AssumptionsModel, image) -> dict:
+        image_bytes = await image.read()
+        mime_type = image.content_type
+        face_detected = await self.google_client.detect_face(image_bytes=image_bytes, mime_type=mime_type)
+        if not face_detected.face_detected:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No face detected")
+
         match assumptions_model.model:
             case Clients.CLAUDE:
                 response = await self.claude_client.generate_response(image)
                 model_name = "claude"
             case Clients.GEMINI:
-                image_bytes = await image.read()
-                mime_type = image.content_type
                 response = await self.google_client.call_gemini_api(
                     image_bytes=image_bytes,
                     mime_type=mime_type
