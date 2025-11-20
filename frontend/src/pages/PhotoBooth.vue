@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {computed, onMounted, ref} from 'vue'
+import {computed, onMounted, ref, watch} from 'vue'
 import {useWebcamService} from '@/services/webcamService'
 import {CameraIcon} from '@heroicons/vue/24/outline'
 import UploadButton from '@/components/UploadButton.vue'
@@ -63,7 +63,12 @@ function agreeToTerms() {
   hasAgreedToTerms.value = true
 }
 
-const formToken = computed(() => getCookie('form_token'))
+const formToken = ref('')
+
+function updateFormToken() {
+  formToken.value = getCookie('form_token') || ''
+}
+
 const qrCodeUrl = computed(() => {
   if (!formToken.value) return ''
 //      const baseUrl = window.location.origin
@@ -71,9 +76,15 @@ const qrCodeUrl = computed(() => {
   return `parallax-darktech.nl/form?token=${formToken.value}`
 })
 
-// Auto-start camera when component mounts
+watch(() => analysisData.value, (newData) => {
+  if (newData) {
+    updateFormToken()
+  }
+})
+
 onMounted(() => {
   hasAgreedToTerms.value = checkTermsCookie()
+  updateFormToken()
   startCamera()
 })
 </script>
