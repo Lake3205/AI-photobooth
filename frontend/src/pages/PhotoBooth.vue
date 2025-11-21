@@ -4,12 +4,9 @@ import {useWebcamService} from '@/services/webcamService'
 import {CameraIcon} from '@heroicons/vue/24/outline'
 import UploadButton from '@/components/UploadButton.vue'
 import AssumptionsPanel from '@/components/AssumptionsPanel.vue'
-import {useRouter} from "vue-router";
-import TermsButton from '@/components/TermsButton.vue'
 import QrcodeVue from 'qrcode.vue'
 import {useCookieService} from '@/services/cookieService'
 
-const router = useRouter()
 const { getCookie } = useCookieService()
 
 const {
@@ -34,7 +31,6 @@ const {
 
   // Webcam functions
   startCamera,
-  stopCamera,
   takeLatestPicture,
 
   // Helper functions
