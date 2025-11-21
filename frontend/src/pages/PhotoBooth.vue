@@ -239,7 +239,6 @@ onMounted(() => {
     </div>
 
     <canvas ref="canvasElement" class="hidden"></canvas>
-    <TermsButton :onBeforeNavigate="stopCamera" class="terms-btn-fixed"/>
   </main>
 </template>
 
