@@ -40,10 +40,6 @@ const {
   reload,
 } = useWebcamService()
 
-
-
-// Terms of Service agreement state
-
 const formToken = ref('')
 
 function updateFormToken() {
