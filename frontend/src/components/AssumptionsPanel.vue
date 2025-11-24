@@ -1,17 +1,17 @@
 <script lang="ts" setup>
 import {computed} from 'vue'
 import type {AssumptionData, AssumptionType} from '@/types/AssumptionType'
-import {useCookieService} from '@/services/cookieService';
+import { useCookieService } from '@/services/cookieService';
 import {
   ChartBarIcon,
   CurrencyDollarIcon,
-  FlagIcon,
   GlobeAltIcon,
   QuestionMarkCircleIcon,
   ScaleIcon,
   ShieldExclamationIcon,
   UserIcon,
   UsersIcon,
+  FlagIcon,
 } from '@heroicons/vue/24/outline'
 
 const props = defineProps<{
@@ -22,7 +22,7 @@ const props = defineProps<{
   getBarColorClass: (k: string) => string,
 }>()
 
-const {getCookie} = useCookieService();
+const { getCookie } = useCookieService();
 
 const entries = computed(() => {
   if (!props.analysisData) return []
@@ -114,9 +114,7 @@ const getIcon = (field: AssumptionType) => {
       </div>
 
       <div class="w-full mb-3 flex items-center justify-center">
-        <router-link :to="'/form?token=' + getCookie('form_token')" class="text-center hover:underline">The AI made some
-          bold guesses... care to correct it?
-        </router-link>
+        <router-link :to="'/form?token=' + getCookie('form_token')" class="text-center hover:underline">The AI made some bold guesses... care to correct it?</router-link>
       </div>
     </div>
   </section>
@@ -140,6 +138,11 @@ const getIcon = (field: AssumptionType) => {
   border-radius: 10px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
   transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.assumption-chip:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.26);
 }
 
 .chip-left {
@@ -171,6 +174,11 @@ const getIcon = (field: AssumptionType) => {
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: 0 18px 40px rgba(2, 6, 23, 0.45);
   transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.assumption-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 28px 64px rgba(2, 6, 23, 0.55);
 }
 
 .avatar {
