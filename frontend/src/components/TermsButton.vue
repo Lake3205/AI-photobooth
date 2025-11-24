@@ -1,11 +1,8 @@
 <script lang="ts" setup>
 import {ref} from 'vue'
+import {useRouter} from 'vue-router'
 
-const props = defineProps<{
-  label: string
-  onClick: () => void
-  class?: string
-}>()
+const router = useRouter()
 
 const mouseX = ref(0)
 const mouseY = ref(0)
@@ -25,12 +22,12 @@ function handleMouseLeave() {
 
 <template>
   <button
-      :class="`group relative inline-flex items-center gap-3 rounded-full bg-white/10 px-8 py-4 text-lg font-semibold text-white ring-1 ring-white/20 backdrop-blur transition-all hover:bg-white/15 focus:outline-none focus:ring-white/40 cursor-pointer ${props.class || ''}`"
-      @click="props.onClick"
+      class="group relative inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2 text-sm font-semibold text-white ring-1 ring-white/20 backdrop-blur transition-all hover:bg-white/15 focus:outline-none focus:ring-white/40 cursor-pointer"
+      @click=" router.push({name: 'terms-of-service'})"
       @mouseleave="handleMouseLeave"
       @mousemove="handleMouseMove"
   >
-    <span class="relative z-10">{{ props.label }}</span>
+    <span class="relative z-10">Terms of Service</span>
     <span
         :style="isHovering
         ? `background: radial-gradient(circle at ${mouseX}px ${mouseY}px, rgba(59,130,246,0.25) 0%, transparent 60%); opacity: 1;`
@@ -41,4 +38,11 @@ function handleMouseLeave() {
 </template>
 
 <style scoped>
+/* Fixed position bottom-left */
+.terms-btn-fixed {
+  position: fixed;
+  left: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 50;
+}
 </style>
