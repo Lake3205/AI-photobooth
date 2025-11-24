@@ -21,7 +21,7 @@ async def generate_assumptions(image: UploadFile, ai_model: str):
             pass
         case "openai":
             assumptions_model.model = ai_model
-            assumptions_model.version = "gpt-3.5-turbo"
+            assumptions_model.version = "gpt-4o"
             pass
         case _:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="AI model not supported yet.")

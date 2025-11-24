@@ -9,6 +9,7 @@ from openai.types.chat import ChatCompletionFunctionToolParam, ChatCompletionUse
     ChatCompletionContentPartTextParam, ChatCompletionContentPartImageParam
 from services.image_service import ImageService
 from openai import OpenAI
+import base64
 
 load_dotenv()
 
@@ -23,6 +24,11 @@ async def upload_image(image) -> str:
         return response.text.strip()
     else:
         raise Exception(f"Catbox upload failed: {response.status_code} - {response.text}")
+
+async def upload_image_as_data_url(image) -> str:
+    image_bytes = await image.read()
+    b64 = base64.b64encode(image_bytes).decode("utf-8")
+    return f"data:{image.content_type};base64,{b64}"
 
 
 class OpenAIClient:
@@ -44,7 +50,9 @@ class OpenAIClient:
         ]
 
     async def generate_openai_response(self, image, version) -> dict:
-        image_url = await upload_image(image)
+        # image_url = await upload_image(image)
+        image_url = await upload_image_as_data_url(image)
+
         messages = [
             ChatCompletionUserMessageParam(
                     role="user",
