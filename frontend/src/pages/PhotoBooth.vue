@@ -7,7 +7,7 @@ import AssumptionsPanel from '@/components/AssumptionsPanel.vue'
 import QrcodeVue from 'qrcode.vue'
 import {useCookieService} from '@/services/cookieService'
 
-const { getCookie } = useCookieService()
+const {getCookie} = useCookieService()
 
 const {
   // Template refs
@@ -37,10 +37,11 @@ const {
   uploadFile,
   getBarColorClass,
   formatField,
-  reload,
 } = useWebcamService()
 
 const formToken = ref('')
+const capturedAt = ref<string | null>(null)
+const copySuccess = ref(false)
 
 function updateFormToken() {
   formToken.value = getCookie('form_token') || ''
@@ -48,14 +49,28 @@ function updateFormToken() {
 
 const qrCodeUrl = computed(() => {
   if (!formToken.value) return ''
-//      const baseUrl = window.location.origin
-//      Should only be used on live
-  return `parallax-darktech.nl/form?token=${formToken.value}`
+  try {
+    const host = window.location.hostname
+    if (host === 'localhost' || host.endsWith('.local') || host.includes('127.0.0.1')) {
+      return `${window.location.origin}/form?token=${formToken.value}`
+    }
+  } catch (e) {
+  }
+  return `https://parallax-darktech.nl/form?token=${formToken.value}`
 })
 
 watch(() => analysisData.value, (newData) => {
   if (newData) {
     updateFormToken()
+  }
+})
+
+watch(latestImage, (val) => {
+  if (val) {
+    capturedAt.value = new Date().toLocaleString()
+    copySuccess.value = false
+  } else {
+    capturedAt.value = null
   }
 })
 
@@ -78,13 +93,12 @@ onMounted(() => {
     </div>
 
     <div class="relative z-10 px-6 py-8 mx-auto" style="--panel-w:28rem;">
-      <!-- Main row: left = title + live camera (always visible), right = result + assumptions (appears after capture) -->
       <div class="flex flex-col md:flex-row items-start justify-center">
-        <!-- Left column: title + live camera -->
         <div
-            :class="['left-column transition-transform duration-500 ease-in-out w-full md:w-auto', latestImage ? 'slide-left' : '']"
+            :class="['left-column transition-transform duration-500 ease-in-out w-full md:w-auto']"
+            :data-slide="latestImage ? 'true' : 'false'"
             :style="latestImage ? 'min-width:320px; width: 40vw; max-width:640px; flex-shrink: 0;' : 'min-width:320px; width: 80vw; max-width:1200px; flex-shrink: 0;'">
-          <header class="mb-4">
+          <header v-if="!latestImage?.dataUrl" class="mb-4">
             <h1 class="bg-gradient-to-b from-white to-blue-300 bg-clip-text text-3xl font-extrabold tracking-tight text-transparent">
               Take a Selfie
             </h1>
@@ -94,11 +108,17 @@ onMounted(() => {
           <div class="relative rounded-3xl border border-white/15 bg-white/5 p-2 overflow-hidden">
             <div
                 class="relative aspect-[16/9] w-full rounded-xl overflow-hidden bg-black/50 flex items-center justify-center">
-              <video ref="videoElement"
+              <video v-if="!latestImage?.dataUrl"
+                     ref="videoElement"
                      :class="['absolute inset-0 w-full h-full object-cover z-0', isStreaming ? '' : 'opacity-50']"
                      autoplay playsinline></video>
 
-              <div v-if="!isStreaming && !isLoading"
+              <img v-if="latestImage?.dataUrl"
+                   :src="latestImage.dataUrl"
+                   alt="Captured"
+                   class="absolute inset-0 w-full h-full object-contain z-0"/>
+
+              <div v-if="!latestImage?.dataUrl && !isStreaming && !isLoading"
                    class="absolute inset-0 z-10 flex items-center justify-center bg-black/70 rounded-xl">
                 <div class="text-center">
                   <CameraIcon class="h-20 w-20 text-white/50 mx-auto mb-4"/>
@@ -114,19 +134,22 @@ onMounted(() => {
                 </div>
               </div>
 
-              <div v-if="isLoading" class="absolute inset-0 z-10 flex items-center justify-center bg-black/70">
+              <div v-if="!latestImage?.dataUrl && isLoading"
+                   class="absolute inset-0 z-10 flex items-center justify-center bg-black/70">
                 <div class="text-center">
                   <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
                   <p class="text-white/70 text-lg">Loading camera...</p>
                 </div>
               </div>
 
-              <div v-if="isStreaming" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+              <div v-if="!latestImage?.dataUrl && isStreaming"
+                   class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
                 <button :disabled="countdown > 0"
-                        class="group relative p-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full transition-all duration-200 hover:scale-110"
+                        aria-label="Take selfie"
+                        class="group relative p-4 bg-gradient-to-r from-blue-600/80 to-blue-400/70 hover:scale-105 active:scale-100 border border-white/10 rounded-full shadow-lg transition-all duration-200"
                         tabindex="1" @click="takeLatestPicture">
-                    <span
-                        class="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/20 to-blue-300/20 group-hover:from-blue-500/30 group-hover:to-blue-300/30 transition-all block"></span>
+                  <span
+                      class="absolute -inset-0 rounded-full bg-gradient-to-r from-blue-500/20 to-blue-300/20 group-hover:from-blue-500/30 group-hover:to-blue-300/30 transition-all block"></span>
                   <CameraIcon class="relative h-7 w-7 text-white"/>
                   <span v-if="countdown > 0"
                         class="absolute inset-0 flex items-center justify-center text-3xl font-bold text-white bg-black/60 rounded-full z-10">{{
@@ -134,62 +157,35 @@ onMounted(() => {
                     }}</span>
                 </button>
               </div>
+            </div>
+          </div>
 
+          <div v-if="latestImage?.dataUrl && qrCodeUrl && analysisData" class="mt-4 flex justify-center">
+            <div class="rounded-2xl p-3 w-full max-w-md">
+              <h3 class="text-sm font-semibold mb-2 text-center text-white/90">Scan to continue on your phone</h3>
+              <div class="flex items-center justify-center gap-3">
+                <div class="flex justify-center bg-white p-3 rounded-xl">
+                  <QrcodeVue :size="200" :value="qrCodeUrl" level="H"/>
+                </div>
+              </div>
+              <p class="text-blue-100/60 text-xs mt-3 text-center break-all">{{ qrCodeUrl }}</p>
             </div>
           </div>
         </div>
 
-        <!-- Right column: small captured image + assumptions + QR -->
-        <div :class="latestImage ? 'show' : 'hidden'"
-             class="right-column flex-1 transition-all duration-500 ease-in-out ml-0 md:ml-6">
-          <div v-if="latestImage" class="w-full">
-            <div class="rounded-2xl bg-white/5 to-transparent p-2 mb-4 max-w-sm">
-              <div class="relative w-full aspect-[16/9] rounded-md overflow-hidden">
-                <img
-                    :src="latestImage.dataUrl"
-                    alt="Preview"
-                    class="absolute inset-0 w-full h-full object-contain"
-                />
-              </div>
+        <div :class="latestImage?.dataUrl ? 'show' : 'hidden'"
+             class="right-column flex-1 flex flex-col justify-center items-center transition-all duration-500 ease-in-out ml-0 md:ml-6 ">
+          <div v-if="latestImage" class="w-full relative">
+            <div class="mt-6">
+              <AssumptionsPanel
+                  :analysisData="analysisData"
+                  :analysisError="analysisError"
+                  :formatField="formatField"
+                  :getBarColorClass="getBarColorClass"
+                  :isAnalyzing="isAnalyzing"
+              />
             </div>
 
-            <!-- Assumptions and QR Code Side by Side -->
-            <div class="flex flex-col lg:flex-row gap-4">
-              <!-- Assumptions Panel -->
-              <div class="flex-1">
-                <AssumptionsPanel
-                    :analysisData="analysisData"
-                    :analysisError="analysisError"
-                    :formatField="formatField"
-                    :getBarColorClass="getBarColorClass"
-                    :isAnalyzing="isAnalyzing"
-                />
-              </div>
-              
-              <!-- QR Code Panel -->
-              <div v-if="qrCodeUrl && analysisData" class="lg:w-80 flex-shrink-0">
-                <div class="rounded-2xl bg-white/5 p-4 h-full">
-                  <h3 class="text-lg font-bold mb-3 bg-gradient-to-b from-white to-blue-300 bg-clip-text text-transparent">
-                    Continue on Your Phone
-                  </h3>
-                    <p class="text-blue-100/80 text-sm font-medium mb-4 font-semibold">
-                    Want to find out how the AI got these assumptions? Scan the code and find out!
-                    </p>
-                  <div class="flex justify-center bg-white p-4 rounded-xl">
-                    <QrcodeVue :value="qrCodeUrl" :size="250" level="H" />
-                  </div>
-                  <p class="text-blue-100/60 text-xs mt-3 text-center break-all">
-                    {{ qrCodeUrl }}
-                  </p>
-                </div>
-              </div>
-            </div>
-            
-            <button
-                class="fixed bottom-2 right-2 w-8 h-8 bg-gray-500/20 hover:bg-gray-500/30 rounded-full opacity-10 hover:opacity-50 transition-opacity"
-                @click="reload"
-            ></button>
-            
             <button
                 class="w-full mt-4 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 text-red-300 rounded-lg transition-colors"
                 @click="clearAllData"
@@ -214,7 +210,7 @@ onMounted(() => {
   transform: translate3d(0, 0, 0);
 }
 
-.left-column.slide-left {
+.left-column[data-slide="true"] {
   transform: translate3d(-0.5rem, 0, 0);
 }
 
@@ -236,6 +232,19 @@ onMounted(() => {
 .right-column.hidden {
   opacity: 0;
   pointer-events: none;
+}
+
+button[aria-label="Take selfie"] {
+  box-shadow: 0 6px 18px rgba(59, 119, 242, 0.18);
+}
+
+button[aria-label="Take selfie"]:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+button[class*="bg-white/6"] {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(4px);
 }
 
 @media (max-width: 768px) {
