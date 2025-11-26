@@ -1,3 +1,5 @@
+from fastapi import HTTPException
+from fastapi import status
 from clients.claude import ClaudeClient
 from models.assumptions import AssumptionsModel
 from constants.clients import Clients
@@ -25,7 +27,13 @@ class AssumptionsService:
                 response = await self.claude_client.generate_response(image)
                 model_name = "claude"
             case Clients.OPENAI:
-                response = await self.openai_client.generate_openai_response(image, version=assumptions_model.version)
+                response = await self.openai_client.generate_openai_response(
+                    image_bytes,
+                    filename=image.filename,
+                    content_type=mime_type,
+                    version=assumptions_model.version
+                )
+                model_name = "openai"
             case Clients.GEMINI:
                 response = await self.google_client.call_gemini_api(
                     image_bytes=image_bytes,

@@ -1,35 +1,27 @@
-from os import environ
-
 import requests
-from dotenv import load_dotenv
+import json
 
+from os import environ
+from dotenv import load_dotenv
 from constants.prompt import USER_PROMPT, SYSTEM_PROMPT
 from models.assumptions import AssumptionsResponse
 from openai.types.chat import ChatCompletionFunctionToolParam, ChatCompletionUserMessageParam, \
     ChatCompletionContentPartTextParam, ChatCompletionContentPartImageParam
 from services.image_service import ImageService
 from openai import OpenAI
-import base64
 
 load_dotenv()
 
-async def upload_image(image) -> str:
-    image_bytes = await image.read()
+async def upload_image(image_bytes: bytes, filename: str, content_type: str) -> str:
     response = requests.post(
         "https://catbox.moe/user/api.php",
         data={"reqtype": "fileupload"},
-        files={"fileToUpload": (image.filename, image_bytes, image.content_type)}
+        files={"fileToUpload": (filename, image_bytes, content_type)}
     )
     if response.status_code == 200:
         return response.text.strip()
     else:
         raise Exception(f"Catbox upload failed: {response.status_code} - {response.text}")
-
-async def upload_image_as_data_url(image) -> str:
-    image_bytes = await image.read()
-    b64 = base64.b64encode(image_bytes).decode("utf-8")
-    return f"data:{image.content_type};base64,{b64}"
-
 
 class OpenAIClient:
     def __init__(self):
@@ -49,10 +41,8 @@ class OpenAIClient:
             )
         ]
 
-    async def generate_openai_response(self, image, version) -> dict:
-        # image_url = await upload_image(image)
-        image_url = await upload_image_as_data_url(image)
-
+    async def generate_openai_response(self, image_bytes: bytes, filename: str, content_type: str, version) -> dict:
+        image_url = await upload_image(image_bytes, filename, content_type)
         messages = [
             ChatCompletionUserMessageParam(
                     role="user",
@@ -77,11 +67,17 @@ class OpenAIClient:
 
         function_call = None
 
-        if getattr(response, "content", None):
+        # Extract the function call from the tool_calls
+        if hasattr(response, "choices") and response.choices:
             try:
-                function_call = response.content[0].input
-            except Exception:
+                tool_calls = response.choices[0].message.tool_calls
+                if tool_calls:
+                    # Get the arguments from the first tool call
+                    arguments = tool_calls[0].function.arguments
+                    # Parse the JSON string into a dictionary
+                    function_call = json.loads(arguments)
+            except Exception as e:
+                print(f"Error extracting function call: {e}")
                 function_call = None
 
         return function_call or {}
-
