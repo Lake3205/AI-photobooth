@@ -5,7 +5,10 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 
-RUN npm run build
+# Copy production environment file from parent directory
+COPY ../.env.production ../
+
+RUN NODE_ENV=production npm run build
 
 FROM node:22-alpine
 

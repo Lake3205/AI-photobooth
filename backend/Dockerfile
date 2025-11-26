@@ -5,9 +5,20 @@ WORKDIR /backend
 
 COPY requirements.txt .
 
+# Install system packages that provide mariadb_config and build tools,
+# then install Python requirements and clean up apt lists.
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+      build-essential gcc g++ \
+      libmariadb-dev libmariadb-dev-compat default-libmysqlclient-dev && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+
+# Copy production environment file from parent directory
+COPY ../.env.production .env
 
 EXPOSE 8000
 
