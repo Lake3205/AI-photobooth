@@ -67,14 +67,11 @@ class OpenAIClient:
 
         function_call = None
 
-        # Extract the function call from the tool_calls
         if hasattr(response, "choices") and response.choices:
             try:
                 tool_calls = response.choices[0].message.tool_calls
                 if tool_calls:
-                    # Get the arguments from the first tool call
                     arguments = tool_calls[0].function.arguments
-                    # Parse the JSON string into a dictionary
                     function_call = json.loads(arguments)
             except Exception as e:
                 print(f"Error extracting function call: {e}")
