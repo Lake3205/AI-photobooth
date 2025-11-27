@@ -56,7 +56,7 @@ if (token) {
                 <div class="text-white/90">
                   <span class="text-gray-400 text-sm">Value:</span> {{ assumption.value.toString() }}
                 </div>
-                <div class="text-gray-400 text-sm italic">
+                <div class="text-gray-400 text-sm italic" v-if="assumption.reasoning">
                   {{ assumption.reasoning.toString() }}
                 </div>
               </div>
