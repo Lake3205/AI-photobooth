@@ -90,7 +90,8 @@ class DatabaseSingleton:
                     INSERT INTO assumption_values (assumption_id, assumption_constant_id, value, reasoning)
                     VALUES (?, ?, ?, ?)
                 """
-                cur.execute(value_query, (assumption_id, constant_id, str(value["value"]) if value is not None else None, value["reasoning"]))
+                reasoning = value["reasoning"] if (value is not None and "reasoning" in value) else None
+                cur.execute(value_query, (assumption_id, constant_id, str(value["value"]) if value is not None else None, reasoning))
             
             conn.commit()
             return assumption_id
