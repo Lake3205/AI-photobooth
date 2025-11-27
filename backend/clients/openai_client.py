@@ -1,16 +1,13 @@
 import requests
 import json
+import config
 
-from os import environ
-from dotenv import load_dotenv
 from constants.prompt import USER_PROMPT, SYSTEM_PROMPT
 from models.assumptions import AssumptionsResponse
 from openai.types.chat import ChatCompletionFunctionToolParam, ChatCompletionUserMessageParam, \
     ChatCompletionContentPartTextParam, ChatCompletionContentPartImageParam
 from services.image_service import ImageService
 from openai import OpenAI
-
-load_dotenv()
 
 async def upload_image(image_bytes: bytes, filename: str, content_type: str) -> str:
     response = requests.post(
@@ -25,9 +22,9 @@ async def upload_image(image_bytes: bytes, filename: str, content_type: str) -> 
 
 class OpenAIClient:
     def __init__(self):
-        self.api_key = environ.get('OPENAI_API_KEY')
+        self.api_key = config.OPENAI_API_KEY
         self.client = OpenAI(
-            base_url=environ.get('OPENAI_API_BASE_URL'),
+            base_url=config.OPENAI_API_BASE_URL,
             default_headers={'Authorization': f'Bearer {self.api_key}'}
         )
         self.tools = [
