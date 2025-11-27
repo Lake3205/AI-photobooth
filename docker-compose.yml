@@ -7,6 +7,9 @@ services:
       - "8000:8000"
     environment:
       - PORT=8000
+      - ENV=production
+    env_file:
+      - .env.production
 
   frontend:
     build: ./frontend
@@ -14,6 +17,9 @@ services:
       - "3000:3000"
     environment:
       - PORT=3000
+      - NODE_ENV=production
+    env_file:
+      - .env.production
     depends_on:
       - backend
 
@@ -23,6 +29,9 @@ services:
       - "3001:3000"
     environment:
       - PORT=3001
+      - NODE_ENV=development
+    env_file:
+      - .env.development
     depends_on:
       - backend-dev
 
@@ -32,3 +41,6 @@ services:
       - "8001:8000"
     environment:
       - PORT=8001
+      - ENV=development
+    env_file:
+      - .env.development

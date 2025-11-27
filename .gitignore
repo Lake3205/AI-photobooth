@@ -1,3 +1,5 @@
 /.idea/
+
+# Environment files - DO NOT COMMIT (stored in project root)
 .env
 .env.production

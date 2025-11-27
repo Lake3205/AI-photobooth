@@ -1,8 +1,5 @@
-import os
-from dotenv import load_dotenv
+import config  # Load environment configuration
 
-load_dotenv()
-
-SECRET_KEY = os.getenv("JWT_SECRET_KEY", "your-secret-key-change-this-in-production")
-ALGORITHM = "HS256"
+SECRET_KEY = config.JWT_SECRET_KEY
+ALGORITHM = config.ALGORITHM
 ACCESS_TOKEN_EXPIRE_MINUTES = 480  # 8 hours to expire
