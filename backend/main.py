@@ -1,3 +1,5 @@
+import config  # Load environment configuration FIRST
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from controllers.assumptions_controller import router as assumptions_controller
@@ -10,6 +12,8 @@ app = FastAPI()
 
 origins = [
     "http://localhost:3000",
+    "https://parallax-darktech.nl"
+    "https://www.parallax-darktech.nl"
 ]
 
 app.add_middleware(
