@@ -3,8 +3,10 @@ import { authService } from '@/services/authService';
 import Login from '@/pages/Login.vue';
 import SelfieCamera from '@/pages/SelfieCamera.vue';
 import Dashboard from '@/pages/Dashboard.vue';
+import PhotoBooth from './pages/PhotoBooth.vue';
 import TermsOfService from '@/pages/TermsOfService.vue';
 import { useCookieService } from './services/cookieService';
+
 
 const { getCookie } = useCookieService();
 
@@ -15,6 +17,12 @@ const router = createRouter({
             path: '/',
             name: 'selfie',
             component: SelfieCamera,
+        },
+        {
+            path:'/booth',
+            name:'photobooth',
+            component: PhotoBooth,
+            meta: { requiresAuth: true, requiredRole: 'admin' }
         },
         {
             path: '/login',
@@ -48,6 +56,8 @@ router.beforeEach(async (to, _from, next) => {
         const isAuthenticated = authService.isAuthenticated()
         
         if (!isAuthenticated) {
+            // Save the intended destination
+            localStorage.setItem('redirectAfterLogin', to.fullPath)
             next('/login')
             return
         }
@@ -55,6 +65,8 @@ router.beforeEach(async (to, _from, next) => {
         // Verify token with backend
         const isValid = await authService.verifyToken()
         if (!isValid) {
+            // Save the intended destination
+            localStorage.setItem('redirectAfterLogin', to.fullPath)
             next('/login')
             return
         }
