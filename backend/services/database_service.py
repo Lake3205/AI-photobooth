@@ -46,10 +46,10 @@ class DatabaseSingleton:
             
             # Insert into assumptions table
             query = """
-                INSERT INTO assumptions (ai_model)
-                VALUES (?)
+                INSERT INTO assumptions (ai_model, reasoning_enabled)
+                VALUES (?, ?)
             """
-            cur.execute(query, (ai_model,))
+            cur.execute(query, (ai_model, 1 if config.SHOW_REASONING else 0))
             assumption_id = cur.lastrowid
             
             # Insert assumption values for each data item
@@ -90,7 +90,8 @@ class DatabaseSingleton:
                     INSERT INTO assumption_values (assumption_id, assumption_constant_id, value, reasoning)
                     VALUES (?, ?, ?, ?)
                 """
-                cur.execute(value_query, (assumption_id, constant_id, str(value["value"]) if value is not None else None, value["reasoning"]))
+                reasoning = value["reasoning"] if (value is not None and "reasoning" in value) else None
+                cur.execute(value_query, (assumption_id, constant_id, str(value["value"]) if value is not None else None, reasoning))
             
             conn.commit()
             return assumption_id
