@@ -7,7 +7,6 @@ RUN npm install
 
 COPY . .
 
-# Copy env file (must be inside project root!)
 COPY .env.production ./.env.production
 
 RUN npm run build
