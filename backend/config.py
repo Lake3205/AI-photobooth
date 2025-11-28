@@ -37,7 +37,6 @@ else:
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 CLAUDE_API_KEY = os.getenv('CLAUDE_API_KEY')
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-OPENAI_API_BASE_URL = os.getenv('OPENAI_API_BASE_URL')
 DB_HOST = os.getenv('DB_HOST')
 DB_PORT = int(os.getenv('DB_PORT', 3306))
 DB_USER = os.getenv('DB_USER')

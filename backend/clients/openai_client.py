@@ -9,6 +9,8 @@ from openai.types.chat import ChatCompletionFunctionToolParam, ChatCompletionUse
 from services.image_service import ImageService
 from openai import OpenAI
 
+base_url = "https://api.openai.com/v1"
+
 async def upload_image(image_bytes: bytes, filename: str, content_type: str) -> str:
     response = requests.post(
         "https://catbox.moe/user/api.php",
@@ -24,7 +26,7 @@ class OpenAIClient:
     def __init__(self):
         self.api_key = config.OPENAI_API_KEY
         self.client = OpenAI(
-            base_url=config.OPENAI_API_BASE_URL,
+            base_url=base_url,
             default_headers={'Authorization': f'Bearer {self.api_key}'}
         )
         self.tools = [
