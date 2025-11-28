@@ -25,7 +25,9 @@ const handleLogin = async () => {
       password: password.value,
     })
     
-    router.push('/dashboard')
+    const redirectPath = localStorage.getItem('redirectAfterLogin') || '/dashboard'
+    localStorage.removeItem('redirectAfterLogin')
+    router.push(redirectPath)
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Login failed. Please check your password or username.'
   } finally {
