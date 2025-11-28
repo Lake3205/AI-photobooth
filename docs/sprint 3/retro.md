@@ -78,3 +78,13 @@ We merken dat de meetings wat stroef lopen. Het wordt af en toe net iets te geze
 - We verbeteren de communicatie binnen het team door regelmatig in te checken bij elkaar. Dit kan bijvoorbeeld door een korte update te geven tijdens de stand-ups over waar je aan werkt en of je ergens hulp bij nodig hebt. Zo voorkomen we dat iemand vastloopt zonder dat het opgemerkt wordt.
 
 ## Individuele reflecties per persoon
+
+### Jay
+Ik ben erg tevreden over hoe de sprint is verlopen. We hebben veel werk verzet en de samenwerking verliep vlot. 
+Ik denk dat we als team goed hebben samengewerkt en elkaar goed hebben ondersteund waar nodig. Dit kan je ook terug zien
+in het cijfer wat ik de sprint heb gegeven, een 8,5. Waar ik vooral tevreden over ben is over hoe we de sprint hebben
+opgepakt met zijn allen. Iedereen heeft zijn taken serieus genomen en we hebben als team goed samengewerkt om onze doelen te
+bereiken. Ten opzichte van vorige sprint hebben we als team echt stappen gemaakt. Natuurlijk zijn er altijd verbeterpunten, 
+maar over het algemeen ben ik erg tevreden met hoe de sprint is verlopen. Wat ik zelf nog zou willen verbeteren aan mijzelf 
+is dat ik nog proactiever kan zijn in het aangeven wanneer ik ergens hulp bij nodig heb. Soms wacht ik te lang voordat ik
+om hulp vraag, waardoor ik vastloop. Dit is iets waar ik aan wil werken in de volgende sprint.
