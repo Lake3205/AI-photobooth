@@ -77,6 +77,24 @@ We merken dat de meetings wat stroef lopen. Het wordt af en toe net iets te geze
 
 ## Individuele reflecties per persoon
 
+### Sjoerd
+
+Ik kijk positief terug over deze sprint. We zijn goed van start gegaan door ter voorbereiding op de planning allemaal 
+user stories te schrijven, waardoor we aan het begin van de sprint gelijk een taakverdeling konden maken en iedereen
+aan de slag kon. Ik heb mij bezig gehouden met de gebruikersvoorwaarden, de beredenering van de AI en zorgen dat de AI
+flow alleen wordt aangeroepen als er een gezicht op de foto wordt gedetecteerd. Ik had tijdens de retrospective 
+aangegeven dat ik wel vind dat onze meetings nog weleens stroef verlopen, dit komt doordat het vaak te gezellig wordt 
+en we van het pad afdwalen waar ik mij wel aan stoor, wat de duur van meetings onnodig verlengd wat ten kosten gaat van 
+tijd die we kunnen gebruiken om onze taken te verrichten. Hier was het team het mee eens en hebben we een actiepunt 
+voor opgesteld, namelijk om de aangewezen notulist de groep erop te wijzen als het te gezellig wordt en de focus 
+verloren gaat zodat we bij de punten van de agende blijven. We hebben gekozen om deze taak op de notulist te leggen 
+omdat die persoon toch het meeste bezig is met wat er in de meeting wordt besproken. Voor mijn PDP heb ik mij deze 
+sprint verder verdiept in hoe/waarom hallucinaties ontstaan bij het gebruik van AI en hoe je dit kan voorkomen, zodat 
+ik bij het gebruik van AI de output consistenter kan houden. Ook heb ik mij verdiept in Computer Vision, wat niet 
+direct op mijn leerdoelen slaat, maar wel bij mijn profiel past. Dit had ik al eerder op het oog, maar niet 
+gedocumenteerd, maar naar aanleiding van de VE1 leek Marise het interessant als ik onderwerpen buiten mijn leerdoel met 
+betrekking tot AI ook zou documenteren.
+
 ### Jay
 Ik ben erg tevreden over hoe de sprint is verlopen. We hebben veel werk verzet en de samenwerking verliep vlot. 
 Ik denk dat we als team goed hebben samengewerkt en elkaar goed hebben ondersteund waar nodig. Dit kan je ook terug zien
