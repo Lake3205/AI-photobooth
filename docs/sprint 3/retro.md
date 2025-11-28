@@ -84,7 +84,14 @@ Ik ben erg tevreden over hoe de sprint is verlopen. We hebben veel werk verzet e
 Ik denk dat we als team goed hebben samengewerkt en elkaar goed hebben ondersteund waar nodig. Dit kan je ook terug zien
 in het cijfer wat ik de sprint heb gegeven, een 8,5. Waar ik vooral tevreden over ben is over hoe we de sprint hebben
 opgepakt met zijn allen. Iedereen heeft zijn taken serieus genomen en we hebben als team goed samengewerkt om onze doelen te
-bereiken. Ten opzichte van vorige sprint hebben we als team echt stappen gemaakt. Natuurlijk zijn er altijd verbeterpunten, 
-maar over het algemeen ben ik erg tevreden met hoe de sprint is verlopen. Wat ik zelf nog zou willen verbeteren aan mijzelf 
-is dat ik nog proactiever kan zijn in het aangeven wanneer ik ergens hulp bij nodig heb. Soms wacht ik te lang voordat ik
-om hulp vraag, waardoor ik vastloop. Dit is iets waar ik aan wil werken in de volgende sprint.
+bereiken. Ten opzichte van vorige sprint hebben we als team echt stappen gemaakt. Voor mijzelf heb ik gewerkt aan de VPS 
+draaiend krijgen met een domein en de OpenAI Assumpties werkend krijgen. Ik had een aantal kleine blockers waardoor ik 
+in het begin niet veel voortgang kon maken met de openAI Assumpties, namelijk dat ik een creditcard nodig had om de API 
+key te gebruiken. Ik had dit gelijk geregeld maar het duurde langer dan verwacht voordat ik mijn creditcard binnen kreeg.
+Verder nadat ik mijn creditcard binnen kreeg kon ik verder werken en het product werkte toen in mijn eigen branch, maar 
+nadat ik dev had gemerged in mijn branch werkte het ineens niet meer. Na wat debuggen kwam ik erachter dat er een probleem was
+en heb ik dit opgelost. Achteraf kon ik misschien beter hulp vragen om iemands creditcard te lenen maar dacht zelf niet dat het
+zo lang zou duren voordat ik mijn eigen creditcard binnen kreeg. Natuurlijk zijn er altijd verbeterpunten, maar over het 
+algemeen ben ik erg tevreden met hoe de sprint is verlopen. Wat ik zelf nog zou willen verbeteren aan mijzelf is dat ik 
+nog proactiever kan zijn in het aangeven wanneer ik ergens hulp bij nodig heb. Soms wacht ik te lang voordat ik om hulp 
+vraag, waardoor ik vastloop. Dit is iets waar ik aan wil werken in de volgende sprint.
