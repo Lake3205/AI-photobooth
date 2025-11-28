@@ -47,7 +47,7 @@ deploy_dev:
       docker pull ${DOCKER_USERNAME}/dark-tech-frontend-dev:dev &&
       docker pull ${DOCKER_USERNAME}/dark-tech-backend-dev:dev &&
       cd /home/dark-tech &&
-      docker prune -f &&
+      docker image prune -f &&
       docker-compose -f docker-compose.dev.yml up -d --force-recreate
       "
     - rm id_rsa
@@ -113,7 +113,7 @@ deploy_main:
       docker pull ${DOCKER_USERNAME}/dark-tech-frontend:latest &&
       docker pull ${DOCKER_USERNAME}/dark-tech-backend:latest &&
       cd /home/dark-tech &&
-      docker prune -f &&
+      docker image prune -f &&
       docker-compose -f docker-compose.prod.yml up -d --force-recreate
       "
     - rm id_rsa
