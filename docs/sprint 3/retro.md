@@ -122,6 +122,31 @@ We hebben alle belangrijke user stories af kunnen ronden, een paar optionele fea
 
 Tijdens deze sprint merkte ik dat ik moeite heb met het uit handen geven van werk. Ik neem taken snel volledig op me, omdat ik bang ben dat anderen het niet goed genoeg of niet op mijn manier uitvoeren. Dit kwam duidelijk naar voren bij het maken van de enquête op de website, waar ik veel te lang aan bleef doorwerken om alles te perfectioneren. Ook merkte ons team dat meetings soms minder effectief verliepen, waardoor we een actiepunt hebben opgesteld om de samenwerking tijdens meetings te verbeteren. Volgende sprint wil ik meer vertrouwen op mijn team en realiseren dat taken delen niet betekent dat het resultaat minder goed wordt. Voor de volgende sprint neem ik me dan ook voor om maar 1 user story in "to do"/"doing" op mijn naam te hebben. Daarnaast wil ik vooraf duidelijker afspraken maken over verwachtingen, zodat ik me veiliger voel bij het overdragen van werk. Dit gaan we doen door tijdens de sprintplanning en bij het maken van nieuwe user stories met zijn alle de gemaakte taken in de beschrijving goed door te lopen. Dit moet mij helpen om minder tijd kwijt te zijn aan perfectioneren en meer focus te krijgen op het geheel. Aan het eind van de sprint ga ik evalueren of dit invloed heeft gehad op mijn mijn tijdsbesteding en de kwaliteit van onze samenwerking.
 
+### Senna
+
+Deze sprint hebben we echt enorme stappen gemaakt, ik ben zeer tevreden met wat er bereikt is. Deze sprint heb ik me beziggehouden met meerdere verschillende dingen: database, VPS, Docker, QR-codes & CORS.
+
+- **Database:**
+  Samen met Tom heb ik aan het begin van de sprint de hele databasestructuur herbouwd. Dit was nodig om de nieuwe form resultaten mogelijk te maken. Hierbij hebben we onder andere table relations gebruikt.
+- **VPS:**
+  Op de VPS heb ik veel dingen veranderd. Ik heb PHP toegevoegd voor PHPMyAdmin, zodat we makkelijk onze database kunnen inzien. Ook heb ik scriptjes toegevoegd die automatisch Docker containers herstarten mocht de VPS zelf herstarten. Daarnaast heb ik de firewall aangepast zodat de VPS beter beveiligd is.
+- **Docker:**
+  Docker restart script toegevoegd om automatisch herstarten mogelijk te maken, en ik heb Jay geassisteerd met het toevoegen van de ENV aan de live build.
+- **QR-codes:**
+  Ik heb QR-codes toegevoegd in de front-end, zodat users in de photobooth verder kunnen gaan op hun telefoon.
+- **CORS:**
+  Backend beter beveiligd door CORS toe te voegen. Op deze manier zorgen we ervoor dat je niet makkelijk bij data kan komen die niet voor de gebruiker bestemd is.
+
+Na dit alles afgerond te hebben ben ik begonnen met het aanvullen van de dashboard page en ben ik onderzoek aan het doen naar chain-of-thought (manier van denken AI). Hierna wil ik aan de slag gaan met de Raspberry Pi voor de camera van de fotobooth.
+
+Om te kijken naar groepswerk/samenwerking: hier liep alles vrij soepel, we hadden duidelijke afspraken gemaakt van tevoren en die zijn we nagekomen. Als ik iets moet noemen wat fout is gegaan, was het een kleine miscommunicatie met een branch, maar dit was vrij snel verholpen. Meetings blijven wel een aandachtspunt, hier dwalen we nog steeds snel af, maar hier hebben we tijdens de retro een oplossing voor aangewezen dus hopelijk werkt dit.
+
+De reden waarom ik de sprint een 7 geef is omdat het zeker goed liep, maar het kan altijd beter. Nu ik er zo op terugkijk had ik het ook een 8 kunnen geven, maar ik kijk liever iets te optimistisch. Verder zijn alle belangrijke user story's af op één na, de Raspberry Pi, alleen deze is uitgesteld wegens een probleem met hardware. Dit is echter geen probleem omdat we verder op schema lopen. Komende sprint pakken we het weer hetzelfde aan, dus ik heb er alle vertrouwen in.
+
+Qua persoonlijk leerdoel moet ik nog aan werken, maar dat heb ik in mijn PDP genoemd en ga ik mee aan de slag. Dat wil ik gaan doen door middel van het schrijven van een verslag. We hebben als CT een les gehad over generative AI. Ik heb hier een hele sterke mening over en zet het liever zelf niet in op de manier hoe het werd uitgelegd. Mijn plan nu is om uit te leggen waarom ik dat vind op basis van bronnen en onderzoek.
+
+Volgende sprint wil ik meer gaan focussen op documenteren en onderzoek. Dit is belangrijk voor mijn persoonlijk leerdoel en PDP.
+
 ## Bijlagen
 
 ![Post its](post-its.png)
