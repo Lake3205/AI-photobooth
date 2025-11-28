@@ -4,20 +4,18 @@ from datetime import timedelta, datetime, timezone
 from services.database_service import DatabaseService
 from fastapi import HTTPException, status
 from jose import JWTError, jwt
-from dotenv import load_dotenv
-from os import getenv
 from models.assumptions import AssumptionsModel
+import config  # Load environment configuration
 
 from constants.form_constants import ALLOWED_QUESTIONS
 
 class FormService:
-    load_dotenv()
     
     def __init__(self):
         self.db_service = DatabaseService()
         self.expiration_time = timedelta(days=1)
-        self.secret_key = getenv("JWT_SECRET_KEY")
-        self.algorithm = getenv("ALGORITHM", "HS256")
+        self.secret_key = config.JWT_SECRET_KEY
+        self.algorithm = config.ALGORITHM
         self.credentials_exception = HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
