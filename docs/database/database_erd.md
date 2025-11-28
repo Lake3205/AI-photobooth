@@ -14,6 +14,7 @@ erDiagram
         INT id PK
         DATETIME created_at
         VARCHAR ai_model
+        TINYINT reasoning_enabled
     }
 
     assumption_constants {

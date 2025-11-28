@@ -2,6 +2,7 @@ CREATE TABLE assumptions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     ai_model VARCHAR(255) NOT NULL
+    reasoning_enabled TINYINT DEFAULT 1
 );
 
 CREATE TABLE formats (
