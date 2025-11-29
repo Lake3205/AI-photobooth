@@ -12,17 +12,18 @@ die minder goed gingen actiepunten opgesteld voor de volgende sprint. Daarna was
 
 ## Cijfers
 
-| Naam        | Cijfer |
-|-------------|--------|
-| Borys       | 7      |
-| Senna       | 7      |
-| Tom         | 7,5    |
-| Sjoerd      | 8      |
-| Jay         | 8,5    |
+| Naam   | Cijfer |
+|--------|--------|
+| Borys  | 7      |
+| Senna  | 7      |
+| Tom    | 7,5    |
+| Sjoerd | 8      |
+| Jay    | 8,5    |
 
-
-Wij zijn erg tevreden over de sprint. We hebben veel werk verzet en zijn goed op schema gebleven. De samenwerking verliep
-vlot en we hebben elkaar goed kunnen ondersteunen waar nodig. Er zijn natuurlijk altijd verbeterpunten, maar over het algemeen zijn we erg tevreden met hoe de sprint is verlopen.
+Wij zijn erg tevreden over de sprint. We hebben veel werk verzet en zijn goed op schema gebleven. De samenwerking
+verliep
+vlot en we hebben elkaar goed kunnen ondersteunen waar nodig. Er zijn natuurlijk altijd verbeterpunten, maar over het
+algemeen zijn we erg tevreden met hoe de sprint is verlopen.
 
 ## Actiepunten vorige sprint
 
@@ -43,109 +44,192 @@ vlot en we hebben elkaar goed kunnen ondersteunen waar nodig. Er zijn natuurlijk
   stories, bespreekpunten, etc.). Als onderling besproken is dat de meeting geen meerwaarde heeft, wordt deze
   geannuleerd.
 
-Sprintplanning is goed verlopen, het actiepunt over de sprintplanning hebben we opgevolgd en zijn tevreden over hoe deze is verlopen. Ieder is met drie user stories gekomen en we hebben deze gelabeld en de eerste user stories onderling verdeeld. Het sprintboard is ook goed bijgehouden. De onofficiële meetings zijn erg goed gedocumenteerd en door elk teamlid nagelezen. Frontend documentatie is nog steeds een aandachtspunt. Senna en Borys hebben medegedeeld dat ze hiermee aan de slag zullen gaan. Het actiepunt omtrent initiatief tonen is niet helemaal opgevolgd. Voor de volgende sprint gaan we een concreter actiepunt opstellen. Borys is niet meer te laat gekomen, dus het document is niet geupdate. De maandag meetingen zijn zoals afgesproken ingepland en verliepen goed. Een keer is de meeting geannuleerd omdat er geen meerwaarde was. 
+Sprintplanning is goed verlopen, het actiepunt over de sprintplanning hebben we opgevolgd en zijn tevreden over hoe deze
+is verlopen. Ieder is met drie user stories gekomen en we hebben deze gelabeld en de eerste user stories onderling
+verdeeld. Het sprintboard is ook goed bijgehouden. De onofficiële meetings zijn erg goed gedocumenteerd en door elk
+teamlid nagelezen. Frontend documentatie is nog steeds een aandachtspunt. Senna en Borys hebben medegedeeld dat ze
+hiermee aan de slag zullen gaan. Het actiepunt omtrent initiatief tonen is niet helemaal opgevolgd. Voor de volgende
+sprint gaan we een concreter actiepunt opstellen. Borys is niet meer te laat gekomen, dus het document is niet geupdate.
+De maandag meetingen zijn zoals afgesproken ingepland en verliepen goed. Een keer is de meeting geannuleerd omdat er
+geen meerwaarde was.
 
 ## Wat ging goed
 
-| Top                                   | Hoeveelheid |
-|---------------------------------------|-------------|
-| Inzet                           | 2           | 
-| Sprintboard goed bijgehouden | 2 |
-| Stand-ups gaan goed | 2 |
-| Documentatie van meetings | 1 |
-| sfeer | 1 |
-| Duidelijke user stories om uit te kiezen | 1 |
-| Veel progressie geboekt | 2 |
-| Communicatie verbeterd | 1 |
+| Top                                      | Hoeveelheid |
+|------------------------------------------|-------------|
+| Inzet                                    | 2           | 
+| Sprintboard goed bijgehouden             | 2           |
+| Stand-ups gaan goed                      | 2           |
+| Documentatie van meetings                | 1           |
+| sfeer                                    | 1           |
+| Duidelijke user stories om uit te kiezen | 1           |
+| Veel progressie geboekt                  | 2           |
+| Communicatie verbeterd                   | 1           |
 
 ## Wat ging niet goed?
 
-| Tip                                                                                                      | Hoeveelheid | 
-|----------------------------------------------------------------------------------------------------------|-------------|
-| Communicatie                                                                           | 2           |
-| Aangeven wanneer je niets te doen hebt | 1 |
-| Tom de enige die maandag meetings organiseert | 1 |
-| Niet alle user stories af | 1 |
-| Meetings lopen soms wat stroef | 1 |
+| Tip                                           | Hoeveelheid | 
+|-----------------------------------------------|-------------|
+| Communicatie                                  | 2           |
+| Aangeven wanneer je niets te doen hebt        | 1           |
+| Tom de enige die maandag meetings organiseert | 1           |
+| Niet alle user stories af                     | 1           |
+| Meetings lopen soms wat stroef                | 1           |
 
 ## Actiepunten volgende sprint
 
-- Om individuele initiatief te stimuleren, stellen we per week een nieuwe SCRUM master aan. De scrum master wordt geroteerd op basis van achternaam. De scrum master is verantwoordelijk voor het organiseren van de maandag meetings, het bijhouden van het sprintboard, en inchecken dat niemand bij zijn taken vastloopt. Ook zorgt hij dat de meetings genoteerd worden. 
+- Om individuele initiatief te stimuleren, stellen we per week een nieuwe SCRUM master aan. De scrum master wordt
+  geroteerd op basis van achternaam. De scrum master is verantwoordelijk voor het organiseren van de maandag meetings,
+  het bijhouden van het sprintboard, en inchecken dat niemand bij zijn taken vastloopt. Ook zorgt hij dat de meetings
+  genoteerd worden.
 
-We merken dat de meetings wat stroef lopen. Het wordt af en toe net iets te gezellig, waardoor we de focus verliezen. Om dit te voorkomen, zal de scrum master voor een meeting start een notulist aanwijzen. Deze persoon is verantwoordelijk voor het bijhouden van de orde en de samenvatting van de meeting.
+We merken dat de meetings wat stroef lopen. Het wordt af en toe net iets te gezellig, waardoor we de focus verliezen. Om
+dit te voorkomen, zal de scrum master voor een meeting start een notulist aanwijzen. Deze persoon is verantwoordelijk
+voor het bijhouden van de orde en de samenvatting van de meeting.
+
 - Notulist wijst de groep erop als het te gezellig wordt en de focus verloren gaat.
 
 ## Individuele reflecties per persoon
 
 ### Sjoerd
 
-Ik kijk positief terug over deze sprint. We zijn goed van start gegaan door ter voorbereiding op de planning allemaal 
+Ik kijk positief terug over deze sprint. We zijn goed van start gegaan door ter voorbereiding op de planning allemaal
 user stories te schrijven, waardoor we aan het begin van de sprint gelijk een taakverdeling konden maken en iedereen
 aan de slag kon. Ik heb mij bezig gehouden met de gebruikersvoorwaarden, de beredenering van de AI en zorgen dat de AI
-flow alleen wordt aangeroepen als er een gezicht op de foto wordt gedetecteerd. Ik had tijdens de retrospective 
-aangegeven dat ik wel vind dat onze meetings nog weleens stroef verlopen, dit komt doordat het vaak te gezellig wordt 
-en we van het pad afdwalen waar ik mij wel aan stoor, wat de duur van meetings onnodig verlengd wat ten kosten gaat van 
-tijd die we kunnen gebruiken om onze taken te verrichten. Hier was het team het mee eens en hebben we een actiepunt 
-voor opgesteld, namelijk om de aangewezen notulist de groep erop te wijzen als het te gezellig wordt en de focus 
-verloren gaat zodat we bij de punten van de agende blijven. We hebben gekozen om deze taak op de notulist te leggen 
-omdat die persoon toch het meeste bezig is met wat er in de meeting wordt besproken. Voor mijn PDP heb ik mij deze 
-sprint verder verdiept in hoe/waarom hallucinaties ontstaan bij het gebruik van AI en hoe je dit kan voorkomen, zodat 
-ik bij het gebruik van AI de output consistenter kan houden. Ook heb ik mij verdiept in Computer Vision, wat niet 
-direct op mijn leerdoelen slaat, maar wel bij mijn profiel past. Dit had ik al eerder op het oog, maar niet 
-gedocumenteerd, maar naar aanleiding van de VE1 leek Marise het interessant als ik onderwerpen buiten mijn leerdoel met 
+flow alleen wordt aangeroepen als er een gezicht op de foto wordt gedetecteerd. Ik had tijdens de retrospective
+aangegeven dat ik wel vind dat onze meetings nog weleens stroef verlopen, dit komt doordat het vaak te gezellig wordt
+en we van het pad afdwalen waar ik mij wel aan stoor, wat de duur van meetings onnodig verlengd wat ten kosten gaat van
+tijd die we kunnen gebruiken om onze taken te verrichten. Hier was het team het mee eens en hebben we een actiepunt
+voor opgesteld, namelijk om de aangewezen notulist de groep erop te wijzen als het te gezellig wordt en de focus
+verloren gaat zodat we bij de punten van de agende blijven. We hebben gekozen om deze taak op de notulist te leggen
+omdat die persoon toch het meeste bezig is met wat er in de meeting wordt besproken. Voor mijn PDP heb ik mij deze
+sprint verder verdiept in hoe/waarom hallucinaties ontstaan bij het gebruik van AI en hoe je dit kan voorkomen, zodat
+ik bij het gebruik van AI de output consistenter kan houden. Ook heb ik mij verdiept in Computer Vision, wat niet
+direct op mijn leerdoelen slaat, maar wel bij mijn profiel past. Dit had ik al eerder op het oog, maar niet
+gedocumenteerd, maar naar aanleiding van de VE1 leek Marise het interessant als ik onderwerpen buiten mijn leerdoel met
 betrekking tot AI ook zou documenteren.
 
 ### Jay
-Ik ben erg tevreden over hoe de sprint is verlopen. We hebben veel werk verzet en de samenwerking verliep vlot. 
+
+Ik ben erg tevreden over hoe de sprint is verlopen. We hebben veel werk verzet en de samenwerking verliep vlot.
 Ik denk dat we als team goed hebben samengewerkt en elkaar goed hebben ondersteund waar nodig. Dit kan je ook terug zien
 in het cijfer wat ik de sprint heb gegeven, een 8,5. Waar ik vooral tevreden over ben is over hoe we de sprint hebben
-opgepakt met zijn allen. Iedereen heeft zijn taken serieus genomen en we hebben als team goed samengewerkt om onze doelen te
-bereiken. Ten opzichte van vorige sprint hebben we als team echt stappen gemaakt. Voor mijzelf heb ik gewerkt aan de VPS 
-draaiend krijgen met een domein en de OpenAI Assumpties werkend krijgen. Ik had een aantal kleine blockers waardoor ik 
-in het begin niet veel voortgang kon maken met de openAI Assumpties, namelijk dat ik een creditcard nodig had om de API 
-key te gebruiken. Ik had dit gelijk geregeld maar het duurde langer dan verwacht voordat ik mijn creditcard binnen kreeg.
-Verder nadat ik mijn creditcard binnen kreeg kon ik verder werken en het product werkte toen in mijn eigen branch, maar 
-nadat ik dev had gemerged in mijn branch werkte het ineens niet meer. Na wat debuggen kwam ik erachter dat er een probleem was
-en heb ik dit opgelost. Achteraf kon ik misschien beter hulp vragen om iemands creditcard te lenen maar dacht zelf niet dat het
-zo lang zou duren voordat ik mijn eigen creditcard binnen kreeg. Natuurlijk zijn er altijd verbeterpunten, maar over het 
-algemeen ben ik erg tevreden met hoe de sprint is verlopen. Wat ik zelf nog zou willen verbeteren aan mijzelf is dat ik 
-nog proactiever kan zijn in het aangeven wanneer ik ergens hulp bij nodig heb. Soms wacht ik te lang voordat ik om hulp 
+opgepakt met zijn allen. Iedereen heeft zijn taken serieus genomen en we hebben als team goed samengewerkt om onze
+doelen te
+bereiken. Ten opzichte van vorige sprint hebben we als team echt stappen gemaakt. Voor mijzelf heb ik gewerkt aan de VPS
+draaiend krijgen met een domein en de OpenAI Assumpties werkend krijgen. Ik had een aantal kleine blockers waardoor ik
+in het begin niet veel voortgang kon maken met de openAI Assumpties, namelijk dat ik een creditcard nodig had om de API
+key te gebruiken. Ik had dit gelijk geregeld maar het duurde langer dan verwacht voordat ik mijn creditcard binnen
+kreeg.
+Verder nadat ik mijn creditcard binnen kreeg kon ik verder werken en het product werkte toen in mijn eigen branch, maar
+nadat ik dev had gemerged in mijn branch werkte het ineens niet meer. Na wat debuggen kwam ik erachter dat er een
+probleem was
+en heb ik dit opgelost. Achteraf kon ik misschien beter hulp vragen om iemands creditcard te lenen maar dacht zelf niet
+dat het
+zo lang zou duren voordat ik mijn eigen creditcard binnen kreeg. Natuurlijk zijn er altijd verbeterpunten, maar over het
+algemeen ben ik erg tevreden met hoe de sprint is verlopen. Wat ik zelf nog zou willen verbeteren aan mijzelf is dat ik
+nog proactiever kan zijn in het aangeven wanneer ik ergens hulp bij nodig heb. Soms wacht ik te lang voordat ik om hulp
 vraag, waardoor ik vastloop. Dit is iets waar ik aan wil werken in de volgende sprint.
 
 ### Tom
 
-Deze sprint verliep voor mij erg soepel en ben tevreden over wat we als team hebben bereikt. Ik heb deze sprint vooral gewerkt aan de database en enquête functionaliteit. Samen met Senna heb ik de database structuur opgezet en bewerkt. Daarna heb ik de enquête functionaliteit opgezet, zodat gebruikers ons feedback kunnen geven zonder dat we er erg bovenop staan. Ook zijn de resultaten in het formulier verwerkt, zodat de gebruiker terug kan kijken naar hun resultaat. Ook heb ik de opzet gemaakt voor de A/B testing op Studio.Next, zodat we kunnen testen of het reasoning gedeelte van de AI daadwerkelijk bijdraagt aan betere resultaten. Al met al ben ik erg tevreden over hoe de sprint is verlopen en kijk ik uit naar de volgende sprint. 
+Deze sprint verliep voor mij erg soepel en ben tevreden over wat we als team hebben bereikt. Ik heb deze sprint vooral
+gewerkt aan de database en enquête functionaliteit. Samen met Senna heb ik de database structuur opgezet en bewerkt.
+Daarna heb ik de enquête functionaliteit opgezet, zodat gebruikers ons feedback kunnen geven zonder dat we er erg
+bovenop staan. Ook zijn de resultaten in het formulier verwerkt, zodat de gebruiker terug kan kijken naar hun resultaat.
+Ook heb ik de opzet gemaakt voor de A/B testing op Studio.Next, zodat we kunnen testen of het reasoning gedeelte van de
+AI daadwerkelijk bijdraagt aan betere resultaten. Al met al ben ik erg tevreden over hoe de sprint is verlopen en kijk
+ik uit naar de volgende sprint.
 
-Ik vond de samenwerking goed gaan. Het actiepunt om ieder met drie user stories te komen heeft goed geholpen om de sprintplanning vlot te laten verlopen en zorgde ervoor dat er genoeg werk was voor iedereen. Doordat het sprintboard goed gevuld was, bleef de motivatie naar mijn idee ook hoog. De maandag meetings verliepen goed, al merkte ik dat ik vaak de enige was die deze organiseerde en documenteerde. Ook dwaalde de focus vaak af naar andere onderwerpen, waardoor de meetings langer duurden dan nodig. We hebben hier een concreter actiepunt voor opgesteld om dit in de volgende sprint te verbeteren. 
+Ik vond de samenwerking goed gaan. Het actiepunt om ieder met drie user stories te komen heeft goed geholpen om de
+sprintplanning vlot te laten verlopen en zorgde ervoor dat er genoeg werk was voor iedereen. Doordat het sprintboard
+goed gevuld was, bleef de motivatie naar mijn idee ook hoog. De maandag meetings verliepen goed, al merkte ik dat ik
+vaak de enige was die deze organiseerde en documenteerde. Ook dwaalde de focus vaak af naar andere onderwerpen, waardoor
+de meetings langer duurden dan nodig. We hebben hier een concreter actiepunt voor opgesteld om dit in de volgende sprint
+te verbeteren.
 
-We hebben alle belangrijke user stories af kunnen ronden, een paar optionele features schuiven we door naar de volgende sprint. Maar dit was van tevoren al ingeschat, dus naar mijn mening is het volgens de planning verlopen. Al deze punten bij elkaar opgeteld, geef ik deze sprint een 7,5. Ik ben verder gegaan met mijn persoonlijke ontwikkeling in het delen van kennis over AI. Ik heb, zoals voorgesteld, een korte uitleg gegeven over de werking van ChatGPT aan Marise. Marise deed alsof ze geen verstand van AI had, zodat ik de uitleg eenvoudig moest houden. Dit ging erg goed en ze liet weten dat het een duidelijke uitleg was. Marise gaf niet aan dat ik verkeerde informatie had gegeven of iets had gemist, dus ik beschouw dit als een succes.
+We hebben alle belangrijke user stories af kunnen ronden, een paar optionele features schuiven we door naar de volgende
+sprint. Maar dit was van tevoren al ingeschat, dus naar mijn mening is het volgens de planning verlopen. Al deze punten
+bij elkaar opgeteld, geef ik deze sprint een 7,5. Ik ben verder gegaan met mijn persoonlijke ontwikkeling in het delen
+van kennis over AI. Ik heb, zoals voorgesteld, een korte uitleg gegeven over de werking van ChatGPT aan Marise. Marise
+deed alsof ze geen verstand van AI had, zodat ik de uitleg eenvoudig moest houden. Dit ging erg goed en ze liet weten
+dat het een duidelijke uitleg was. Marise gaf niet aan dat ik verkeerde informatie had gegeven of iets had gemist, dus
+ik beschouw dit als een succes.
 
-Tijdens deze sprint merkte ik dat ik moeite heb met het uit handen geven van werk. Ik neem taken snel volledig op me, omdat ik bang ben dat anderen het niet goed genoeg of niet op mijn manier uitvoeren. Dit kwam duidelijk naar voren bij het maken van de enquête op de website, waar ik veel te lang aan bleef doorwerken om alles te perfectioneren. Ook merkte ons team dat meetings soms minder effectief verliepen, waardoor we een actiepunt hebben opgesteld om de samenwerking tijdens meetings te verbeteren. Volgende sprint wil ik meer vertrouwen op mijn team en realiseren dat taken delen niet betekent dat het resultaat minder goed wordt. Voor de volgende sprint neem ik me dan ook voor om maar 1 user story in "to do"/"doing" op mijn naam te hebben. Daarnaast wil ik vooraf duidelijker afspraken maken over verwachtingen, zodat ik me veiliger voel bij het overdragen van werk. Dit gaan we doen door tijdens de sprintplanning en bij het maken van nieuwe user stories met zijn alle de gemaakte taken in de beschrijving goed door te lopen. Dit moet mij helpen om minder tijd kwijt te zijn aan perfectioneren en meer focus te krijgen op het geheel. Aan het eind van de sprint ga ik evalueren of dit invloed heeft gehad op mijn mijn tijdsbesteding en de kwaliteit van onze samenwerking.
+Tijdens deze sprint merkte ik dat ik moeite heb met het uit handen geven van werk. Ik neem taken snel volledig op me,
+omdat ik bang ben dat anderen het niet goed genoeg of niet op mijn manier uitvoeren. Dit kwam duidelijk naar voren bij
+het maken van de enquête op de website, waar ik veel te lang aan bleef doorwerken om alles te perfectioneren. Ook merkte
+ons team dat meetings soms minder effectief verliepen, waardoor we een actiepunt hebben opgesteld om de samenwerking
+tijdens meetings te verbeteren. Volgende sprint wil ik meer vertrouwen op mijn team en realiseren dat taken delen niet
+betekent dat het resultaat minder goed wordt. Voor de volgende sprint neem ik me dan ook voor om maar 1 user story in "
+to do"/"doing" op mijn naam te hebben. Daarnaast wil ik vooraf duidelijker afspraken maken over verwachtingen, zodat ik
+me veiliger voel bij het overdragen van werk. Dit gaan we doen door tijdens de sprintplanning en bij het maken van
+nieuwe user stories met zijn alle de gemaakte taken in de beschrijving goed door te lopen. Dit moet mij helpen om minder
+tijd kwijt te zijn aan perfectioneren en meer focus te krijgen op het geheel. Aan het eind van de sprint ga ik evalueren
+of dit invloed heeft gehad op mijn mijn tijdsbesteding en de kwaliteit van onze samenwerking.
 
 ### Senna
 
-Deze sprint hebben we echt enorme stappen gemaakt, ik ben zeer tevreden met wat er bereikt is. Deze sprint heb ik me beziggehouden met meerdere verschillende dingen: database, VPS, Docker, QR-codes & CORS.
+Deze sprint hebben we echt enorme stappen gemaakt, ik ben zeer tevreden met wat er bereikt is. Deze sprint heb ik me
+beziggehouden met meerdere verschillende dingen: database, VPS, Docker, QR-codes & CORS.
 
 - **Database:**
-  Samen met Tom heb ik aan het begin van de sprint de hele databasestructuur herbouwd. Dit was nodig om de nieuwe form resultaten mogelijk te maken. Hierbij hebben we onder andere table relations gebruikt.
+  Samen met Tom heb ik aan het begin van de sprint de hele databasestructuur herbouwd. Dit was nodig om de nieuwe form
+  resultaten mogelijk te maken. Hierbij hebben we onder andere table relations gebruikt.
 - **VPS:**
-  Op de VPS heb ik veel dingen veranderd. Ik heb PHP toegevoegd voor PHPMyAdmin, zodat we makkelijk onze database kunnen inzien. Ook heb ik scriptjes toegevoegd die automatisch Docker containers herstarten mocht de VPS zelf herstarten. Daarnaast heb ik de firewall aangepast zodat de VPS beter beveiligd is.
+  Op de VPS heb ik veel dingen veranderd. Ik heb PHP toegevoegd voor PHPMyAdmin, zodat we makkelijk onze database kunnen
+  inzien. Ook heb ik scriptjes toegevoegd die automatisch Docker containers herstarten mocht de VPS zelf herstarten.
+  Daarnaast heb ik de firewall aangepast zodat de VPS beter beveiligd is.
 - **Docker:**
-  Docker restart script toegevoegd om automatisch herstarten mogelijk te maken, en ik heb Jay geassisteerd met het toevoegen van de ENV aan de live build.
+  Docker restart script toegevoegd om automatisch herstarten mogelijk te maken, en ik heb Jay geassisteerd met het
+  toevoegen van de ENV aan de live build.
 - **QR-codes:**
   Ik heb QR-codes toegevoegd in de front-end, zodat users in de photobooth verder kunnen gaan op hun telefoon.
 - **CORS:**
-  Backend beter beveiligd door CORS toe te voegen. Op deze manier zorgen we ervoor dat je niet makkelijk bij data kan komen die niet voor de gebruiker bestemd is.
+  Backend beter beveiligd door CORS toe te voegen. Op deze manier zorgen we ervoor dat je niet makkelijk bij data kan
+  komen die niet voor de gebruiker bestemd is.
 
-Na dit alles afgerond te hebben ben ik begonnen met het aanvullen van de dashboard page en ben ik onderzoek aan het doen naar chain-of-thought (manier van denken AI). Hierna wil ik aan de slag gaan met de Raspberry Pi voor de camera van de fotobooth.
+Na dit alles afgerond te hebben ben ik begonnen met het aanvullen van de dashboard page en ben ik onderzoek aan het doen
+naar chain-of-thought (manier van denken AI). Hierna wil ik aan de slag gaan met de Raspberry Pi voor de camera van de
+fotobooth.
 
-Om te kijken naar groepswerk/samenwerking: hier liep alles vrij soepel, we hadden duidelijke afspraken gemaakt van tevoren en die zijn we nagekomen. Als ik iets moet noemen wat fout is gegaan, was het een kleine miscommunicatie met een branch, maar dit was vrij snel verholpen. Meetings blijven wel een aandachtspunt, hier dwalen we nog steeds snel af, maar hier hebben we tijdens de retro een oplossing voor aangewezen dus hopelijk werkt dit.
+Om te kijken naar groepswerk/samenwerking: hier liep alles vrij soepel, we hadden duidelijke afspraken gemaakt van
+tevoren en die zijn we nagekomen. Als ik iets moet noemen wat fout is gegaan, was het een kleine miscommunicatie met een
+branch, maar dit was vrij snel verholpen. Meetings blijven wel een aandachtspunt, hier dwalen we nog steeds snel af,
+maar hier hebben we tijdens de retro een oplossing voor aangewezen dus hopelijk werkt dit.
 
-De reden waarom ik de sprint een 7 geef is omdat het zeker goed liep, maar het kan altijd beter. Nu ik er zo op terugkijk had ik het ook een 8 kunnen geven, maar ik kijk liever iets te optimistisch. Verder zijn alle belangrijke user story's af op één na, de Raspberry Pi, alleen deze is uitgesteld wegens een probleem met hardware. Dit is echter geen probleem omdat we verder op schema lopen. Komende sprint pakken we het weer hetzelfde aan, dus ik heb er alle vertrouwen in.
+De reden waarom ik de sprint een 7 geef is omdat het zeker goed liep, maar het kan altijd beter. Nu ik er zo op
+terugkijk had ik het ook een 8 kunnen geven, maar ik kijk liever iets te optimistisch. Verder zijn alle belangrijke user
+story's af op één na, de Raspberry Pi, alleen deze is uitgesteld wegens een probleem met hardware. Dit is echter geen
+probleem omdat we verder op schema lopen. Komende sprint pakken we het weer hetzelfde aan, dus ik heb er alle vertrouwen
+in.
 
-Qua persoonlijk leerdoel moet ik nog aan werken, maar dat heb ik in mijn PDP genoemd en ga ik mee aan de slag. Dat wil ik gaan doen door middel van het schrijven van een verslag. We hebben als CT een les gehad over generative AI. Ik heb hier een hele sterke mening over en zet het liever zelf niet in op de manier hoe het werd uitgelegd. Mijn plan nu is om uit te leggen waarom ik dat vind op basis van bronnen en onderzoek.
+Qua persoonlijk leerdoel moet ik nog aan werken, maar dat heb ik in mijn PDP genoemd en ga ik mee aan de slag. Dat wil
+ik gaan doen door middel van het schrijven van een verslag. We hebben als CT een les gehad over generative AI. Ik heb
+hier een hele sterke mening over en zet het liever zelf niet in op de manier hoe het werd uitgelegd. Mijn plan nu is om
+uit te leggen waarom ik dat vind op basis van bronnen en onderzoek.
 
-Volgende sprint wil ik meer gaan focussen op documenteren en onderzoek. Dit is belangrijk voor mijn persoonlijk leerdoel en PDP.
+Volgende sprint wil ik meer gaan focussen op documenteren en onderzoek. Dit is belangrijk voor mijn persoonlijk leerdoel
+en PDP.
+
+# Borys
+
+Ik kijk terug op een sprint die redelijk goed is verlopen, al had mijn persoonlijke inzet hoger kunnen liggen. Door
+persoonlijke omstandigheden en werkverplichtingen was mijn focus niet optimaal, wat ik jammer vind. Desondanks heb ik me
+deze sprint beziggehouden met het verfijnen van de frontend en het afwerken van andermans pagina's. Ik heb het design
+van de QR-code pagina gepolijst en ervoor gezorgd dat alle pagina's visueel consistent en strak ogen. Deze frontend
+rework was belangrijk om de gebruikerservaring te verbeteren en de applicatie professioneler te laten ogen.
+Mijn user stories heb ik niet volledig kunnen afronden, deze neem ik mee naar de volgende sprint. Het is de bedoeling
+dat ik een bounding box implementeer rond gezichten, kleinere details verder afwerk en mogelijk het design op sommige
+pagina's verder strak trek. Daarnaast heb ik al wat vooronderzoek gedaan naar het omzetten van de applicatie naar een
+mobiele app, iets waar ik graag ASAP mee aan de slag wil.
+Wat betreft teamwerk vond ik de communicatie tegenvallen. Het was vaak onduidelijk waar iedereen op welk moment mee
+bezig was, wat tot verwarring leidde. Dit hebben we tijdens de retro besproken en het actiepunt met de roterende scrum
+master moet dit verbeteren. Ik geef de sprint een 7 omdat we als team goed werk hebben geleverd, maar ik persoonlijk
+meer uit de kast had kunnen halen.
+Voor de volgende sprint wil ik strakker zijn in mijn eigen planning en ervoor zorgen dat ik een sterkere focus leg op
+school. Ik merkte dat deze focus voor mij wegviel, wat ten koste ging van mijn inzet. Door structureler te werken en
+eerder hulp te vragen waar nodig, hoop ik volgende sprint beter bij te kunnen dragen aan het project.
 
 ## Bijlagen
 
