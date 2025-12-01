@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { onMounted, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import {onMounted, ref, watch} from 'vue'
+import {useRouter} from 'vue-router'
 import BaseCard from '../components/BaseCard.vue'
-import { fetchAssumptions, groupAssumptionsByFormat, createChartForAssumption } from '../services/dashboardService'
-import { authService } from '../services/authService'
-import type { Chart } from 'chart.js'
+import {createChartForAssumption, fetchAssumptions, groupAssumptionsByFormat} from '../services/dashboardService'
+import {authService} from '../services/authService'
+import type {Chart} from 'chart.js'
 
 const router = useRouter()
 const loading = ref(true)
@@ -63,30 +63,32 @@ watch(selectedModel, loadDashboardData)
 </script>
 
 <template>
-  <section class="p-6 md:p-10 space-y-10">
+  <section class="p-4 sm:p-6 md:p-10 space-y-6 sm:space-y-10">
     <header class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
       <div>
-        <h1 class="text-4xl font-extrabold bg-gradient-to-r from-indigo-200 via-fuchsia-200 to-pink-300 text-transparent bg-clip-text">
+        <h1 class="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-indigo-200 via-fuchsia-200 to-pink-300 text-transparent bg-clip-text">
           Dashboard
         </h1>
-        <p class="mt-2 text-gray-400">Analytics and insights from AI assumptions</p>
+        <p class="mt-2 text-sm sm:text-base text-gray-400">Analytics and insights from AI assumptions</p>
       </div>
 
-      <div class="flex items-center gap-3">
-        <label class="text-white/70 text-sm font-medium" for="model-select">AI Model:</label>
-        <select
-            id="model-select"
-            v-model="selectedModel"
-            class="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-        >
-          <option v-for="model in availableModels" :key="model" :value="model">
-            {{ model.charAt(0).toUpperCase() + model.slice(1) }}
-          </option>
-        </select>
-        
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <div class="flex items-center gap-2 sm:gap-3">
+          <label class="text-white/70 text-sm font-medium" for="model-select">AI Model:</label>
+          <select
+              id="model-select"
+              v-model="selectedModel"
+              class="flex-1 sm:flex-initial px-3 sm:px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition min-h-[44px]"
+          >
+            <option v-for="model in availableModels" :key="model" :value="model">
+              {{ model.charAt(0).toUpperCase() + model.slice(1) }}
+            </option>
+          </select>
+        </div>
+
         <button
-          @click="handleLogout"
-          class="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 rounded-lg text-red-300 hover:text-red-200 transition"
+            class="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 rounded-lg text-red-300 hover:text-red-200 transition min-h-[44px]"
+            @click="handleLogout"
         >
           Logout
         </button>
@@ -101,14 +103,14 @@ watch(selectedModel, loadDashboardData)
       <p class="text-red-400 text-lg">{{ error }}</p>
     </div>
 
-    <div v-else class="grid gap-6 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2">
+    <div v-else class="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
       <BaseCard
           v-for="(assumption, key) in groupedAssumptions"
           :key="key"
-          class="p-6"
+          class="p-4 sm:p-6"
       >
-        <h2 class="text-xl font-semibold mb-4 text-white">{{ assumption.name }}</h2>
-        <div class="h-80">
+        <h2 class="text-lg sm:text-xl font-semibold mb-4 text-white">{{ assumption.name }}</h2>
+        <div class="h-64 sm:h-80">
           <canvas :id="`chart-${key}`"></canvas>
         </div>
       </BaseCard>
