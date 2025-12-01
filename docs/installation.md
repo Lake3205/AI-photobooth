@@ -84,58 +84,85 @@ open docker desktop
 
 ### Go to backend folder in dark-tech
 
+```bash
 cd backend
+```
 
 ### Build backend docker file
 
+```bash
 docker build -t emetain/dark-tech-backend-review:dev .
+```
 
 ### Go to frontend folder in dark-tech
 
+```bash
 cd ../frontend
+```
 
 ### Build frontend docker file
 
+```bash
 docker build -t emetain/dark-tech-frontend-review:dev .
+```
 
 ### Save images as tars
 
+```bash
 docker save emetain/dark-tech-frontend-review:dev -o frontend-society.tar
 cd ../backend
 docker save emetain/dark-tech-backend-review:dev -o backend-review.tar
+```
 
 ### Upload files to vps
 
 open FileZilla
 enter credentials
+
+```bash
 cd ../home/dark-tech
+```
 
 ### Access vps through terminal
 
+```bash
 ssh root@185.228.82.235
+```
 
 ### Go to the correct folder
 
+```bash
 cd ../home/dark-tech
+```
 
 ### Load docker images
 
+```bash
 docker load -i backend-society.tar
 docker load -i frontend-society.tar
+```
 
 ### Check if the image is there
 
+```bash
 docker images
+```
 
 ### Check if there are containers running
 
+```bash
 docker ps
+```
 
 ### Delete containers if necessary
 
+```bash
 docker stop <container-id>
+```
 
 ### Run new container
 
+```bash
 docker run -d -p 3000:3000 emetain/dark-tech-backend-frontend:dev
 docker run -d -p 8000:8000 emetain/dark-tech-backend-review:dev
+```
