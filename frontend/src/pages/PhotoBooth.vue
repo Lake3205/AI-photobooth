@@ -49,14 +49,9 @@ function updateFormToken() {
 
 const qrCodeUrl = computed(() => {
   if (!formToken.value) return ''
-  try {
-    const host = window.location.hostname
-    if (host === 'localhost' || host.endsWith('.local') || host.includes('127.0.0.1')) {
-      return `${window.location.origin}/form?token=${formToken.value}`
-    }
-  } catch (e) {
-  }
-  return `https://parallax-darktech.nl/form?token=${formToken.value}`
+//      const baseUrl = window.location.origin
+//      Should only be used on live
+  return `parallax-darktech.nl/form?token=${formToken.value}`
 })
 
 watch(() => analysisData.value, (newData) => {
