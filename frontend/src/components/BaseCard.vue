@@ -1,6 +1,6 @@
 <template>
   <div
-      :class="['dashboard-card p-5 rounded-2xl bg-gradient-to-br from-white/5 to-white/2 border border-white/10 backdrop-blur-sm transition transform hover:-translate-y-2 hover:shadow-2xl', extraClass]">
+      :class="['dashboard-card p-5 rounded-2xl bg-gradient-to-br from-white/5 to-white/2 border border-white/10 backdrop-blur-sm transition transform', extraClass]">
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div v-if="$slots.icon" class="h-10 w-10 rounded-xl bg-indigo-500/20 flex items-center justify-center">

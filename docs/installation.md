@@ -84,7 +84,9 @@ open docker desktop
 
 ### Go to backend folder in dark-tech
 
+```bash
 cd backend
+```
 
 ### Build backend docker file
 
@@ -122,7 +124,10 @@ open FileZilla
 
 enter credentials
 
+
+```bash
 cd ../home/dark-tech
+```
 
 ### Access vps through terminal
 
@@ -164,8 +169,16 @@ docker ps
 docker stop <container-id>
 ```
 
-### Run new container
+### Run new container for prod
 
 ```bash
-docker compose -f docker-compose.prod.yml up -d --force-recreate
+docker-compose -f docker-compose.prod.yml down -v --remove-orphans
+docker-compose -f docker-compose.prod.yml up -d --force-recreate
+```
+
+### Run new container for dev
+```bash
+docker-compose -f docker-compose.dev.yml down -v --remove-orphans
+docker-compose -f docker-compose.dev.yml up -d --force-recreate
+
 ```
