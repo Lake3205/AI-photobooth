@@ -16,13 +16,14 @@ const router = useRouter()
           class="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:24px_24px]"></div>
     </div>
     <section
-        class="relative z-10 my-10 mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-6 text-center">
-      <h1 class="select-none bg-gradient-to-b from-white to-blue-300 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent mb-6">
+        class="relative z-10 my-6 sm:my-10 mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-4 sm:px-6 text-center">
+      <h1 class="select-none bg-gradient-to-b from-white to-blue-300 bg-clip-text text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-transparent mb-4 sm:mb-6">
         Terms of Service</h1>
-      <div class="bg-white/10 rounded-2xl shadow-lg p-8 w-full text-left text-base text-blue-100/90">
-        <p class="mb-4">Welcome to our application. By using our service, you agree to the following terms and
+      <div
+          class="bg-white/10 rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 md:p-8 w-full text-left text-sm sm:text-base text-blue-100/90">
+        <p class="mb-3 sm:mb-4">Welcome to our application. By using our service, you agree to the following terms and
           conditions. Please read them carefully.</p>
-        <ol class="list-decimal list-inside space-y-2 mb-4">
+        <ol class="list-decimal list-inside space-y-2 mb-3 sm:mb-4">
           <li>
             <strong>Use of Webcam:</strong> This application requires access to your device’s webcam to capture an
             image. By using this feature, you consent to the collection and processing of the captured image.
@@ -37,7 +38,7 @@ const router = useRouter()
           <li>
             <strong>Third-Party AI Terms:</strong> By using this service, you also agree to the terms and policies of
             the AI providers we use. Please review their respective Terms of Service:
-            <ul>
+            <ul class="ml-4 sm:ml-6 mt-1">
               <li><a class="underline" href="https://openai.com/policies/terms-of-use" target="_blank">OpenAI Terms of
                 Use</a></li>
               <li><a class="underline" href="https://policies.google.com/terms" target="_blank">Google Terms of
@@ -88,9 +89,9 @@ const router = useRouter()
           </li>
         </ol>
         <p>If you have any questions about these terms, please contact us.</p>
-        <div class="mt-8 text-center">
+        <div class="mt-6 sm:mt-8 text-center">
           <button
-              class="text-blue-300 hover:text-white transition-colors"
+              class="text-blue-300 hover:text-white transition-colors text-sm sm:text-base min-h-[44px] px-4 py-2"
               @click="router.push({name: 'selfie'})"
           >
             ← Back to start

@@ -185,6 +185,25 @@ export const useWebcamService = () => {
         return colorClasses[index] as string;
     };
 
+    const reload = async () => {
+        if (!latestImage.value) {
+            analysisError.value = 'No image to reload'
+            return
+        }
+
+        try {
+            isAnalyzing.value = true
+            analysisError.value = null
+
+            analysisData.value = await assumptionsService.generateAssumptions(latestImage.value.blob)
+        } catch (error) {
+            console.error('Reload error:', error)
+            analysisError.value = error instanceof Error ? error.message : 'Reload failed'
+        } finally {
+            isAnalyzing.value = false
+        }
+    }
+
     const startCamera = async () => {
         try {
             isLoading.value = true
@@ -296,16 +315,6 @@ export const useWebcamService = () => {
         analysisData.value = null
         analysisError.value = null
         closeNavbar()
-    }
-
-    const reload = () => {
-        clearAllData()
-
-        stopCamera()
-
-        setTimeout(() => {
-            startCamera()
-        }, 200)
     }
 
     // Upload file from upload button

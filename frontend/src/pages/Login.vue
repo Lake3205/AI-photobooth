@@ -54,18 +54,18 @@ const handleKeypress = (event: KeyboardEvent) => {
     </div>
 
     <!-- Content -->
-    <section class="relative z-10 min-h-screen flex items-center justify-center p-6">
+    <section class="relative z-10 min-h-screen flex items-center justify-center p-4 sm:p-6">
       <div class="w-full max-w-md">
         <!-- Card -->
-        <div class="rounded-2xl bg-gradient-to-br from-white/5 to-white/2 border border-white/10 backdrop-blur-sm p-8">
-          <div class="text-center mb-8">
-            <h1 class="text-4xl font-extrabold bg-gradient-to-r from-indigo-200 via-fuchsia-200 to-pink-300 text-transparent bg-clip-text mb-2">
+        <div class="rounded-2xl bg-gradient-to-br from-white/5 to-white/2 border border-white/10 backdrop-blur-sm p-6 sm:p-8">
+          <div class="text-center mb-6 sm:mb-8">
+            <h1 class="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-indigo-200 via-fuchsia-200 to-pink-300 text-transparent bg-clip-text mb-2">
               Login
             </h1>
-            <p class="text-gray-400">Sign in to access the dashboard</p>
+            <p class="text-sm sm:text-base text-gray-400">Sign in to access the dashboard</p>
           </div>
 
-          <form class="space-y-6" @submit.prevent="handleLogin">
+          <form class="space-y-4 sm:space-y-6" @submit.prevent="handleLogin">
             <div>
               <label class="block text-sm font-medium text-gray-300 mb-2" for="username">
                 Username
@@ -74,7 +74,7 @@ const handleKeypress = (event: KeyboardEvent) => {
                   id="username"
                   v-model="username"
                   autocomplete="username"
-                  class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                  class="w-full px-4 py-3 sm:py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition text-base"
                   placeholder="Enter your username"
                   required
                   type="text"
@@ -90,7 +90,7 @@ const handleKeypress = (event: KeyboardEvent) => {
                   id="password"
                   v-model="password"
                   autocomplete="current-password"
-                  class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                  class="w-full px-4 py-3 sm:py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition text-base"
                   placeholder="Enter your password"
                   required
                   type="password"
@@ -98,13 +98,13 @@ const handleKeypress = (event: KeyboardEvent) => {
               />
             </div>
 
-            <div v-if="error" class="bg-red-500/10 border border-red-500/50 rounded-lg p-4">
+            <div v-if="error" class="bg-red-500/10 border border-red-500/50 rounded-lg p-3 sm:p-4">
               <p class="text-red-400 text-sm text-center">{{ error }}</p>
             </div>
 
             <button
                 :disabled="loading"
-                class="w-full px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold rounded-lg transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                class="w-full px-6 py-3.5 sm:py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold rounded-lg transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none min-h-[44px]"
                 type="submit"
             >
               <span v-if="loading" class="flex items-center justify-center gap-2">
