@@ -25,6 +25,8 @@ async def upload_image(image_bytes: bytes, filename: str, content_type: str) -> 
 class OpenAIClient:
     def __init__(self):
         self.api_key = config.OPENAI_API_KEY
+        if not self.api_key or self.api_key == "None":
+            return
         self.client = OpenAI(
             base_url=base_url,
             default_headers={'Authorization': f'Bearer {self.api_key}'}
