@@ -1,6 +1,6 @@
 import type {AssumptionData, AssumptionType} from '@/types/AssumptionType';
 import {computed, onUnmounted, ref, watch} from 'vue'
-import { useCookieService } from './cookieService';
+import {useCookieService} from './cookieService';
 
 interface CapturedImage {
     dataUrl: string
@@ -15,7 +15,7 @@ interface TestAnalysisResponse {
     token?: string;
 }
 
-const { setCookie } = useCookieService();
+const {setCookie} = useCookieService();
 
 class AssumptionsService {
     private baseUrl: string;
@@ -313,27 +313,6 @@ export const useWebcamService = () => {
         });
     }
 
-    const reload = async () => {
-        if (!latestImage.value) {
-            analysisError.value = 'No image to reload'
-            return
-        }
-
-        try {
-            isAnalyzing.value = true
-            analysisError.value = null
-
-            const assumptions = await assumptionsService.generateAssumptions(latestImage.value.blob)
-            analysisData.value = assumptions
-        } catch (error) {
-            console.error('Reload error:', error)
-            analysisError.value = error instanceof Error ? error.message : 'Reload failed'
-        } finally {
-            isAnalyzing.value = false
-        }
-    }
-
-
     // Cleanup on unmount
     onUnmounted(() => {
         stopCamera()
@@ -379,6 +358,5 @@ export const useWebcamService = () => {
         getStringHash,
         getBarColorClass,
         uploadFile,
-        reload,
     }
 }

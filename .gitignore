@@ -2,12 +2,4 @@
 
 # Environment files - DO NOT COMMIT (stored in project root)
 .env
-.env.local
-.env.development
-.env.development.local
 .env.production
-.env.production.local
-
-# EXCEPT: Template/example files for reference
-!.env.example
-!**/.env.example
