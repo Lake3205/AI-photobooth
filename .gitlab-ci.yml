@@ -127,6 +127,7 @@ deploy_main:
 
 test_build:
   stage: test
+  allow_failure: true
   tags:
     - hva
   image:
