@@ -1,4 +1,5 @@
 stages:
+  - test
   - build
   - deploy
 
@@ -123,3 +124,36 @@ deploy_main:
     - if: '$CI_COMMIT_BRANCH == "main"'
       when: always
     - when: never
+
+test_build:
+  stage: test
+  tags:
+    - hva
+  image:
+    name: emetain/kaniko-wrapper:latest
+    entrypoint: [ "" ]
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID && ($CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main")'
+      when: always
+    - when: never
+
+  variables:
+    DOCKER_CONFIG: /kaniko/.docker/
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"username\":\"$DOCKER_USERNAME\",\"password\":\"$DOCKER_PASSWORD\"}}}" > /kaniko/.docker/config.json
+
+    - >
+      /kaniko/executor
+      --context ./frontend
+      --dockerfile ./frontend/Dockerfile
+      --destination dummy/frontend:test
+      --no-push
+
+    - >
+      /kaniko/executor
+      --context ./backend
+      --dockerfile ./backend/Dockerfile
+      --destination dummy/backend:test
+      --no-push
+
