@@ -57,9 +57,10 @@ const handleKeypress = (event: KeyboardEvent) => {
     <section class="relative z-10 min-h-screen flex items-center justify-center p-4 sm:p-6">
       <div class="w-full max-w-md">
         <!-- Card -->
-        <div class="rounded-2xl bg-gradient-to-br from-white/5 to-white/2 border border-white/10 backdrop-blur-sm p-6 sm:p-8">
+        <div
+            class="rounded-2xl bg-gradient-to-br from-white/5 to-white/2 border border-white/10 backdrop-blur-sm p-6 sm:p-8">
           <div class="text-center mb-6 sm:mb-8">
-            <h1 class="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-indigo-200 via-fuchsia-200 to-pink-300 text-transparent bg-clip-text mb-2">
+            <h1 class="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-indigo-200 via-fuchsia-200 to-pink-300 text-transparent bg-clip-text mb-2 pb-2">
               Login
             </h1>
             <p class="text-sm sm:text-base text-gray-400">Sign in to access the dashboard</p>
