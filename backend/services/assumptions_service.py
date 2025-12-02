@@ -1,17 +1,19 @@
-from fastapi import HTTPException, status
-
+from fastapi import HTTPException
+from fastapi import status
 from clients.claude import ClaudeClient
 from models.assumptions import AssumptionsModel
 from constants.clients import Clients
 from services.database_service import DatabaseService
-
 from clients.google_ai_client import GoogleAIClient
+from clients.openai_client import OpenAIClient
+
 
 class AssumptionsService:
     def __init__(self):
         self.claude_client = ClaudeClient()
         self.google_client = GoogleAIClient()
         self.db_service = DatabaseService()
+        self.openai_client = OpenAIClient()
 
     async def get_assumptions(self, assumptions_model: AssumptionsModel, image) -> dict:
         image_bytes = await image.read()
@@ -24,6 +26,14 @@ class AssumptionsService:
             case Clients.CLAUDE:
                 response = await self.claude_client.generate_response(image)
                 model_name = "claude"
+            case Clients.OPENAI:
+                response = await self.openai_client.generate_openai_response(
+                    image_bytes,
+                    filename=image.filename,
+                    content_type=mime_type,
+                    version=assumptions_model.version
+                )
+                model_name = "openai"
             case Clients.GEMINI:
                 response = await self.google_client.call_gemini_api(
                     image_bytes=image_bytes,
@@ -47,17 +57,17 @@ class AssumptionsService:
                 print(f"failed to log assumption to database: {e}")
 
         return response
-    
+
     async def get_assumptions_by_id(self, assumption_id: int) -> dict:
         conn = None
         cur = None
-        
+
         try:
             conn = self.db_service.get_db_connection()
             cur = conn.cursor()
-            
+
             assumptions_model = AssumptionsModel()
-            
+
             query = """
             SELECT ac.id, ac.value, av.value, av.reasoning
             FROM assumptions a 
@@ -65,14 +75,14 @@ class AssumptionsService:
             LEFT JOIN assumption_constants ac ON av.assumption_constant_id = ac.id
             WHERE a.id = ?
             """
-            
+
             cur.execute(query, (assumption_id,))
             rows = cur.fetchall()
-            
+
             if not rows:
                 raise Exception(f"No assumption found with ID: {assumption_id}")
-            
-            
+
+
             for row in rows:
                 assumption = row[1]
                 value = row[2]
@@ -80,9 +90,9 @@ class AssumptionsService:
                 if (assumption in assumptions_model.assumptions):
                     assumptions_model.assumptions[assumption]["value"] = value
                     assumptions_model.assumptions[assumption]["reasoning"] = reasoning
-            
+
             return assumptions_model.assumptions
-            
+
         except Exception as e:
             if conn:
                 try:

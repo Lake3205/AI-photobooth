@@ -317,6 +317,16 @@ export const useWebcamService = () => {
         closeNavbar()
     }
 
+    const reload = () => {
+        clearAllData()
+
+        stopCamera()
+
+        setTimeout(() => {
+            startCamera()
+        }, 200)
+    }
+
     // Upload file from upload button
     function uploadFile(e: Event) {
         const files = (e.target as HTMLInputElement).files
@@ -377,6 +387,6 @@ export const useWebcamService = () => {
         getStringHash,
         getBarColorClass,
         uploadFile,
-        reload
+        reload,
     }
 }

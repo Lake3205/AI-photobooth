@@ -5,7 +5,7 @@ from services.test_service import TestService
 from services.form_service import FormService
 from constants.clients import Clients
 from models.assumptions import AssumptionsModel
-from constants.model_version_constants import GEMINI_MODEL_VERSION, CLAUDE_MODEL_VERSION
+from constants.model_version_constants import GEMINI_MODEL_VERSION, CLAUDE_MODEL_VERSION, OPENAI_MODEL_VERSION
 
 router = APIRouter(prefix="/assumptions", tags=["AI assumptions"])
 assumptions_service = AssumptionsService()
@@ -25,15 +25,20 @@ async def generate_assumptions(image: UploadFile, ai_model: Clients):
         case Clients.GEMINI:
             assumptions_model.model = ai_model
             assumptions_model.version = GEMINI_MODEL_VERSION
+            pass
+        case Clients.OPENAI:
+            assumptions_model.model = ai_model
+            assumptions_model.version = OPENAI_MODEL_VERSION
+            pass
         case _:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="AI model not supported yet.")
 
     assumptions = await assumptions_service.get_assumptions(assumptions_model, image)
-    
+
     if ('id' in assumptions and type(assumptions['id'] is int)):
         assumption_id = assumptions['id']
         token = form_service.log_form_token(assumption_id)
-        
+
         assumptions_model.set_token(token)
 
     assumptions_model.set_assumptions_json(assumptions)
