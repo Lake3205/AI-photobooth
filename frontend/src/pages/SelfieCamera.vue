@@ -4,11 +4,8 @@ import {useWebcamService} from '@/services/webcamService'
 import {CameraIcon} from '@heroicons/vue/24/outline'
 import UploadButton from '@/components/UploadButton.vue'
 import AssumptionsPanel from '@/components/AssumptionsPanel.vue'
-import {useRouter} from "vue-router";
 import TermsButton from '@/components/TermsButton.vue'
 import TermsPopup from '@/components/TermsPopup.vue'
-
-const router = useRouter()
 
 const {
   // Template refs

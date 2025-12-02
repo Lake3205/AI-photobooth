@@ -78,7 +78,7 @@ Open your web browser and navigate to `http://localhost:3000` to access the Dark
 
 ## Access the VPS
 
-manual docker setup to vps
+## manual docker setup to vps
 
 open docker desktop
 
@@ -101,23 +101,29 @@ cd ../frontend
 ```
 
 ### Build frontend docker file
-
 ```bash
 docker build -t emetain/dark-tech-frontend-review:dev .
 ```
 
 ### Save images as tars
+```bash
+docker save emetain/dark-tech-frontend-review:dev -o frontend.tar
+```
 
 ```bash
-docker save emetain/dark-tech-frontend-review:dev -o frontend-society.tar
 cd ../backend
-docker save emetain/dark-tech-backend-review:dev -o backend-review.tar
+```
+
+```bash
+docker save emetain/dark-tech-backend-review:dev -o backend.tar
 ```
 
 ### Upload files to vps
 
 open FileZilla
+
 enter credentials
+
 
 ```bash
 cd ../home/dark-tech
@@ -138,8 +144,11 @@ cd ../home/dark-tech
 ### Load docker images
 
 ```bash
-docker load -i backend-society.tar
-docker load -i frontend-society.tar
+docker load -i backend.tar
+```
+
+```bash
+docker load -i frontend.tar
 ```
 
 ### Check if the image is there
@@ -160,9 +169,16 @@ docker ps
 docker stop <container-id>
 ```
 
-### Run new container
+### Run new container for prod
 
 ```bash
-docker run -d -p 3000:3000 emetain/dark-tech-backend-frontend:dev
-docker run -d -p 8000:8000 emetain/dark-tech-backend-review:dev
+docker-compose -f docker-compose.prod.yml down -v --remove-orphans
+docker-compose -f docker-compose.prod.yml up -d --force-recreate
+```
+
+### Run new container for dev
+```bash
+docker-compose -f docker-compose.dev.yml down -v --remove-orphans
+docker-compose -f docker-compose.dev.yml up -d --force-recreate
+
 ```
