@@ -310,14 +310,15 @@ export const useWebcamService = () => {
     }
 
     // Clear all images and analysis data
-    const clearAllData = () => {
+    const clearAllData = async () => {
+        stopCamera()
         capturedImages.value.length = 0
         analysisData.value = null
         analysisError.value = null
         closeNavbar()
+        await startCamera()
     }
 
-    // Upload file from upload button
     function uploadFile(e: Event) {
         const files = (e.target as HTMLInputElement).files
         const file = files && files.length > 0 ? files[0] : undefined
