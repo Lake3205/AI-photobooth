@@ -4,6 +4,11 @@ ALLOWED_QUESTIONS = {
         "type": "scale",
         "scale": [1, 10]
     },
+    "experience": {
+        "question": "On a scale from 1 to 10, how experienced are you with AI?",
+        "type": "scale",
+        "scale": [1, 10]
+    },
     "happiness": {
         "question": "On a scale from 1 to 10, how happy are you with the results?",
         "type": "scale",
