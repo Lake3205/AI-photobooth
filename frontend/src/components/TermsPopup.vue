@@ -1,6 +1,6 @@
-<script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+<script lang="ts" setup>
+import {onMounted, ref} from 'vue'
+import {useRouter} from 'vue-router'
 
 const router = useRouter()
 const hasAgreedToTerms = ref(false)
@@ -38,8 +38,8 @@ defineExpose({
         before using the selfie camera.
       </p>
       <button
-        class="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-        @click="agreeToTerms"
+          class="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          @click="agreeToTerms"
       >
         I Agree
       </button>

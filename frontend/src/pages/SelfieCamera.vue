@@ -43,7 +43,13 @@ const {
 const termsPopup = ref<InstanceType<typeof TermsPopup> | null>(null)
 
 // Face detection
-const {faceDetected, faceBounds, loadModel} = useFaceDetection(videoElement, isStreaming)
+const {
+  faceDetected,
+  faceBounds,
+  isModelLoading,
+  isInitializing,
+  loadModel
+} = useFaceDetection(videoElement, isStreaming)
 
 // Auto-start camera when component mounts
 onMounted(async () => {
@@ -67,9 +73,7 @@ onMounted(async () => {
     </div>
 
     <div class="relative z-10 px-4 sm:px-6 py-4 sm:py-8 mx-auto" style="--panel-w:28rem;">
-      <!-- Main row: left = title + live camera (always visible), right = result + assumptions (appears after capture) -->
       <div class="flex flex-col md:flex-row items-start justify-center gap-4 md:gap-0">
-        <!-- Left column: title + live camera -->
         <div
             :class="['left-column transition-transform duration-500 ease-in-out w-full md:w-auto', latestImage ? 'slide-left' : '']"
             class="min-w-full md:min-w-[320px]"
@@ -87,11 +91,20 @@ onMounted(async () => {
             <div
                 class="relative aspect-[16/9] w-full rounded-xl overflow-hidden bg-black/50 flex items-center justify-center">
               <video ref="videoElement"
-                     :class="['absolute inset-0 w-full h-full object-cover z-0', isStreaming ? '' : 'opacity-50']"
+                     :class="['camera-video', isStreaming ? '' : 'opacity-50']"
                      autoplay playsinline></video>
 
-              <div v-if="faceDetected && isStreaming" class="absolute inset-0 z-10 pointer-events-none">
-                <!-- Render bounding box for each detected face -->
+              <div v-if="(isModelLoading || isInitializing) && isStreaming"
+                   class="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
+                <div class="face-detection-loading">
+                  <div class="loading-text">
+                    <span class="loading-dots">{{ isModelLoading ? 'Loading AI Model' : 'Preparing Detection' }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div v-if="faceDetected && isStreaming && !isModelLoading && !isInitializing"
+                   class="absolute inset-0 z-10 pointer-events-none">
                 <div v-for="face in faceBounds"
                      :key="face.index"
                      :style="{
@@ -100,7 +113,7 @@ onMounted(async () => {
                        width: face.width + 'px',
                        height: face.height + 'px'
                      }"
-                     class="face-box">
+                     class="face-box face-box-appear">
 
                   <div class="face-info">
                     <div class="info-text">FACE {{ face.index + 1 }}</div>
@@ -150,7 +163,6 @@ onMounted(async () => {
           </div>
         </div>
 
-        <!-- Right column: small captured image + assumptions -->
         <div :class="latestImage ? 'show' : 'hidden'"
              class="right-column w-full md:w-150 transition-all duration-500 ease-in-out"
              style="--panel-w:28rem;">
@@ -233,6 +245,32 @@ onMounted(async () => {
   animation: pulse-border 3s ease-in-out infinite;
 }
 
+.face-box-appear {
+  animation: materialize 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+  pulse-border 3s ease-in-out 0.6s infinite;
+}
+
+@keyframes materialize {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+    border-color: rgba(0, 200, 255, 0);
+    box-shadow: inset 0 0 0 rgba(0, 200, 255, 0),
+    0 0 0 rgba(0, 200, 255, 0);
+  }
+  40% {
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    border-color: rgba(0, 200, 255, 0.5);
+    box-shadow: inset 0 0 8px rgba(0, 200, 255, 0.1),
+    0 0 8px rgba(0, 200, 255, 0.2);
+  }
+}
+
 @keyframes pulse-border {
   0%, 100% {
     border-color: rgba(0, 200, 255, 0.5);
@@ -243,17 +281,6 @@ onMounted(async () => {
     border-color: rgba(0, 200, 255, 0.7);
     box-shadow: inset 0 0 12px rgba(0, 200, 255, 0.15),
     0 0 12px rgba(0, 200, 255, 0.3);
-  }
-}
-
-@keyframes face-scan {
-  0%, 100% {
-    transform: translateY(0);
-    opacity: 0.6;
-  }
-  50% {
-    transform: translateY(100%);
-    opacity: 1;
   }
 }
 
@@ -271,23 +298,60 @@ onMounted(async () => {
   color: rgba(0, 200, 255, 0.9);
   box-shadow: 0 0 4px rgba(0, 200, 255, 0.2);
   white-space: nowrap;
+  opacity: 0;
+  animation: info-appear 0.4s ease-out 0.5s forwards;
 }
 
+@keyframes info-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 .info-text {
   font-weight: 600;
   letter-spacing: 1px;
 }
 
-@keyframes blink {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
+.face-detection-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
+.loading-text {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: rgba(0, 200, 255, 0.9);
+  text-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
+  letter-spacing: 1px;
+}
+
+.loading-dots::after {
+  content: '';
+  animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% {
+    content: '';
+  }
+  40% {
+    content: '.';
+  }
+  60% {
+    content: '..';
+  }
+  80%, 100% {
+    content: '...';
+  }
+}
 
 @media (max-width: 768px) {
   .left-column {
@@ -304,6 +368,10 @@ onMounted(async () => {
   .face-info {
     font-size: 9px;
     padding: 3px 8px;
+  }
+
+  .loading-text {
+    font-size: 10px;
   }
 }
 </style>

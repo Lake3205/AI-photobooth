@@ -97,10 +97,12 @@ onMounted(() => {
             <h1 class="bg-gradient-to-b from-white to-blue-300 bg-clip-text text-2xl sm:text-3xl font-extrabold tracking-tight text-transparent">
               Take a Selfie
             </h1>
-            <p class="mt-1 sm:mt-2 text-sm sm:text-base text-blue-100/90">Position yourself in the frame and capture the perfect shot</p>
+            <p class="mt-1 sm:mt-2 text-sm sm:text-base text-blue-100/90">Position yourself in the frame and capture the
+              perfect shot</p>
           </header>
 
-          <div class="relative rounded-2xl sm:rounded-3xl border border-white/15 bg-white/5 p-1.5 sm:p-2 overflow-hidden">
+          <div
+              class="relative rounded-2xl sm:rounded-3xl border border-white/15 bg-white/5 p-1.5 sm:p-2 overflow-hidden">
             <div
                 class="relative aspect-[16/9] w-full rounded-xl overflow-hidden bg-black/50 flex items-center justify-center">
               <video v-if="!latestImage?.dataUrl"
@@ -132,7 +134,8 @@ onMounted(() => {
               <div v-if="!latestImage?.dataUrl && isLoading"
                    class="absolute inset-0 z-10 flex items-center justify-center bg-black/70">
                 <div class="text-center">
-                  <div class="animate-spin rounded-full h-12 sm:h-16 w-12 sm:w-16 border-b-2 border-white mx-auto mb-3 sm:mb-4"></div>
+                  <div
+                      class="animate-spin rounded-full h-12 sm:h-16 w-12 sm:w-16 border-b-2 border-white mx-auto mb-3 sm:mb-4"></div>
                   <p class="text-white/70 text-base sm:text-lg">Loading camera...</p>
                 </div>
               </div>
@@ -157,7 +160,8 @@ onMounted(() => {
 
           <div v-if="latestImage?.dataUrl && qrCodeUrl && analysisData" class="mt-3 sm:mt-4 flex justify-center">
             <div class="rounded-xl sm:rounded-2xl p-3 sm:p-4 w-full max-w-md">
-              <h3 class="text-xs sm:text-sm font-semibold mb-2 text-center text-white/90">Scan to continue on your phone</h3>
+              <h3 class="text-xs sm:text-sm font-semibold mb-2 text-center text-white/90">Scan to continue on your
+                phone</h3>
               <div class="flex items-center justify-center gap-3">
                 <div class="flex justify-center bg-white p-2 sm:p-3 rounded-lg sm:rounded-xl">
                   <QrcodeVue :size="160" :value="qrCodeUrl" class="sm:hidden" level="H"/>

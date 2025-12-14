@@ -14,10 +14,10 @@ export function useFaceDetection(
     videoElement: Ref<HTMLVideoElement | null>,
     isStreaming: Ref<boolean>
 ) {
-    // Face detection state
     const faceDetected = ref(false)
     const faceBounds = ref<FaceBounds[]>([])
     const isModelLoading = ref(false)
+    const isInitializing = ref(false)
 
     let faceDetectionInterval: number | null = null
     let model: blazeface.BlazeFaceModel | null = null
@@ -27,9 +27,7 @@ export function useFaceDetection(
         if (model) return
         try {
             isModelLoading.value = true
-            console.log('Loading BlazeFace model...')
             model = await blazeface.load()
-            console.log('BlazeFace model loaded successfully')
         } catch (error) {
             console.error('Error loading BlazeFace model:', error)
         } finally {
@@ -51,10 +49,10 @@ export function useFaceDetection(
             const predictions = await model.estimateFaces(video, false)
 
             if (predictions && predictions.length > 0) {
-                // Get video element dimensions (display size)
+                // Get video element dimensions
                 const videoBounds = video.getBoundingClientRect()
 
-                // Calculate scale factors (video element size vs actual video size)
+                // Calculate scale factors
                 const scaleX = videoBounds.width / video.videoWidth
                 const scaleY = videoBounds.height / video.videoHeight
 
@@ -108,6 +106,8 @@ export function useFaceDetection(
     // Start/stop face detection based on streaming state
     watch(isStreaming, async (streaming) => {
         if (streaming) {
+            isInitializing.value = true
+
             // Load model if not loaded
             if (!model && !isModelLoading.value) {
                 await loadModel()
@@ -115,7 +115,12 @@ export function useFaceDetection(
 
             // Start detection interval
             if (model) {
-                faceDetectionInterval = window.setInterval(detectFace, 100) // 10 FPS for smooth tracking
+                faceDetectionInterval = window.setInterval(detectFace, 10)
+
+                // Clear initializing state after first detection attempt
+                setTimeout(() => {
+                    isInitializing.value = false
+                }, 2000)
             }
         } else {
             if (faceDetectionInterval) {
@@ -124,6 +129,7 @@ export function useFaceDetection(
             }
             faceDetected.value = false
             faceBounds.value = []
+            isInitializing.value = false
         }
     })
 
@@ -138,6 +144,7 @@ export function useFaceDetection(
         faceDetected,
         faceBounds,
         isModelLoading,
+        isInitializing,
         loadModel
     }
 }
