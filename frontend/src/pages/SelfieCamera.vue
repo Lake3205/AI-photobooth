@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {onMounted, ref} from 'vue'
 import {useWebcamService} from '@/services/webcamService'
+import {useFaceDetection} from '@/composables/useFaceDetection'
 import {CameraIcon} from '@heroicons/vue/24/outline'
 import UploadButton from '@/components/UploadButton.vue'
 import AssumptionsPanel from '@/components/AssumptionsPanel.vue'
@@ -41,8 +42,12 @@ const {
 
 const termsPopup = ref<InstanceType<typeof TermsPopup> | null>(null)
 
+// Face detection
+const {faceDetected, faceBounds, loadModel} = useFaceDetection(videoElement, isStreaming)
+
 // Auto-start camera when component mounts
-onMounted(() => {
+onMounted(async () => {
+  await loadModel()
   startCamera()
 })
 </script>
@@ -84,6 +89,24 @@ onMounted(() => {
               <video ref="videoElement"
                      :class="['absolute inset-0 w-full h-full object-cover z-0', isStreaming ? '' : 'opacity-50']"
                      autoplay playsinline></video>
+
+              <div v-if="faceDetected && isStreaming" class="absolute inset-0 z-10 pointer-events-none">
+                <!-- Render bounding box for each detected face -->
+                <div v-for="face in faceBounds"
+                     :key="face.index"
+                     :style="{
+                       left: face.x + 'px',
+                       top: face.y + 'px',
+                       width: face.width + 'px',
+                       height: face.height + 'px'
+                     }"
+                     class="face-box">
+
+                  <div class="face-info">
+                    <div class="info-text">FACE {{ face.index + 1 }}</div>
+                  </div>
+                </div>
+              </div>
 
               <div v-if="!isStreaming && !isLoading"
                    class="absolute inset-0 z-10 flex items-center justify-center bg-black/70 rounded-xl p-4">
@@ -202,6 +225,70 @@ onMounted(() => {
   pointer-events: none;
 }
 
+.face-box {
+  position: absolute;
+  border: 1px solid rgba(0, 200, 255, 0.5);
+  box-shadow: inset 0 0 8px rgba(0, 200, 255, 0.1),
+  0 0 8px rgba(0, 200, 255, 0.2);
+  animation: pulse-border 3s ease-in-out infinite;
+}
+
+@keyframes pulse-border {
+  0%, 100% {
+    border-color: rgba(0, 200, 255, 0.5);
+    box-shadow: inset 0 0 8px rgba(0, 200, 255, 0.1),
+    0 0 8px rgba(0, 200, 255, 0.2);
+  }
+  50% {
+    border-color: rgba(0, 200, 255, 0.7);
+    box-shadow: inset 0 0 12px rgba(0, 200, 255, 0.15),
+    0 0 12px rgba(0, 200, 255, 0.3);
+  }
+}
+
+@keyframes face-scan {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(100%);
+    opacity: 1;
+  }
+}
+
+.face-info {
+  position: absolute;
+  top: -26px;
+  left: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  padding: 3px 10px;
+  border: 1px solid rgba(0, 200, 255, 0.4);
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  color: rgba(0, 200, 255, 0.9);
+  box-shadow: 0 0 4px rgba(0, 200, 255, 0.2);
+  white-space: nowrap;
+}
+
+
+.info-text {
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+
 @media (max-width: 768px) {
   .left-column {
     transform: none !important;
@@ -212,6 +299,11 @@ onMounted(() => {
     opacity: 1 !important;
     pointer-events: auto !important;
     transition-delay: 0ms !important;
+  }
+
+  .face-info {
+    font-size: 9px;
+    padding: 3px 8px;
   }
 }
 </style>
