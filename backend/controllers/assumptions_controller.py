@@ -57,3 +57,10 @@ async def generate_test_assumptions():
     assumptions_model.set_assumptions_json(assumptions)
 
     return assumptions_model.to_dict()
+
+@router.post("/compare", status_code=status.HTTP_200_OK)
+async def compare_assumptions(image: UploadFile, assumptions_id, assumptions_model: AssumptionsModel):
+    comparison_results = await assumptions_service.compare_assumptions(image, assumptions_id, assumptions_model)
+    return comparison_results
+
+

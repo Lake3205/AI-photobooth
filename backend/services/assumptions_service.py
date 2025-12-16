@@ -102,3 +102,58 @@ class AssumptionsService:
             raise
         finally:
             self.db_service.close_resources(cur, conn)
+
+    async def compare_assumptions(self, image, assumptions_id, assumptions_model) -> dict:
+        existing_assumptions = await self.get_assumptions_by_id(assumptions_id)
+        image_bytes = await image.read()
+        mime_type = image.content_type
+        print(existing_assumptions)
+        print(assumptions_model, assumptions_model.model, assumptions_model.model.value, assumptions_model.model.value.lower())
+        comparison_results = {assumptions_model.model.value.lower(): existing_assumptions}
+
+        match assumptions_model.model:
+            case Clients.CLAUDE:
+                comparison_results["openai"] = await self.openai_client.generate_openai_response(
+                    image_bytes,
+                    filename=image.filename,
+                    content_type=mime_type,
+                    version=assumptions_model.version
+                )
+
+                response = await self.google_client.call_gemini_api(
+                    image_bytes=image_bytes,
+                    mime_type=mime_type
+                )
+                if response is not None:
+                    response = response.to_dict()
+                else:
+                    response = {}
+                comparison_results["gemini"] = response.to_dict() if response else {}
+            case Clients.OPENAI:
+                comparison_results["claude"] = await self.claude_client.generate_response(image)
+
+                response = await self.google_client.call_gemini_api(
+                    image_bytes=image_bytes,
+                    mime_type=mime_type
+                )
+                if response is not None:
+                    response = response.to_dict()
+                else:
+                    response = {}
+                comparison_results["gemini"] = response.to_dict() if response else {}
+            case Clients.GEMINI:
+                comparison_results["openai"] = await self.openai_client.generate_openai_response(
+                    image_bytes,
+                    filename=image.filename,
+                    content_type=mime_type,
+                    version=assumptions_model.version
+                )
+
+                comparison_results["claude"] = await self.claude_client.generate_response(image)
+
+        for model_name, response in comparison_results.items():
+            try:
+                assumption_id = self.db_service.log_assumption_to_db(ai_model=model_name, data=response)
+                response['id'] = assumption_id
+            except Exception as e:
+                print(f"failed to log assumption to database for {model_name}: {e}")
