@@ -17,12 +17,13 @@ class AssumptionsService:
         self.db_service = DatabaseService()
         self.openai_client = OpenAIClient()
 
-    async def get_assumptions(self, assumptions_model: AssumptionsModel, image) -> dict:
+    async def get_assumptions(self, assumptions_model: AssumptionsModel, image, detect_face) -> dict:
         image_bytes = await image.read()
         mime_type = image.content_type
-        face_detected = await self.google_client.detect_face(image_bytes=image_bytes, mime_type=mime_type)
-        if not face_detected.face_detected:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No face detected")
+        if detect_face is False:
+            face_detected = await self.google_client.detect_face(image_bytes=image_bytes, mime_type=mime_type)
+            if not face_detected.face_detected:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No face detected")
 
         match assumptions_model.model:
             case Clients.CLAUDE:
@@ -111,48 +112,21 @@ class AssumptionsService:
         mime_type = image.content_type
 
         existing_assumptions = await self.get_assumptions_by_id(assumptions_id)
+        detect_face = True
 
         comparison_results = {assumptions_model.model.value.lower(): existing_assumptions}
 
         match assumptions_model.model:
             case Clients.CLAUDE:
-                comparison_results["openai"] = await self.openai_client.generate_openai_response(
-                    image_bytes,
-                    filename=image.filename,
-                    content_type=mime_type,
-                    version="gpt-4o"
-                )
-
-                response = await self.google_client.call_gemini_api(
-                    image_bytes=image_bytes,
-                    mime_type=mime_type
-                )
-                if response is not None:
-                    response = response.to_dict()
-                else:
-                    response = {}
-                comparison_results["gemini"] = response if response else {}
+                comparison_results["openai"] = self.get_assumptions(Clients.OPENAI, image, detect_face)
+                comparison_results["gemini"] = self.get_assumptions(Clients.GEMINI, image, detect_face)
             case Clients.OPENAI:
-                comparison_results["claude"] = await self.claude_client.generate_response(image)
-
-                response = await self.google_client.call_gemini_api(
-                    image_bytes=image_bytes,
-                    mime_type=mime_type
-                )
-                if response is not None:
-                    response = response.to_dict()
-                else:
-                    response = {}
-                comparison_results["gemini"] = response.to_dict() if response else {}
+                comparison_results["claude"] = self.get_assumptions(Clients.CLAUDE, image, detect_face)
+                comparison_results["gemini"] = self.get_assumptions(Clients.GEMINI, image, detect_face)
             case Clients.GEMINI:
-                comparison_results["openai"] = await self.openai_client.generate_openai_response(
-                    image_bytes,
-                    filename=image.filename,
-                    content_type=mime_type,
-                    version="gpt-4o"
-                )
+                comparison_results["claude"] = self.get_assumptions(Clients.CLAUDE, image, detect_face)
+                comparison_results["openai"] = self.get_assumptions(Clients.OPENAI, image, detect_face)
 
-                comparison_results["claude"] = await self.claude_client.generate_response(image)
 
         for model_name, response in comparison_results.items():
             try:
