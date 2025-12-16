@@ -2,15 +2,16 @@
 
 ## Het Adviesrapport
 
-Eerste beginnen met probleemanalyse (ishikawa diagram(?)).
+Eerst beginnen met probleemanalyse (ishikawa diagram(?)).
 Dan de oorzaak van het probleem.
 Onderbouwen met prototype dat je hebt gemaakt (prototype = project).
 Vervolgens advies geven op basis van ethische design patterns.
-In de studiehandleiding staat hoe het rapport wordt getoests, ook staat er een structuur en alles wat ze willen.
-terugzien, deze is heel uitgebreid met een hoop vragen die een richtlijn kunne zijn voor het schrijven van het rapport.
+In de studiehandleiding staat hoe het rapport wordt getoetst, ook staat er een structuur en alles wat ze willen.
+terugkijken, deze is heel uitgebreid met een hoop vragen die een richtlijn kunnen zijn voor het schrijven van het
+rapport.
 Een belangrijk deel is die analyse waarbij je laat zien waaraan je hebt gewerkt en hoe dit aansluit.
-Zo een rapport zou eigenlijk geen verassing mogen zijn voor de opdrachtgever, je neemt hem/haar mee in het proces.
-Technologien die je hebt onderzocht, alles waarmee je bezig was in het project moeten stevig aan bod komen in het
+Zo een rapport zou eigenlijk geen verrassing mogen zijn voor de opdrachtgever, je neemt hem/haar mee in het proces.
+Technologieën die je hebt onderzocht, alles waarmee je bezig was in het project moeten stevig aan bod komen in het
 adviesrapport.
 
 Dark side van het project is onderzoeken wat er verkeerd is met het project, wat allemaal mis gaat, etc. Je moet deze in
@@ -24,7 +25,7 @@ Vertel welke rollen en perspectieven zijn meegenomen:
 - Zorg ervoor dat elke rol goed aan bod komt, zorg ervoor dat per rol duidelijk is wat iedereen heeft gedaan (e.g: AI
   heeft zich beziggehouden met deze AI kiezen, en waarom; Frontend heeft zich beziggehouden met UI, design etc.)
 
-Breng in kaart welke stakehodlers er zijn.
+Breng in kaart welke stakeholders er zijn.
 Check goed welke eisen er zijn.
 
 Elk van deze onderwerpen heeft pakweg 200-400 woorden nodig (Staat ook in de template!(DLO))
@@ -41,7 +42,7 @@ Vul de cellen in: Hoe raakt deze technologie deze stakeholder op deze waarde
 
 Voorbeeld Brightspace:
 
-|                | Transparanite | Archivering        | Autonomie          | Privacy                 |
+|                | Transparantie | Archivering        | Autonomie          | Privacy                 |
 |----------------|---------------|--------------------|--------------------|-------------------------|
 | Docenten       | ---           | ---                | ---                | Zoveel mogelijk data    |
 | Student        | ---           | ---                | Weinig zeggenschap | Activiteit is zichtbaar |
@@ -60,9 +61,9 @@ Bright patterns
 
 ## Pattern matching
 
-Scrhijf je ethische dilemma's op.
+Schrijf je ethische dilemma's op.
 Beschrijf welke "dark" patterns jullie hebben toegepast.
-Kies voor elk dillema ook een of twee "light patterns".
+Kies voor elk dilemma ook een of twee "light patterns".
 
 Dit moet ook in je adviesrapport komen.
 
@@ -71,7 +72,7 @@ Dit moet ook in je adviesrapport komen.
 1. Betrouwbaarheid
     - Uitleggen waarom AI niet betrouwbaar is.
     - Dark patterns die hierbij horen:
-        - AI zoekt vaakt patronen die niet waar zijn
+        - AI zoekt vaak patronen die niet waar zijn
         - AI kan bevooroordeeld zijn
         - Er zit bias in de data
             - Claude mag geen vooroordelen op basis van ethniciteit geven
