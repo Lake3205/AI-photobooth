@@ -23,7 +23,8 @@ class GoogleAIClient:
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
                 response_schema=AssumptionsResponse,
-                system_instruction=SYSTEM_PROMPT
+                system_instruction=SYSTEM_PROMPT,
+                thinking_config=types.ThinkingConfig(include_thoughts=True)
             ),
             contents=[
                 types.Part.from_bytes(
@@ -34,7 +35,15 @@ class GoogleAIClient:
             ],
         )
 
-        return response.parsed
+        thought = None
+        for part in response.candidates[0].content.parts:
+            if part.thought == False:
+                break
+            if part.text:
+                thought = part.text
+                break
+
+        return response.parsed, thought
 
     async def detect_face(self, image_bytes: bytes, mime_type: str):
         genai_client = genai.Client()
