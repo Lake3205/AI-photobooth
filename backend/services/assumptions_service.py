@@ -18,10 +18,11 @@ class AssumptionsService:
     async def get_assumptions(self, assumptions_model: AssumptionsModel, image) -> dict:
         image_bytes = await image.read()
         mime_type = image.content_type
-        face_detected = await self.google_client.detect_face(image_bytes=image_bytes, mime_type=mime_type)
-        if not face_detected.face_detected:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No face detected")
+        # face_detected = await self.google_client.detect_face(image_bytes=image_bytes, mime_type=mime_type)
+        # if not face_detected.face_detected:
+        #     raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No face detected")
 
+        thought = None
         match assumptions_model.model:
             case Clients.CLAUDE:
                 response = await self.claude_client.generate_response(image)
@@ -35,7 +36,7 @@ class AssumptionsService:
                 )
                 model_name = "openai"
             case Clients.GEMINI:
-                response = await self.google_client.call_gemini_api(
+                response, thought = await self.google_client.call_gemini_api(
                     image_bytes=image_bytes,
                     mime_type=mime_type
                 )
@@ -51,7 +52,7 @@ class AssumptionsService:
         # Log the assumption to the database
         if response:
             try:
-                assumption_id = self.db_service.log_assumption_to_db(ai_model=model_name, data=response)
+                assumption_id = self.db_service.log_assumption_to_db(ai_model=model_name, data=response, thought=thought)
                 response['id'] = assumption_id
             except Exception as e:
                 print(f"failed to log assumption to database: {e}")

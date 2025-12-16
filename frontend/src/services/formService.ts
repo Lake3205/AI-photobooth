@@ -9,7 +9,7 @@ const { getCookie } = useCookieService();
 export function useFormService() {
     const isLoading = ref(false);
     const isSubmitting = ref(false);
-    const assumptions = ref<null | AssumptionData>(null);
+    const assumptionsData = ref<null | AssumptionData>(null);
     const submitSuccess = ref(false);
     const questions = ref<FormQuestions>({});
 
@@ -31,7 +31,7 @@ export function useFormService() {
         const data = (await response.json()) as AssumptionData;
         isLoading.value = false;
 
-        assumptions.value = data;
+        assumptionsData.value = data;
 
         return data;
     };
@@ -156,7 +156,7 @@ export function useFormService() {
     });
 
     return {
-        assumptions, questions, isLoading, isSubmitting, submitSuccess, getAssumptions, getFormQuestions, submitForm
+        assumptionsData: assumptionsData, questions, isLoading, isSubmitting, submitSuccess, getAssumptions, getFormQuestions, submitForm
     };
                 
 }
