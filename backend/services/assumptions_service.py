@@ -8,6 +8,7 @@ from constants.clients import Clients
 from services.database_service import DatabaseService
 from clients.google_ai_client import GoogleAIClient
 from clients.openai_client import OpenAIClient
+from constants.model_version_constants import GEMINI_MODEL_VERSION, CLAUDE_MODEL_VERSION, OPENAI_MODEL_VERSION
 
 
 class AssumptionsService:
@@ -110,19 +111,37 @@ class AssumptionsService:
     async def compare_assumptions(self, image, assumptions_id, assumptions_model) -> dict:
         existing_assumptions = await self.get_assumptions_by_id(assumptions_id)
         detect_face = True
-
         comparison_results = {assumptions_model.model.value.lower(): existing_assumptions}
 
         match assumptions_model.model:
             case Clients.CLAUDE:
-                comparison_results["openai"] = self.get_assumptions(Clients.OPENAI, image, detect_face)
-                comparison_results["gemini"] = self.get_assumptions(Clients.GEMINI, image, detect_face)
+                openai = assumptions_model
+                openai.model = Clients.OPENAI
+                openai.version = OPENAI_MODEL_VERSION
+                print(openai.model)
+                comparison_results["openai"] = await self.get_assumptions(openai, image, detect_face)
+                gemini = assumptions_model
+                gemini.model = Clients.GEMINI
+                gemini.version = GEMINI_MODEL_VERSION
+                comparison_results["gemini"] = await self.get_assumptions(gemini, image, detect_face)
             case Clients.OPENAI:
-                comparison_results["claude"] = self.get_assumptions(Clients.CLAUDE, image, detect_face)
-                comparison_results["gemini"] = self.get_assumptions(Clients.GEMINI, image, detect_face)
+                claude = assumptions_model
+                claude.model = Clients.CLAUDE
+                claude.version = CLAUDE_MODEL_VERSION
+                comparison_results["claude"] = await self.get_assumptions(claude, image, detect_face)
+                gemini = assumptions_model
+                gemini.model = Clients.GEMINI
+                gemini.version = GEMINI_MODEL_VERSION
+                comparison_results["gemini"] = await self.get_assumptions(gemini, image, detect_face)
             case Clients.GEMINI:
-                comparison_results["claude"] = self.get_assumptions(Clients.CLAUDE, image, detect_face)
-                comparison_results["openai"] = self.get_assumptions(Clients.OPENAI, image, detect_face)
+                claude = assumptions_model
+                claude.model = Clients.CLAUDE
+                claude.version = CLAUDE_MODEL_VERSION
+                comparison_results["claude"] = await self.get_assumptions(claude, image, detect_face)
+                openai = assumptions_model
+                openai.model = Clients.OPENAI
+                openai.version = OPENAI_MODEL_VERSION
+                comparison_results["openai"] = await self.get_assumptions(openai, image, detect_face)
 
 
         for model_name, response in comparison_results.items():

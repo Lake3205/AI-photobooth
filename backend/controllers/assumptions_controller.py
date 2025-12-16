@@ -66,9 +66,9 @@ async def generate_test_assumptions():
 
 @router.post("/compare", status_code=status.HTTP_200_OK)
 async def compare_assumptions(
-        image: UploadFile = File(...),
-        assumptions_id: int = Form(...),
-        ai_model: Clients = Form(...)
+        image: UploadFile,
+        assumptions_id: int,
+        ai_model: Clients
 ):
     assumptions_model = AssumptionsModel()
 
