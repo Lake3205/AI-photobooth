@@ -22,6 +22,8 @@ async def generate_assumptions(image: UploadFile, ai_model: Clients):
 
     assumptions_model = AssumptionsModel()
 
+    detect_face = False
+
     match ai_model:
         case Clients.CLAUDE:
             assumptions_model.model = ai_model
@@ -37,7 +39,7 @@ async def generate_assumptions(image: UploadFile, ai_model: Clients):
         case _:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="AI model not supported yet.")
 
-    assumptions = await assumptions_service.get_assumptions(assumptions_model, image)
+    assumptions = await assumptions_service.get_assumptions(assumptions_model, image, detect_face)
 
     if ('id' in assumptions and type(assumptions['id'] is int)):
         assumption_id = assumptions['id']
