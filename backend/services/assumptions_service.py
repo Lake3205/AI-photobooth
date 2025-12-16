@@ -143,7 +143,7 @@ class AssumptionsService:
                     response = response.to_dict()
                 else:
                     response = {}
-                comparison_results["gemini"] = response.to_dict() if response else {}
+                comparison_results["gemini"] = response if response else {}
             case Clients.GEMINI:
                 comparison_results["openai"] = await self.openai_client.generate_openai_response(
                     image_bytes,
