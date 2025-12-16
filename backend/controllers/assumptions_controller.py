@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import APIRouter, UploadFile, status, HTTPException
 
 from services.assumptions_service import AssumptionsService
@@ -6,6 +8,8 @@ from services.form_service import FormService
 from constants.clients import Clients
 from models.assumptions import AssumptionsModel
 from constants.model_version_constants import GEMINI_MODEL_VERSION, CLAUDE_MODEL_VERSION, OPENAI_MODEL_VERSION
+from fastapi import File, Form, UploadFile
+
 
 router = APIRouter(prefix="/assumptions", tags=["AI assumptions"])
 assumptions_service = AssumptionsService()
@@ -59,7 +63,28 @@ async def generate_test_assumptions():
     return assumptions_model.to_dict()
 
 @router.post("/compare", status_code=status.HTTP_200_OK)
-async def compare_assumptions(image: UploadFile, assumptions_id, assumptions_model: AssumptionsModel):
+async def compare_assumptions(
+        image: UploadFile = File(...),
+        assumptions_id: int = Form(...),
+        ai_model: Clients = Form(...)
+):
+    assumptions_model = AssumptionsModel()
+
+    match ai_model:
+        case Clients.CLAUDE:
+            assumptions_model.model = ai_model
+            assumptions_model.version = CLAUDE_MODEL_VERSION
+        case Clients.GEMINI:
+            assumptions_model.model = ai_model
+            assumptions_model.version = GEMINI_MODEL_VERSION
+            pass
+        case Clients.OPENAI:
+            assumptions_model.model = ai_model
+            assumptions_model.version = OPENAI_MODEL_VERSION
+            pass
+        case _:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="AI model not supported yet.")
+
     comparison_results = await assumptions_service.compare_assumptions(image, assumptions_id, assumptions_model)
     return comparison_results
 

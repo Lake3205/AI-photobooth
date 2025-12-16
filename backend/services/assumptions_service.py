@@ -1,3 +1,5 @@
+from typing import Any, Coroutine
+
 from fastapi import HTTPException
 from fastapi import status
 from clients.claude import ClaudeClient
@@ -33,6 +35,7 @@ class AssumptionsService:
                     content_type=mime_type,
                     version=assumptions_model.version
                 )
+                print(assumptions_model.version)
                 model_name = "openai"
             case Clients.GEMINI:
                 response = await self.google_client.call_gemini_api(
@@ -104,11 +107,11 @@ class AssumptionsService:
             self.db_service.close_resources(cur, conn)
 
     async def compare_assumptions(self, image, assumptions_id, assumptions_model) -> dict:
-        existing_assumptions = await self.get_assumptions_by_id(assumptions_id)
         image_bytes = await image.read()
         mime_type = image.content_type
-        print(existing_assumptions)
-        print(assumptions_model, assumptions_model.model, assumptions_model.model.value, assumptions_model.model.value.lower())
+
+        existing_assumptions = await self.get_assumptions_by_id(assumptions_id)
+
         comparison_results = {assumptions_model.model.value.lower(): existing_assumptions}
 
         match assumptions_model.model:
@@ -117,7 +120,7 @@ class AssumptionsService:
                     image_bytes,
                     filename=image.filename,
                     content_type=mime_type,
-                    version=assumptions_model.version
+                    version="gpt-4o"
                 )
 
                 response = await self.google_client.call_gemini_api(
@@ -128,7 +131,7 @@ class AssumptionsService:
                     response = response.to_dict()
                 else:
                     response = {}
-                comparison_results["gemini"] = response.to_dict() if response else {}
+                comparison_results["gemini"] = response if response else {}
             case Clients.OPENAI:
                 comparison_results["claude"] = await self.claude_client.generate_response(image)
 
@@ -146,7 +149,7 @@ class AssumptionsService:
                     image_bytes,
                     filename=image.filename,
                     content_type=mime_type,
-                    version=assumptions_model.version
+                    version="gpt-4o"
                 )
 
                 comparison_results["claude"] = await self.claude_client.generate_response(image)
@@ -157,3 +160,5 @@ class AssumptionsService:
                 response['id'] = assumption_id
             except Exception as e:
                 print(f"failed to log assumption to database for {model_name}: {e}")
+
+        return comparison_results
