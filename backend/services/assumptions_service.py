@@ -108,9 +108,6 @@ class AssumptionsService:
             self.db_service.close_resources(cur, conn)
 
     async def compare_assumptions(self, image, assumptions_id, assumptions_model) -> dict:
-        image_bytes = await image.read()
-        mime_type = image.content_type
-
         existing_assumptions = await self.get_assumptions_by_id(assumptions_id)
         detect_face = True
 
