@@ -120,7 +120,7 @@ class FormService:
             assumptions_model = AssumptionsModel()
             
             query = """
-            SELECT ac.id, ac.value, av.value, av.reasoning
+            SELECT ac.id, ac.value, av.value, av.reasoning, a.thought
             FROM assumptions a
             LEFT JOIN assumption_values av ON a.id = av.assumption_id
             JOIN assumption_constants ac ON av.assumption_constant_id = ac.id
@@ -133,14 +133,20 @@ class FormService:
             result = cur.fetchall()
             if not result:
                 raise Exception("No assumptions found for the provided token")
-            
+
+            thought = None
             for row in result:
-                (id, assumption, value, reasoning) = row
+                (id, assumption, value, reasoning, row_thought) = row
+                if thought is None:
+                    thought = row_thought
                 if (assumption in assumptions_model.assumptions):
                     assumptions_model.assumptions[assumption]["value"] = value
                     assumptions_model.assumptions[assumption]["reasoning"] = reasoning
-            
-            return assumptions_model.assumptions
+
+            return {
+                "thought": thought,
+                "assumptions": assumptions_model.assumptions
+            }
         except JWTError:
             raise self.credentials_exception
         except Exception:

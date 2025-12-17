@@ -36,7 +36,7 @@ class DatabaseSingleton:
             except Exception as e:
                 print(f"Error closing connection: {e}")
 
-    def log_assumption(self, ai_model: str, data: dict):
+    def log_assumption(self, ai_model: str, data: dict, thought: str = None):
         conn = None
         cur = None
         
@@ -46,10 +46,10 @@ class DatabaseSingleton:
             
             # Insert into assumptions table
             query = """
-                INSERT INTO assumptions (ai_model, reasoning_enabled)
-                VALUES (?, ?)
+                INSERT INTO assumptions (ai_model, reasoning_enabled, thought)
+                VALUES (?, ?, ?)
             """
-            cur.execute(query, (ai_model, 1 if config.SHOW_REASONING else 0))
+            cur.execute(query, (ai_model, 1 if config.SHOW_REASONING else 0, thought))
             assumption_id = cur.lastrowid
             
             # Insert assumption values for each data item
@@ -325,8 +325,8 @@ class DatabaseService:
     def close_resources(self, cursor=None, connection=None):
         self._db_singleton.close_resources(cursor, connection)
 
-    def log_assumption_to_db(self, ai_model: str, data: dict):
-        return self._db_singleton.log_assumption(ai_model, data)
+    def log_assumption_to_db(self, ai_model: str, data: dict, thought: str = None):
+        return self._db_singleton.log_assumption(ai_model, data, thought)
 
     def get_assumptions_by_model(self, ai_model: str):
         return self._db_singleton.get_assumptions_by_model(ai_model)
