@@ -115,7 +115,6 @@ class AssumptionsService:
             current_model = deepcopy(new_assumptions_model)
             current_model.model = client
             current_model.version = version
-            print(current_model.model, current_model.version)
             return current_model
 
         match assumptions_model.model:
