@@ -1,5 +1,8 @@
 from fastapi import APIRouter, UploadFile, status, HTTPException
 
+from google.genai import errors
+from openai import AuthenticationError, RateLimitError
+
 from services.assumptions_service import AssumptionsService
 from services.test_service import TestService
 from services.form_service import FormService
@@ -32,8 +35,19 @@ async def generate_assumptions(image: UploadFile, ai_model: Clients):
             pass
         case _:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="AI model not supported yet.")
-
-    assumptions = await assumptions_service.get_assumptions(assumptions_model, image)
+    try:
+        assumptions = await assumptions_service.get_assumptions(assumptions_model, image)
+    except errors.ClientError as e:
+        if e.code == 429:
+            raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail="Rate limit exceeded") from e
+        if e.code == 400 and "API key not valid" in e.message:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Gemini API key") from e
+    except AuthenticationError as e:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid OpenAI API key") from e
+    except RateLimitError as e:
+        raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail="OpenAI rate limit exceeded") from e
+    except Exception as e:
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)) from e
 
     if ('id' in assumptions and type(assumptions['id'] is int)):
         assumption_id = assumptions['id']
