@@ -19,10 +19,10 @@ class AssumptionsService:
         self.openai_client = OpenAIClient()
 
     async def get_assumptions(self, assumptions_model: AssumptionsModel, image_bytes, mime_type, image_name, detect_face = True) -> dict:
-        # if detect_face:
-        #     face_detected = await self.google_client.detect_face(image_bytes=image_bytes, mime_type=mime_type)
-        #     if not face_detected.face_detected:
-        #         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No face detected")
+        if detect_face:
+            face_detected = await self.google_client.detect_face(image_bytes=image_bytes, mime_type=mime_type)
+            if not face_detected.face_detected:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No face detected")
 
         thought = None
         match assumptions_model.model:
