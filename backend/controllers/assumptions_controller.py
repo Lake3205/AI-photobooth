@@ -28,7 +28,7 @@ async def generate_assumptions(image: UploadFile, ai_model: Clients):
 
     assumptions_model = AssumptionsModel()
 
-    detect_face = False
+    detect_face = True
 
     match ai_model:
         case Clients.CLAUDE:

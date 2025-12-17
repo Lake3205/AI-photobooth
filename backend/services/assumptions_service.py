@@ -18,8 +18,8 @@ class AssumptionsService:
         self.db_service = DatabaseService()
         self.openai_client = OpenAIClient()
 
-    async def get_assumptions(self, assumptions_model: AssumptionsModel, image_bytes, mime_type, image_name, detect_face) -> dict:
-        # if detect_face is False:
+    async def get_assumptions(self, assumptions_model: AssumptionsModel, image_bytes, mime_type, image_name, detect_face = True) -> dict:
+        # if detect_face is True:
         #     face_detected = await self.google_client.detect_face(image_bytes=image_bytes, mime_type=mime_type)
         #     if not face_detected.face_detected:
         #         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No face detected")
@@ -109,7 +109,7 @@ class AssumptionsService:
     async def compare_assumptions(self, image_bytes, mime_type, image_name, assumptions_id, assumptions_model) -> dict:
         existing_assumptions = await self.get_assumptions_by_id(assumptions_id)
 
-        detect_face = True
+        detect_face = False
         comparison_results = {assumptions_model.model.value.lower(): existing_assumptions}
 
         def change_model(new_assumptions_model: AssumptionsModel, client: Clients ,version: str) -> AssumptionsModel:
