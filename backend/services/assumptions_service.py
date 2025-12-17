@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import Any, Coroutine
 
 from fastapi import HTTPException
@@ -10,7 +11,6 @@ from clients.google_ai_client import GoogleAIClient
 from clients.openai_client import OpenAIClient
 from constants.model_version_constants import GEMINI_MODEL_VERSION, CLAUDE_MODEL_VERSION, OPENAI_MODEL_VERSION
 
-
 class AssumptionsService:
     def __init__(self):
         self.claude_client = ClaudeClient()
@@ -18,9 +18,7 @@ class AssumptionsService:
         self.db_service = DatabaseService()
         self.openai_client = OpenAIClient()
 
-    async def get_assumptions(self, assumptions_model: AssumptionsModel, image, detect_face) -> dict:
-        image_bytes = await image.read()
-        mime_type = image.content_type
+    async def get_assumptions(self, assumptions_model: AssumptionsModel, image_bytes, mime_type, image_name, detect_face) -> dict:
         if detect_face is False:
             face_detected = await self.google_client.detect_face(image_bytes=image_bytes, mime_type=mime_type)
             if not face_detected.face_detected:
@@ -28,16 +26,15 @@ class AssumptionsService:
 
         match assumptions_model.model:
             case Clients.CLAUDE:
-                response = await self.claude_client.generate_response(image)
+                response = await self.claude_client.generate_response(image_bytes, mime_type)
                 model_name = "claude"
             case Clients.OPENAI:
                 response = await self.openai_client.generate_openai_response(
                     image_bytes,
-                    filename=image.filename,
+                    filename=image_name,
                     content_type=mime_type,
                     version=assumptions_model.version
                 )
-                print(assumptions_model.version)
                 model_name = "openai"
             case Clients.GEMINI:
                 response = await self.google_client.call_gemini_api(
@@ -108,38 +105,40 @@ class AssumptionsService:
         finally:
             self.db_service.close_resources(cur, conn)
 
-    async def compare_assumptions(self, image, assumptions_id, assumptions_model) -> dict:
+    async def compare_assumptions(self, image_bytes, mime_type, image_name, assumptions_id, assumptions_model) -> dict:
         existing_assumptions = await self.get_assumptions_by_id(assumptions_id)
+
         detect_face = True
         comparison_results = {assumptions_model.model.value.lower(): existing_assumptions}
 
         def change_model(new_assumptions_model: AssumptionsModel, client: Clients ,version: str) -> AssumptionsModel:
-            current_model = new_assumptions_model
+            current_model = deepcopy(new_assumptions_model)
             current_model.model = client
             current_model.version = version
+            print(current_model.model, current_model.version)
             return current_model
 
         match assumptions_model.model:
             case Clients.CLAUDE:
-                comparison_results["openai"] = await self.get_assumptions(
-                    change_model(assumptions_model, Clients.OPENAI, OPENAI_MODEL_VERSION), image, detect_face
-                )
                 comparison_results["gemini"] = await self.get_assumptions(
-                    change_model(assumptions_model, Clients.GEMINI, GEMINI_MODEL_VERSION), image, detect_face
+                    change_model(assumptions_model, Clients.GEMINI, GEMINI_MODEL_VERSION), image_bytes, mime_type, image_name, detect_face
+                )
+                comparison_results["openai"] = await self.get_assumptions(
+                    change_model(assumptions_model, Clients.OPENAI, OPENAI_MODEL_VERSION), image_bytes, mime_type, image_name, detect_face
                 )
             case Clients.OPENAI:
                 comparison_results["claude"] = await self.get_assumptions(
-                    change_model(assumptions_model, Clients.CLAUDE, CLAUDE_MODEL_VERSION), image, detect_face
+                    change_model(assumptions_model, Clients.CLAUDE, CLAUDE_MODEL_VERSION), image_bytes, mime_type, image_name, detect_face
                 )
                 comparison_results["gemini"] = await self.get_assumptions(
-                    change_model(assumptions_model, Clients.GEMINI, GEMINI_MODEL_VERSION), image, detect_face
+                    change_model(assumptions_model, Clients.GEMINI, GEMINI_MODEL_VERSION), image_bytes, mime_type, image_name,detect_face
                 )
             case Clients.GEMINI:
                 comparison_results["claude"] = await self.get_assumptions(
-                    change_model(assumptions_model, Clients.CLAUDE, CLAUDE_MODEL_VERSION), image, detect_face
+                    change_model(assumptions_model, Clients.CLAUDE, CLAUDE_MODEL_VERSION), image_bytes, mime_type, image_name, detect_face
                 )
                 comparison_results["openai"] = await self.get_assumptions(
-                    change_model(assumptions_model, Clients.OPENAI, OPENAI_MODEL_VERSION), image, detect_face
+                    change_model(assumptions_model, Clients.OPENAI, OPENAI_MODEL_VERSION), image_bytes, mime_type, image_name, detect_face
                 )
 
         for model_name, response in comparison_results.items():

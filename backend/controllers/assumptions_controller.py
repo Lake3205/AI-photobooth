@@ -15,6 +15,12 @@ router = APIRouter(prefix="/assumptions", tags=["AI assumptions"])
 assumptions_service = AssumptionsService()
 form_service = FormService()
 
+def read_image_bytes(image) -> tuple[bytes, str, str]:
+    image_bytes_read = image.file.read()
+    mime_type_read = image.content_type
+    image_name_read = image.filename
+    return image_bytes_read, mime_type_read, image_name_read
+
 @router.post("/generate", status_code=status.HTTP_200_OK)
 async def generate_assumptions(image: UploadFile, ai_model: Clients):
     if (ai_model not in Clients):
@@ -39,7 +45,9 @@ async def generate_assumptions(image: UploadFile, ai_model: Clients):
         case _:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="AI model not supported yet.")
 
-    assumptions = await assumptions_service.get_assumptions(assumptions_model, image, detect_face)
+    image_bytes, mime_type, image_name = read_image_bytes(image)
+
+    assumptions = await assumptions_service.get_assumptions(assumptions_model, image_bytes, mime_type, image_name, detect_face)
 
     if ('id' in assumptions and type(assumptions['id'] is int)):
         assumption_id = assumptions['id']
@@ -87,7 +95,8 @@ async def compare_assumptions(
         case _:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="AI model not supported yet.")
 
-    comparison_results = await assumptions_service.compare_assumptions(image, assumptions_id, assumptions_model)
+    image_bytes, mime_type, image_name = read_image_bytes(image)
+    comparison_results = await assumptions_service.compare_assumptions(image_bytes, mime_type, image_name, assumptions_id, assumptions_model)
     return comparison_results
 
 

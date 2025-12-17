@@ -20,13 +20,13 @@ class ClaudeClient:
             }
         ]
         
-    async def generate_response(self, image) -> dict:
+    async def generate_response(self, image_bytes, mime_type) -> dict:
         # Resize image to fit within 512x512 pixels to reduce token amount
-        original_bytes = await image.read()
+        original_bytes = image_bytes
         resized_bytes = ImageService().resize_image(original_bytes)
 
         base64_image = b64encode(resized_bytes).decode("utf-8")
-        mime_type = getattr(image, "content_type", "") or ""
+        media_type = mime_type or "image/jpeg"
         
         self.client = Anthropic(api_key=self.api_key)
         message = self.client.messages.create(
@@ -46,7 +46,7 @@ class ClaudeClient:
                             "type": "image",
                             "source": {
                                 "type": "base64",
-                                "media_type": mime_type,
+                                "media_type": media_type,
                                 "data": base64_image
                             }
                         },
