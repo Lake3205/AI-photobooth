@@ -140,11 +140,4 @@ class AssumptionsService:
                     change_model(assumptions_model, Clients.OPENAI, OPENAI_MODEL_VERSION), image_bytes, mime_type, image_name, detect_face
                 )
 
-        for model_name, response in comparison_results.items():
-            try:
-                assumption_id = self.db_service.log_assumption_to_db(ai_model=model_name, data=response)
-                response['id'] = assumption_id
-            except Exception as e:
-                print(f"failed to log assumption to database for {model_name}: {e}")
-
         return comparison_results
