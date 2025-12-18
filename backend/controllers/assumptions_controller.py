@@ -57,6 +57,7 @@ async def generate_assumptions(image: UploadFile, ai_model: Clients):
             raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail="Rate limit exceeded") from e
         if e.code == 400 and "API key not valid" in e.message:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Gemini API key") from e
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Gemini API error") from e
     except AuthenticationError as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid OpenAI API key") from e
     except RateLimitError as e:
