@@ -4,6 +4,7 @@ from fastapi import APIRouter, UploadFile, status, HTTPException
 
 from google.genai import errors
 from openai import AuthenticationError, RateLimitError
+from anthropic import AuthenticationError, RateLimitError, APIError
 
 from services.assumptions_service import AssumptionsService
 from services.test_service import TestService
@@ -60,8 +61,18 @@ async def generate_assumptions(image: UploadFile, ai_model: Clients):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid OpenAI API key") from e
     except RateLimitError as e:
         raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail="OpenAI rate limit exceeded") from e
+    except AuthenticationError as e:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="Invalid Claude API key") from e
+    except RateLimitError as e:
+        raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS, detail="Claude rate limit exceeded") from e
+    except APIError as e:
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Claude API error") from e
     except Exception as e:
-        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)) from e
+        if (hasattr(e, 'message')):
+            detail = str(e.message)
+        else:
+            detail = str(e)
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, detail=detail) from e
 
     if ('id' in assumptions and type(assumptions['id'] is int)):
         assumption_id = assumptions['id']
