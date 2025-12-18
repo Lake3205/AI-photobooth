@@ -1,5 +1,6 @@
 export interface AssumptionData {
-    [key: string]: AssumptionType;
+    thought: string;
+    assumptions: Record<string, AssumptionType>;
 }
 
 export type AssumptionType = {
