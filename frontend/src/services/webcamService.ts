@@ -8,13 +8,6 @@ interface CapturedImage {
     blob: Blob
 }
 
-interface TestAnalysisResponse {
-    model: string;
-    version: string;
-    assumptions: AssumptionData;
-    token?: string;
-}
-
 const {setCookie} = useCookieService();
 
 class AssumptionsService {
@@ -39,7 +32,7 @@ class AssumptionsService {
                 throw new Error(`${errorDetail}`);
             }
 
-            const data: TestAnalysisResponse = await response.json();
+            const data: any = await response.json();
 
             if (!data.assumptions) {
                 return null as unknown as AssumptionData;
@@ -49,10 +42,56 @@ class AssumptionsService {
                 setCookie("form_token", data.token, 1);
             }
 
+            if (data.id) {
+                sessionStorage.setItem("assumption_id", String(data.id));
+            } else {
+                console.warn("No id in response data");
+            }
+            sessionStorage.setItem("ai_model", data.model || "gemini");
+
+            this.startComparison(data.id, data.model || "gemini");
+
             return data.assumptions;
         } catch (error) {
             console.error('Error generating assumptions:', error);
             throw new Error(error instanceof Error ? error.message : 'Failed to generate assumptions');
+        }
+    }
+
+    async startComparison(assumptionId: number, aiModel: string): Promise<void> {
+        try {
+            const imageData = sessionStorage.getItem("captured_image");
+            if (!imageData || !assumptionId || !aiModel) {
+                console.warn("⚠️ Cannot start comparison - missing data");
+                return;
+            }
+
+            // Convert base64 to blob
+            const response = await fetch(imageData);
+            const blob = await response.blob();
+
+            const formData = new FormData();
+            formData.append('image', blob, 'selfie.jpg');
+
+            const url = `${this.baseUrl}/assumptions/compare?assumptions_id=${assumptionId}&ai_model=${aiModel}`;
+
+            // Fire and forget - don't await
+            fetch(url, {
+                method: "POST",
+                body: formData,
+            }).then(async (compareResponse) => {
+                if (compareResponse.ok) {
+                    const data = await compareResponse.json();
+                    const enriched = {...data, __comparison_completed_at: Date.now()};
+                    sessionStorage.setItem("comparison_data", JSON.stringify(enriched));
+                } else {
+                    console.error("❌ Comparison failed:", compareResponse.status);
+                }
+            }).catch((error) => {
+                console.error("❌ Comparison error:", error);
+            });
+        } catch (error) {
+            console.error("❌ Failed to start comparison:", error);
         }
     }
 }
@@ -124,8 +163,7 @@ export const useWebcamService = () => {
             // Save image to sessionStorage for later use (comparison)
             await saveImageToStorage(imageBlob);
 
-            const assumptions = await assumptionsService.generateAssumptions(imageBlob)
-            analysisData.value = assumptions
+            analysisData.value = await assumptionsService.generateAssumptions(imageBlob)
         } catch (error) {
             console.error('Analysis error:', error)
             analysisError.value = error instanceof Error ? error.message : 'Analysis failed'

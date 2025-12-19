@@ -6,7 +6,7 @@ import AssumptionsDisplay from '@/components/AssumptionsDisplay.vue';
 import {PencilSquareIcon} from '@heroicons/vue/24/outline';
 
 const {setCookie} = useCookieService();
-const {submitForm, isLoading, assumptionsData} = useFormService();
+const {submitForm, isLoading, assumptionsData, comparisonData} = useFormService();
 const token = new URLSearchParams(location.search).get('token');
 
 if (token) {
@@ -28,7 +28,7 @@ if (token) {
     </div>
 
     <div class="relative z-10 w-full flex flex-col gap-4 justify-center items-center">
-      <div class="w-full max-w-4xl py-8 sm:py-12 md:py-16 px-4 sm:px-6">
+      <div class="w-full max-w-6xl py-8 sm:py-12 md:py-16 px-4 sm:px-6">
         <div class="text-center mb-6 sm:mb-10">
           <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-indigo-200 via-fuchsia-200 to-pink-300 bg-clip-text tracking-tight text-transparent mb-3">
             Assumption Form
@@ -49,6 +49,7 @@ if (token) {
             <!-- AI Assumptions -->
             <AssumptionsDisplay
                 :assumptions-data="assumptionsData"
+                :comparison-data="comparisonData"
             />
 
             <!-- Form Questions -->
