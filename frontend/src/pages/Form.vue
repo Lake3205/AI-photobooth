@@ -7,7 +7,6 @@ import {PencilSquareIcon} from '@heroicons/vue/24/outline';
 
 const {setCookie} = useCookieService();
 const {submitForm, isLoading, assumptionsData} = useFormService();
-
 const token = new URLSearchParams(location.search).get('token');
 
 if (token) {
@@ -47,10 +46,12 @@ if (token) {
 
         <div v-else-if="assumptionsData">
           <form class="space-y-6 sm:space-y-8" @submit.prevent="submitForm($event.currentTarget as HTMLFormElement)">
-            <!-- AI Assumptions & Thought Process Section -->
-            <AssumptionsDisplay :assumptions-data="assumptionsData"/>
+            <!-- AI Assumptions -->
+            <AssumptionsDisplay
+                :assumptions-data="assumptionsData"
+            />
 
-            <!-- Form Questions Section -->
+            <!-- Form Questions -->
             <div
                 class="rounded-2xl bg-gradient-to-br from-white/5 to-white/2 border border-white/10 backdrop-blur-sm p-4 sm:p-6 space-y-4 sm:space-y-6">
               <h2 class="text-xl sm:text-2xl font-bold text-white mb-4 flex items-center gap-2">
@@ -75,7 +76,3 @@ if (token) {
     </div>
   </main>
 </template>
-
-<style scoped>
-
-</style>

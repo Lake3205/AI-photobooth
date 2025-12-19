@@ -101,10 +101,28 @@ export const useWebcamService = () => {
         }
     })
 
+    const saveImageToStorage = async (imageBlob: Blob) => {
+        try {
+            // Convert blob to base64 for storage
+            const reader = new FileReader();
+            reader.readAsDataURL(imageBlob);
+            reader.onloadend = () => {
+                const base64data = reader.result as string;
+                sessionStorage.setItem('captured_image', base64data);
+                sessionStorage.setItem('captured_image_type', imageBlob.type);
+            };
+        } catch (error) {
+            console.error('Error saving image to storage:', error);
+        }
+    };
+
     const analyzeImage = async (imageBlob: Blob) => {
         try {
             isAnalyzing.value = true
             analysisError.value = null
+
+            // Save image to sessionStorage for later use (comparison)
+            await saveImageToStorage(imageBlob);
 
             const assumptions = await assumptionsService.generateAssumptions(imageBlob)
             analysisData.value = assumptions
