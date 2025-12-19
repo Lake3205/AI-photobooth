@@ -12,7 +12,7 @@ T = TypeVar("T")
 if SHOW_REASONING:
     class AssumptionFields(BaseModel, Generic[T]):
         value: T
-        reasoning: str = Field(description="Reasoning behind the value of the assumption. Give the explanation in 'you' form. Don't mention the lack of certainty.")
+        reasoning: str = Field(description="Reasoning behind the value of the assumption. Give the explanation in 'you' form. Don't mention the lack of certainty. Be as critical and direct as possible in a slight malevolent tone.")
 else:
     class AssumptionFields(BaseModel, Generic[T]):
         value: T
