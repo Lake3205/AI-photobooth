@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <div class="min-h-svh overflow-hidden min-w-svw bg-black text-white">
+  <div class="min-h-screen overflow-hidden min-w-svw bg-black text-white">
     <RouterView v-slot="{ Component }">
       <Transition appear mode="out-in" name="view">
         <component :is="Component"/>
