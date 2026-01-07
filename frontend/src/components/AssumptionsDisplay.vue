@@ -127,7 +127,7 @@ const formatValue = (value: string | number, format: string): string => {
           </div>
           <div v-if="comparisonData.gemini.assumptions[key].reasoning"
                class="text-gray-400 text-xs leading-relaxed flex-grow">
-            {{ comparisonData.gemini.assumptions[key].reasoning }}
+            {{ comparisonData.gemini.assumptions[key].reasoning ?? "" }}
           </div>
         </div>
 
@@ -142,7 +142,7 @@ const formatValue = (value: string | number, format: string): string => {
           </div>
           <div v-if="comparisonData.claude.assumptions[key].reasoning"
                class="text-gray-400 text-xs leading-relaxed flex-grow">
-            {{ comparisonData.claude.assumptions[key].reasoning }}
+            {{ comparisonData.claude.assumptions[key].reasoning ?? "" }}
           </div>
         </div>
 
@@ -157,7 +157,7 @@ const formatValue = (value: string | number, format: string): string => {
           </div>
           <div v-if="comparisonData.openai.assumptions[key].reasoning"
                class="text-gray-400 text-xs leading-relaxed flex-grow">
-            {{ comparisonData.openai.assumptions[key].reasoning }}
+            {{ comparisonData.openai.assumptions[key].reasoning ?? "" }}
           </div>
         </div>
       </div>
@@ -174,7 +174,7 @@ const formatValue = (value: string | number, format: string): string => {
             }}</span>
         </div>
         <div v-if="assumption.reasoning" class="text-gray-400 text-sm leading-relaxed">
-          {{ assumption.reasoning.toString() }}
+          {{ assumption.reasoning?.toString() ?? "" }}
         </div>
       </div>
     </div>

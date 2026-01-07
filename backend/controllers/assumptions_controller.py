@@ -106,7 +106,6 @@ async def compare_assumptions(
         assumptions_id: int,
         ai_model: Clients
 ):
-    print(f"Compare endpoint called with assumptions_id={assumptions_id}, ai_model={ai_model}")
     assumptions_model = AssumptionsModel()
 
     match ai_model:
@@ -125,8 +124,6 @@ async def compare_assumptions(
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="AI model not supported yet.")
 
     image_bytes, mime_type, image_name = read_image_bytes(image)
-    print(f"Starting comparison for assumption_id={assumptions_id}")
     comparison_results = await assumptions_service.compare_assumptions(image_bytes, mime_type, image_name,
                                                                        assumptions_id, assumptions_model)
-    print(f"Comparison complete. Keys: {list(comparison_results.keys())}")
     return comparison_results

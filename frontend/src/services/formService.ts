@@ -58,7 +58,7 @@ export function useFormService() {
             const aiModel = sessionStorage.getItem("ai_model");
 
             if (!imageData || !assumptionId || !aiModel) {
-                console.warn("❌ Missing data for comparison:", {imageData: !!imageData, assumptionId, aiModel});
+                console.warn("Missing data for comparison:", {imageData: !!imageData, assumptionId, aiModel});
                 isComparisonLoading.value = false;
                 return;
             }
