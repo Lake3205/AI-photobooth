@@ -62,7 +62,7 @@ class AssumptionsService {
         try {
             const imageData = sessionStorage.getItem("captured_image");
             if (!imageData || !assumptionId || !aiModel) {
-                console.warn("⚠️ Cannot start comparison - missing data");
+                console.warn("Cannot start comparison - missing data");
                 return;
             }
 
@@ -75,7 +75,6 @@ class AssumptionsService {
 
             const url = `${this.baseUrl}/assumptions/compare?assumptions_id=${assumptionId}&ai_model=${aiModel}`;
 
-            // Fire and forget - don't await
             fetch(url, {
                 method: "POST",
                 body: formData,
@@ -85,13 +84,13 @@ class AssumptionsService {
                     const enriched = {...data, __comparison_completed_at: Date.now()};
                     sessionStorage.setItem("comparison_data", JSON.stringify(enriched));
                 } else {
-                    console.error("❌ Comparison failed:", compareResponse.status);
+                    console.error("Comparison failed:", compareResponse.status);
                 }
             }).catch((error) => {
-                console.error("❌ Comparison error:", error);
+                console.error("Comparison error:", error);
             });
         } catch (error) {
-            console.error("❌ Failed to start comparison:", error);
+            console.error("Failed to start comparison:", error);
         }
     }
 }
@@ -237,7 +236,7 @@ export const useWebcamService = () => {
             'bg-gradient-to-r from-amber-500 to-yellow-300'
         ];
 
-        const index = Math.abs(getStringHash(key)) % colorClasses.length; // Ensure index is always valid
+        const index = Math.abs(getStringHash(key)) % colorClasses.length;
         return colorClasses[index] as string;
     };
 

@@ -142,8 +142,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main class="relative overflow-hidden bg-black text-white min-h-screen">
-
+  <main class="relative overflow-hidden bg-black text-white h-screen">
+    
     <TermsPopup ref="termsPopup"/>
 
     <Transition
