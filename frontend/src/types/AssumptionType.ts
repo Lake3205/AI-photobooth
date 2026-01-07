@@ -3,6 +3,12 @@ export interface AssumptionData {
     assumptions: Record<string, AssumptionType>;
 }
 
+export interface ComparisonData {
+    claude?: AssumptionData;
+    openai?: AssumptionData;
+    gemini?: AssumptionData;
+}
+
 export type AssumptionType = {
     name: string;
     value: string | number;
