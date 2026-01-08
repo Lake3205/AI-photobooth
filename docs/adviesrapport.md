@@ -3,38 +3,38 @@
 ## Inhoud
 
 - [Adviesrapport](#adviesrapport)
-    - [Inhoud](#inhoud)
-    - [Samenvatting](#samenvatting)
-    - [Introductie](#introductie)
-    - [Analyse](#analyse)
-    - [Dark](#dark)
-    - [Het dilemma](#het-dilemma)
-    - [Light](#light)
-    - [Advies](#advies)
-    - [Proces en rollen](#proces-en-rollen)
-        - [Werkwijze](#werkwijze)
-        - [Rolbijdragen](#rolbijdragen)
-        - [Stakeholders en betrokkenheid](#stakeholders-en-betrokkenheid)
-    - [Reflectie, beperkingen en aanbevelingen](#reflectie-beperkingen-en-aanbevelingen)
-        - [Reflectie: Wat zou het team anders doen?](#reflectie-wat-zou-het-team-anders-doen)
-        - [Beperkingen van het onderzoek](#beperkingen-van-het-onderzoek)
-        - [Aanbevelingen voor vervolgonderzoek](#aanbevelingen-voor-vervolgonderzoek)
-    - [Bijlagen](#bijlagen)
+  - [Inhoud](#inhoud)
+  - [Samenvatting](#samenvatting)
+  - [Introductie](#introductie)
+  - [Analyse](#analyse)
+  - [Dark](#dark)
+  - [Het dilemma](#het-dilemma)
+  - [Light](#light)
+  - [Advies](#advies)
+  - [Proces en rollen](#proces-en-rollen)
+    - [Werkwijze](#werkwijze)
+    - [Rolbijdragen](#rolbijdragen)
+    - [Stakeholders en betrokkenheid](#stakeholders-en-betrokkenheid)
+  - [Reflectie, beperkingen en aanbevelingen](#reflectie-beperkingen-en-aanbevelingen)
+    - [Reflectie: Wat zou het team anders doen?](#reflectie-wat-zou-het-team-anders-doen)
+    - [Beperkingen van het onderzoek](#beperkingen-van-het-onderzoek)
+    - [Aanbevelingen voor vervolgonderzoek](#aanbevelingen-voor-vervolgonderzoek)
+  - [Bronnen](#bronnen)
+  - [Bijlagen](#bijlagen)
 
 ## Samenvatting
 
-In dit project hebben we als probleem dat generatieve AI-tools gebruikt worden door niet-tech gebruikers zonder dat zij 
-begrijpen hoe deze tools werken en wat de implicaties zijn. Om dit aan te pakken, hebben we een interactief prototype 
-ontwikkeld dat gebruikers laat reflecteren op de aannames en gevolgen van generatieve AI. Het prototype is een fotobooth
-ervaring waarbij gebruikers in de booth gaan zitten om een foto te maken, waarna verschillende AI-modellen (OpenAI, 
+Een semester lang hebben wij gewerkt aan een interactief prototype dat niet-tech gebruikers laat reflecteren op de aannames en gevolgen van generatieve AI.
+Dit prototype is gemaakt in opdracht van onze docent en begeleider Marise met als doel om AI-literacy te vergroten bij de algemene Chat-GPT gebruiker.
+Het prototype is een fotobooth ervaring waarbij gebruikers in de booth gaan zitten om een foto te maken, waarna verschillende AI-modellen (OpenAI, 
 Claude, Gemini) aannames genereren op basis van die afbeelding. De bedoeling voor de fotobooth is naast mensen 
 bewuster maken van AI ook om gesprekken op gang te brengen over AI en vooroordelen.
 
-We hebben onderzocht of en hoe dit prototype mensen bewuster maakt van de werking en risico's van AI. Uit 
+We hebben onderzocht of en hoe dit prototype mensen bewuster maakt over de werking en risico's van AI. Uit 
 gebruikerstesten tijdens Society 5.0 en Studio.Next kwamen verschillende inzichten naar voren. Mensen waren vaak geneigd
 om de AI-aannames te rechtvaardigen, zelfs als deze onjuist of absurd waren. Dit kan ook goed teruggevonden worden bij 
-Society 5.0 waarbij er nog geen AI-aannames waren en de antwoorden random waren. Dit wijst op een vertrouwen in AI dat 
-kritisch denken kan ondermijnen. Daarnaast bleek dat het invullen van feedbackformulieren een drempel vormde, wat de 
+Society 5.0 waarbij er, zonder dat men dit wist, nog helemaal geen AI was gekoppeld en de antwoorden volkomen random waren. 
+Dit wijst op een vertrouwen in AI dat kritisch denken kan ondermijnen. Daarnaast bleek dat het invullen van feedbackformulieren een drempel vormde, wat de 
 dataverzameling beperkte.
 
 Ons advies hierbij is om een combinatie van technische en educatieve maatregelen toe te passen om gebruikers bewuster en
@@ -48,12 +48,11 @@ zodat het ontwerp verder kan worden geoptimaliseerd om kritisch denken bij gebru
 maatregelen te combineren kan de opdrachtgever AI-toepassingen ontwikkelen die niet alleen functioneel en innovatief 
 zijn, maar ook verantwoord en mensgericht.
 
-link naar de prototype: https://www.parallax-darktech.nl/
-
+link naar de prototype: [https://www.parallax-darktech.nl/](https://www.parallax-darktech.nl/)
 
 ## Introductie
 
-In deze opdracht — uitgevoerd in opdracht van onze docent en begeleider Marise — hebben we een interactief prototype
+In deze opdracht uitgevoerd in opdracht van onze docent en begeleider Marise, hebben we een interactief prototype
 ontwikkeld dat niet-tech gebruikers laat reflecteren op de werking en gevolgen van generatieve AI. De doelgroep bestaat
 uit doodgewone mensen die nieuwsgierig zijn naar AI maar geen diep technische achtergrond hebben, ook al zijn deze ook
 voorgekomen bij de antwoorden van ons formulier. Ons prototype is een fotobooth-achtige ervaring: gebruikers maken
@@ -112,13 +111,13 @@ Een dark voorbeeld is het gebruiken van AI om op basis van vooroordelen in een s
 heeft om te stelen. Dit creëert een sfeer die moreel gezien een slechte keuze is. Hoe zou jij je voelen als je
 geselecteerd wordt door een AI die je labelt met een hoge kans op diefstal?
 
-Helaas worden ze wel voor dit doel gebruikt [1], volgens een onderzoek van RTL Nieuws [2]. Hierbij wordt de AI alleen
+Helaas worden ze wel voor dit doel gebruikt [[1]](#bronnen), volgens een onderzoek van RTL Nieuws [[2]](#bronnen). Hierbij wordt de AI alleen
 ingezet op handelingen van de klant, niet op basis van identiteit, leeftijd, afkomst of geslacht. Hierbij wordt alleen
 ingegrepen nadat de klant probeert de winkel te verlaten zonder af te rekenen. In principe is het dus alleen een tool
 die helpt bij het identificeren van diefstal. Dit kan bij mensen echter wel een gevoel van onrust creëren, omdat je
 altijd bekeken wordt.
 
-Ik ben hierna op onderzoek gegaan naar dingen die deze scenario’s tegenhouden: [3] In een wet van de Autoriteit
+Ik ben hierna op onderzoek gegaan naar dingen die deze scenario’s tegenhouden: [[3]](#bronnen) In een wet van de Autoriteit
 Persoonsgegevens staat het volgende:
 
 Verboden:
@@ -203,7 +202,7 @@ booth gaan zitten om een foto te maken, waarna verschillende AI-modellen (OpenAI
 op basis van die afbeelding. De bedoeling voor de fotobooth is naast mensen bewuster maken van AI ook om gesprekken op 
 gang te brengen over AI en vooroordelen.
 
-Doormiddel van gebruikerstesten [4] tijdens Society 5.0 en Studio.Next hebben wij onderzocht of en hoe dit prototype mensen 
+Doormiddel van gebruikerstesten [[4]](#bronnen) tijdens Society 5.0 en Studio.Next hebben wij onderzocht of en hoe dit prototype mensen 
 bewuster maakt van de werking en risico's van AI. Uit deze testen kwamen verschillende inzichten naar voren. Mensen 
 waren vaak geneigd om de AI-aannames te rechtvaardigen, zelfs als deze onjuist of absurd waren. Dit kan ook goed terug 
 gevonden worden bij Society 5.0 waarbij er nog geen AI-aannames waren en de antwoorden volledig willekeurig waren. Dit wijst 
@@ -366,9 +365,38 @@ gebruikers hier eerder kritisch op reageren.
 - Verschillen mannen en vrouwen in hoe ze AI-aannames over uiterlijk evalueren?
 - Welke formulering van AI-output (zeker vs. waarschijnlijk) leidt tot meest kritische houding?
 
+## Bronnen
+
+[1] https://privacy-web.nl/nieuws/supermarkten-installeren-cameras-met-ai-tegen-winkeldiefstal/  
+[2] https://www.rtl.nl/nieuws/artikel/5435132/supermarkten-pakken-winkeldieven-met-slimme-cameras  
+[3] https://www.autoriteitpersoonsgegevens.nl/actueel/ai-verordening-gaat-in-werk-aan-de-winkel-voor-ontwikkelaars-en-gebruikers  
+[4] https://docs.google.com/spreadsheets/d/1R6vBBvVR3SH3v7ZQED2n-C4D2KTi3C9rxXEZDQL9Ro4/edit?resourcekey=&gid=1316423657#gid=1316423657  
+
 ## Bijlagen
 
-[1] https://privacy-web.nl/nieuws/supermarkten-installeren-cameras-met-ai-tegen-winkeldiefstal/
-[2] https://www.rtl.nl/nieuws/artikel/5435132/supermarkten-pakken-winkeldieven-met-slimme-cameras`
-[3] https://www.autoriteitpersoonsgegevens.nl/actueel/ai-verordening-gaat-in-werk-aan-de-winkel-voor-ontwikkelaars-en-gebruikers
-[4] https://docs.google.com/spreadsheets/d/1R6vBBvVR3SH3v7ZQED2n-C4D2KTi3C9rxXEZDQL9Ro4/edit?resourcekey=&gid=1316423657#gid=1316423657
+*Schermafbeelding van gegeneerde aannames op de site*  
+![assumption](adviesrapport/assumptions.png)
+
+*De enquête vragen*  
+![enquete](adviesrapport/enquete.png)
+
+*De vergelijking van verschillende AI modellen*  
+![comparison](adviesrapport/comparison.png)
+
+*De AI gedachte gang uitgeschreven in de enquête*  
+![ai thought process](adviesrapport/form.png)
+
+*De raspberry pi*  
+![de raspberry pi](<adviesrapport/raspberry pi.jpeg>)
+
+*De fotobooth*  
+![booth](adviesrapport/booth.png)
+
+*De achterkant van het scherm*  
+![het scherm](adviesrapport/screen.png)
+
+*De algemene voorwaarden uitgevouwen*  
+![tos uitgevouwen](adviesrapport/tos-long.jpeg)
+
+*De algemene voorwaarden op een hoopje*  
+![tos](adviesrapport/tos.jpeg)
