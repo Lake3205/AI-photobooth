@@ -36,7 +36,8 @@ provides visual feedback.
 ### AI Analysis
 
 Uploaded images are sent to the backend where AI models (Gemini, Claude, OpenAI) generate assumptions about the person
-in the photo. Results are displayed with confidence indicators.
+in the photo. Results are displayed and can be viewed immediately. There is also a possibility to compare outputs from
+different AI models.
 
 ### Admin Dashboard
 
