@@ -17,6 +17,14 @@ technology.
 
 [Installation guide](/docs/installation.md)
 
+## Documentation
+
+- [Frontend](/docs/frontend/index.md) - Vue 3 application overview
+- [AI Models](/docs/ai/index.md) - AI model integration and comparison
+- [Database ERD](/docs/database/database_erd.md) - Database structure
+- [Society 5.0](/docs/society%205/index.md) - Research and analysis
+- [Sprint Reviews](/docs/sprint%201/) - Sprint documentation
+
 ## Getting started
 
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.
