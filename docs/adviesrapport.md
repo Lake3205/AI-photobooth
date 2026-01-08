@@ -27,12 +27,12 @@ In dit project hebben we als probleem dat generatieve AI-tools gebruikt worden d
 begrijpen hoe deze tools werken en wat de implicaties zijn. Om dit aan te pakken, hebben we een interactief prototype 
 ontwikkeld dat gebruikers laat reflecteren op de aannames en gevolgen van generatieve AI. Het prototype is een fotobooth
 ervaring waarbij gebruikers in de booth gaan zitten om een foto te maken, waarna verschillende AI-modellen (OpenAI, 
-Claude, Gemini) assumpties genereren op basis van die afbeelding. De bedoeling voor de fotobooth is naast mensen 
+Claude, Gemini) aannames genereren op basis van die afbeelding. De bedoeling voor de fotobooth is naast mensen 
 bewuster maken van AI ook om gesprekken op gang te brengen over AI en vooroordelen.
 
 We hebben onderzocht of en hoe dit prototype mensen bewuster maakt van de werking en risico's van AI. Uit 
 gebruikerstesten tijdens Society 5.0 en Studio.Next kwamen verschillende inzichten naar voren. Mensen waren vaak geneigd
-om de AI-aannames te rechtvaardigen, zelfs als deze onjuist of absurd waren. Dit kan ook goed terug gevonden worden bij 
+om de AI-aannames te rechtvaardigen, zelfs als deze onjuist of absurd waren. Dit kan ook goed teruggevonden worden bij 
 Society 5.0 waarbij er nog geen AI-aannames waren en de antwoorden random waren. Dit wijst op een vertrouwen in AI dat 
 kritisch denken kan ondermijnen. Daarnaast bleek dat het invullen van feedbackformulieren een drempel vormde, wat de 
 dataverzameling beperkte.
@@ -55,7 +55,7 @@ link naar de prototype: https://www.parallax-darktech.nl/
 
 In deze opdracht — uitgevoerd in opdracht van onze docent en begeleider Marise — hebben we een interactief prototype
 ontwikkeld dat niet-tech gebruikers laat reflecteren op de werking en gevolgen van generatieve AI. De doelgroep bestaat
-uit doodgewone mensen die nieuwsgierig zijn naar AI maar geen diep technische achtergrond hebben, ookal zijn deze ook
+uit doodgewone mensen die nieuwsgierig zijn naar AI maar geen diep technische achtergrond hebben, ook al zijn deze ook
 voorgekomen bij de antwoorden van ons formulier. Ons prototype is een fotobooth-achtige ervaring: gebruikers maken
 of uploaden een foto, het systeem genereert op basis van die afbeelding veronderstellingen en toelichtingen afkomstig
 van verschillende AI‑modellen (OpenAI, Claude of Gemini). Belangrijke ontwerpkeuzes waren anonimiteit en expliciete
@@ -93,7 +93,7 @@ niet-tech experts omdat zij waarschijnlijk alleen bekend zijn met deze grote AI-
 We hebben ook verkend wat voor impact de toevoeging van opgevraagde beredenering van AI-antwoorden en de denkwijze van
 AI kan hebben op het ondersteunen van het doel van ons project. Hieruit kan je leren dat AI met overtuiging antwoord
 geeft dat nergens op gebaseerd is, puur zodat de gebruiker antwoord krijgt op zijn/haar vraag. Dit is een van de
-oorzaken dat AI onbetrouwbaar is en bijvoorbeeld misinformatie verspreidt.  
+oorzaken waardoor AI onbetrouwbaar is en bijvoorbeeld misinformatie verspreidt.  
 Tot slot hebben we ook geleerd dat mensen nog weleens geneigd zijn om de antwoorden van AI goed te praten. Op Society
 5.0 deden wij alsof we met foto's van mensen aannames lieten genereren door AI (eigenlijk gewoon random hardcoded
 waarden), en toen mensen zagen dat de AI soms rare of onjuiste aannames deed, probeerden ze dit alsnog te verklaren door
@@ -115,7 +115,7 @@ geselecteerd wordt door een AI die je labelt met een hoge kans op diefstal?
 Helaas worden ze wel voor dit doel gebruikt [1], volgens een onderzoek van RTL Nieuws [2]. Hierbij wordt de AI alleen
 ingezet op handelingen van de klant, niet op basis van identiteit, leeftijd, afkomst of geslacht. Hierbij wordt alleen
 ingegrepen nadat de klant probeert de winkel te verlaten zonder af te rekenen. In principe is het dus alleen een tool
-die helpt bij het identificeren van diefstal. Dit kan bij mensen echter wel een gevoel van ontrust creëren, omdat je
+die helpt bij het identificeren van diefstal. Dit kan bij mensen echter wel een gevoel van onrust creëren, omdat je
 altijd bekeken wordt.
 
 Ik ben hierna op onderzoek gegaan naar dingen die deze scenario’s tegenhouden: [3] In een wet van de Autoriteit
@@ -147,33 +147,32 @@ Minimaal risico:
 - Aanbevelingssystemen (zoals “meer zoals dit”)
 
 Deze wetten zijn hard nodig. Zonder duidelijke grenzen loopt AI snel uit de hand en neemt het onze macht en vrijheid van
-keuzes over, zonder dat wij hier inbreng in hebben.
+keuzes over, zonder dat wij hier inspraak in hebben.
 
 Ter informatie:
 Ons project valt onder AI die sociale scores en biometrische surveillance gebruikt. Normaal is dit verboden, maar
 doordat wij toestemming vragen en geen data opslaan, blijft het legaal. Dit laat zien hoe dun de grens is tussen een
 ethisch experiment en technologie die mensen reduceert tot labels en risico’s.
 
-Bronnen:
-[1] https://privacy-web.nl/nieuws/supermarkten-installeren-cameras-met-ai-tegen-winkeldiefstal/
-[2] https://www.rtl.nl/nieuws/artikel/5435132/supermarkten-pakken-winkeldieven-met-slimme-cameras`
-[3] https://www.autoriteitpersoonsgegevens.nl/actueel/ai-verordening-gaat-in-werk-aan-de-winkel-voor-ontwikkelaars-en-gebruikers
-
-AI spelfouten correctie:
-https://chatgpt.com/c/695ee915-dd8c-832a-a456-8f1690e0dd0a
-
 ## Het dilemma
 
-Het dilemma dat wij in ons project proberen aan te pakken, is dat mensen vaak te snel vertrouwen op AI. Wanneer een AI-systeem informatie of een oordeel geeft, nemen mensen vaak aan dat dit klopt.
-AI wordt gezien als slim en objectief, terwijl dit in de praktijk niet zo is. AI is namelijk gebaseerd op een grote set data die niet altijd perfect is. Hij kan beïnvloed zijn (bias) of gaan hallucineren. Toch volgen mensen vaak de uitkomst zonder door te vragen of te factchecken.
+Het dilemma dat wij in ons project proberen aan te pakken, is dat mensen vaak te snel vertrouwen op AI. Wanneer een 
+AI-systeem informatie of een oordeel geeft, nemen mensen vaak aan dat dit klopt. AI wordt gezien als slim en objectief, 
+terwijl dit in de praktijk niet zo is. AI is namelijk gebaseerd op een grote set data die niet altijd perfect is. Hij 
+kan beïnvloed zijn (bias) of gaan hallucineren. Toch volgen mensen vaak de uitkomst zonder door te vragen of te 
+factchecken.
 
-Dit dilemma is moeilijk op te lossen, omdat er belangrijke waarden met elkaar botsen. Aan de ene kant willen mensen snel informatie hebben, maar aan de andere kant willen we dat dit ook betrouwbaar en veilig is. Dit zijn twee dingen die moeilijk te combineren zijn binnen het gebruik van AI. AI kan inderdaad gebruikt worden om sneller beslissingen te nemen en om menselijke fouten te verminderen, maar daar tegenover staan gelijkheid, vrijheid en menselijke controle (morele keuzes). Mensen willen niet beoordeeld worden door een systeem dat hen labelt of profileert.
+Dit dilemma is moeilijk op te lossen, omdat er belangrijke waarden met elkaar botsen. Aan de ene kant willen mensen snel
+informatie hebben, maar aan de andere kant willen we dat dit ook betrouwbaar en veilig is. Dit zijn twee dingen die 
+moeilijk te combineren zijn binnen het gebruik van AI. AI kan inderdaad gebruikt worden om sneller beslissingen te nemen
+en om menselijke fouten te verminderen, maar daar tegenover staan gelijkheid, vrijheid en menselijke controle (morele 
+keuzes). Mensen willen niet beoordeeld worden door een systeem dat hen labelt of profileert.
 
-Binnen de technologie komt het dilemma naar voren in de keuzes van de ontwikkelaars. Zij bepalen namelijk welke data er wordt gebruikt en dus ook wat de uitkomst van de AI is. Als deze keuzes gericht zijn op snelheid en efficiëntie, blijft er weinig toezicht over en zullen er snel dingen fout gaan. Hierdoor krijgt AI steeds meer invloed op ons dagelijks leven en onze keuzes, zonder dat wij hier echt iets aan kunnen doen of dit zelfs merken. AI zal een technisch hulpmiddel moeten blijven, maar kan hierdoor helaas wel morele gevolgen hebben.
-
-AI spelfouten correctie: 
-https://chatgpt.com/c/695fbb10-57f8-8332-a515-b5daa530db17
-
+Binnen de technologie komt het dilemma naar voren in de keuzes van de ontwikkelaars. Zij bepalen namelijk welke data er 
+wordt gebruikt en dus ook wat de uitkomst van de AI is. Als deze keuzes gericht zijn op snelheid en efficiëntie, blijft 
+er weinig toezicht over en zullen er snel dingen fout gaan. Hierdoor krijgt AI steeds meer invloed op ons dagelijks 
+leven en onze keuzes, zonder dat wij hier echt iets aan kunnen doen of dit zelfs merken. AI zal een technisch hulpmiddel
+moeten blijven, maar kan hierdoor helaas wel morele gevolgen hebben.
 
 ## Light
 
@@ -199,25 +198,25 @@ Voor het advies moeten we eerst kijken naar het probleem en hoe wij dit hebben u
 generatieve AI-tools zoals ChatGPT, Claude en Gemini mainstream zijn geworden. Deze tools worden steeds vaker gebruikt 
 in bijvoorbeeld het onderwijs, werk of privé, alleen weinig mensen begrijpen hoe deze tools en de AI-systemen erachter 
 precies werken. Om dit probleem te voorkomen hebben wij een prototype ontwikkeld dat mensen bewust maakt van de werking,
-aannames en gevolgen van generatieve AI-technologieën. Dit prototype is een fotobooth ervaring waarbij gebruikers in de 
+aannames en gevolgen van generatieve AI-technologieën. Dit prototype is een fotobooth-ervaring waarbij gebruikers in de 
 booth gaan zitten om een foto te maken, waarna verschillende AI-modellen (OpenAI, Claude, Gemini) assumpties genereren 
 op basis van die afbeelding. De bedoeling voor de fotobooth is naast mensen bewuster maken van AI ook om gesprekken op 
 gang te brengen over AI en vooroordelen.
 
-Doormiddel van gebruikerstesten [1] tijdens Society 5.0 en Studio.Next hebben wij onderzocht of en hoe dit prototype mensen 
+Doormiddel van gebruikerstesten [4] tijdens Society 5.0 en Studio.Next hebben wij onderzocht of en hoe dit prototype mensen 
 bewuster maakt van de werking en risico's van AI. Uit deze testen kwamen verschillende inzichten naar voren. Mensen 
 waren vaak geneigd om de AI-aannames te rechtvaardigen, zelfs als deze onjuist of absurd waren. Dit kan ook goed terug 
-gevonden worden bij Society 5.0 waarbij er nog geen AI-aannames waren en de antwoorden compleet random waren. Dit wijst 
+gevonden worden bij Society 5.0 waarbij er nog geen AI-aannames waren en de antwoorden volledig willekeurig waren. Dit wijst 
 op een vertrouwen in AI dat kritisch denken kan ondermijnen. Daarnaast bleek dat het invullen van feedbackformulieren 
 een drempel vormde, wat de dataverzameling beperkte. Om hier conclusies uit te kunnen trekken zie je snel dat mensen 
 geneigd zijn om AI te vertrouwen en de antwoorden goed te praten. Dit is een belangrijk inzicht voor het ontwerp van 
 AI-systemen en educatieve tools. Hierbij is het cruciaal om mechanismen in te bouwen die kritisch denken stimuleren en 
 gebruikers bewust maken van de beperkingen en risico's van AI. Het echte dilemma hierbij is dat AI steeds vaker 
 onzichtbaar beslissingen voor ons neemt, zonder dat wij hier controle over hebben. Hoe kunnen we Gen-AI beter benutten 
-zonder dat menselijke autonomie en keuzevrijheid langzaam wordne overgenomen door het systeem?
+zonder dat menselijke autonomie en keuzevrijheid langzaam worden overgenomen door het systeem?
 
 Als we kijken naar de donkere en lichte kant en de impact die dit heeft op de maatschappij, zien we dat AI zowel 
-positieve als negatieve gevolgen kan hebben. Voor bij de donkere kant is het belangrijk om duidelijke grenzen te stellen
+positieve als negatieve gevolgen kan hebben. Bij de donkere kant is het belangrijk om duidelijke grenzen te stellen
 aan het gebruik van AI, vooral wanneer het gaat om sociale scores en biometrische surveillance. Zonder deze grenzen kan 
 AI snel uit de hand lopen en onze macht en vrijheid van keuzes overnemen. Aan de lichte kant kunnen we AI verantwoorder 
 maken door transparantie, geïnformeerde toestemming, human-in-the-loop beslissingen en regelmatige bias-tests toe te 
@@ -236,7 +235,7 @@ met de risico’s en ethische implicaties van Gen-AI, kan de opdrachtgever AI-to
 controleerbaar en mensgericht zijn. Dit verkleint maatschappelijke risico’s, vergroot vertrouwen bij gebruikers en 
 draagt bij aan duurzame en verantwoorde innovatie.
 
-Voor concrete aanbevelingen kan het onderzoek kan uitgebreid worden door bijvoorbeeld meer diepgang te zoeken in de 
+Voor concrete aanbevelingen kan het onderzoek uitgebreid worden door bijvoorbeeld meer diepgang te zoeken in de 
 psychologische aspecten van waarom mensen AI vertrouwen en deze aannames accepteren. In dit vervolgonderzoek kan er 
 misschien samengewerkt worden met psychologen of gedragswetenschappers om dit beter in kaart te brengen. Met behulp van 
 deze inzichten kan het ontwerp worden aangepast om kritischer denken te stimuleren.
@@ -249,10 +248,6 @@ en ervaringsgericht ontwerp een cruciale rol speelt in het vergroten van AI‑li
 - Ruimte te creëren voor reflectie, gesprek en feedback binnen de gebruikerservaring. 
 - AI niet alleen efficiënt, maar ook begrijpelijk en bespreekbaar te maken.
 
-Bronnen:
-
-[1] https://docs.google.com/spreadsheets/d/1R6vBBvVR3SH3v7ZQED2n-C4D2KTi3C9rxXEZDQL9Ro4/edit?resourcekey=&gid=1316423657#gid=1316423657
-
 ## Proces en rollen
 
 ### Werkwijze
@@ -264,7 +259,7 @@ Wekelijks kwamen we op maandag om 11:30 uur bij elkaar voor voortgangsbespreking
 sprintplanningen uitvoerden. Tijdens deze sprintplanning kwam elk teamlid met minimaal 3 user stories, wat zorgde voor
 voldoende werk en betrokkenheid van iedereen. Vanaf sprint 3 begonnen we met een wisselende Scrum Master rol om de
 verantwoordelijkheid gelijk te verdelen over het team. Alle documentatie werd bijgehouden in de docs-map van de
-Git-repository, wat zorgde voor een centrale en toegankelijke kennisbank. Hier staat de technische aspecten, maar ook
+Git-repository, wat zorgde voor een centrale en toegankelijke kennisbank. Hier staan de technische aspecten, maar ook
 het proces en feedbackmomenten. Om de focus tijdens meetings te behouden werd de notulist aangewezen om te waarschuwen
 wanneer de groep afdwaalde van de agenda.
 
@@ -276,7 +271,7 @@ Hieronder een overzicht van de belangrijkste bijdragen per teamlid.
 
 Jay richtte zich voornamelijk op de installatie van de VPS en de deployment van de applicatie naar deze server. Ook
 heeft hij een domeinnaam gekoppeld en beveiligd met een SSL-certificaat. Daarnaast was hij verantwoordelijk voor de
-integratie van de OpenAI API en ontwikkelde hij de AI model vergelijkingsfunctionaliteit, waarmee gebruikers de output
+integratie van de OpenAI API en ontwikkelde hij de AI-model vergelijkingsfunctionaliteit, waarmee gebruikers de output
 van verschillende AI-modellen kunnen vergelijken.
 
 Sjoerd heeft zich beziggehouden met de integratie van de Gemini API en hier extra functionaliteiten aan toegevoegd,
@@ -337,7 +332,7 @@ van AI-gebruikers in het algemeen.
 
 Technische beperkingen speelden ook een rol in wat we konden realiseren. Het gebruik van Claude en OpenAI was beperkt
 door de kosten en creditcard vereisten voor API toegang, waardoor grootschalig testen niet mogelijk was. De vergelijking
-tussen AI-modellen bleef daardoor oppervlakkig. Uit eigen ervaring en gebruik van de verschillende AI's concludeerde we
+tussen AI-modellen bleef daardoor oppervlakkig. Uit eigen ervaring en gebruik van de verschillende AI's concludeerden we
 dat Gemini wat assertiever is dan OpenAI en Claude, maar dit werd niet systematisch gemeten of gevalideerd. De keuze
 voor geanonimiseerde opslag van data betekende dat grotere diepgang in analyse van de foto's niet mogelijk was. Wel
 voorkomt dit privacyproblemen en ethische dilemma's rondom gezichtsdata.
@@ -372,3 +367,8 @@ gebruikers hier eerder kritisch op reageren.
 - Welke formulering van AI-output (zeker vs. waarschijnlijk) leidt tot meest kritische houding?
 
 ## Bijlagen
+
+[1] https://privacy-web.nl/nieuws/supermarkten-installeren-cameras-met-ai-tegen-winkeldiefstal/
+[2] https://www.rtl.nl/nieuws/artikel/5435132/supermarkten-pakken-winkeldieven-met-slimme-cameras`
+[3] https://www.autoriteitpersoonsgegevens.nl/actueel/ai-verordening-gaat-in-werk-aan-de-winkel-voor-ontwikkelaars-en-gebruikers
+[4] https://docs.google.com/spreadsheets/d/1R6vBBvVR3SH3v7ZQED2n-C4D2KTi3C9rxXEZDQL9Ro4/edit?resourcekey=&gid=1316423657#gid=1316423657
