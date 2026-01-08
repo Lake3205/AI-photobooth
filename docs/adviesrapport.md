@@ -164,6 +164,17 @@ https://chatgpt.com/c/695ee915-dd8c-832a-a456-8f1690e0dd0a
 
 ## Het dilemma
 
+Het dilemma dat wij in ons project proberen aan te pakken, is dat mensen vaak te snel vertrouwen op AI. Wanneer een AI-systeem informatie of een oordeel geeft, nemen mensen vaak aan dat dit klopt.
+AI wordt gezien als slim en objectief, terwijl dit in de praktijk niet zo is. AI is namelijk gebaseerd op een grote set data die niet altijd perfect is. Hij kan beïnvloed zijn (bias) of gaan hallucineren. Toch volgen mensen vaak de uitkomst zonder door te vragen of te factchecken.
+
+Dit dilemma is moeilijk op te lossen, omdat er belangrijke waarden met elkaar botsen. Aan de ene kant willen mensen snel informatie hebben, maar aan de andere kant willen we dat dit ook betrouwbaar en veilig is. Dit zijn twee dingen die moeilijk te combineren zijn binnen het gebruik van AI. AI kan inderdaad gebruikt worden om sneller beslissingen te nemen en om menselijke fouten te verminderen, maar daar tegenover staan gelijkheid, vrijheid en menselijke controle (morele keuzes). Mensen willen niet beoordeeld worden door een systeem dat hen labelt of profileert.
+
+Binnen de technologie komt het dilemma naar voren in de keuzes van de ontwikkelaars. Zij bepalen namelijk welke data er wordt gebruikt en dus ook wat de uitkomst van de AI is. Als deze keuzes gericht zijn op snelheid en efficiëntie, blijft er weinig toezicht over en zullen er snel dingen fout gaan. Hierdoor krijgt AI steeds meer invloed op ons dagelijks leven en onze keuzes, zonder dat wij hier echt iets aan kunnen doen of dit zelfs merken. AI zal een technisch hulpmiddel moeten blijven, maar kan hierdoor helaas wel morele gevolgen hebben.
+
+AI spelfouten correctie: 
+https://chatgpt.com/c/695fbb10-57f8-8332-a515-b5daa530db17
+
+
 ## Light
 
 Om AI-toepassingen verantwoorder te maken hebben we in het ontwerp een aantal concrete patronen en maatregelen toegepast
