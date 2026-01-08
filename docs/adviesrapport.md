@@ -10,7 +10,7 @@
     - [Dark](#dark)
     - [Het dilemma](#het-dilemma)
     - [Light](#light)
-    - [Analyse](#analyse-1)
+    - [Advies](#advies)
     - [Proces en rollen](#proces-en-rollen)
         - [Werkwijze](#werkwijze)
         - [Rolbijdragen](#rolbijdragen)
@@ -22,6 +22,34 @@
     - [Bijlagen](#bijlagen)
 
 ## Samenvatting
+
+In dit project hebben we als probleem dat generatieve AI-tools gebruikt worden door niet-tech gebruikers zonder dat zij 
+begrijpen hoe deze tools werken en wat de implicaties zijn. Om dit aan te pakken, hebben we een interactief prototype 
+ontwikkeld dat gebruikers laat reflecteren op de aannames en gevolgen van generatieve AI. Het prototype is een fotobooth
+ervaring waarbij gebruikers in de booth gaan zitten om een foto te maken, waarna verschillende AI-modellen (OpenAI, 
+Claude, Gemini) assumpties genereren op basis van die afbeelding. De bedoeling voor de fotobooth is naast mensen 
+bewuster maken van AI ook om gesprekken op gang te brengen over AI en vooroordelen.
+
+We hebben onderzocht of en hoe dit prototype mensen bewuster maakt van de werking en risico's van AI. Uit 
+gebruikerstesten tijdens Society 5.0 en Studio.Next kwamen verschillende inzichten naar voren. Mensen waren vaak geneigd
+om de AI-aannames te rechtvaardigen, zelfs als deze onjuist of absurd waren. Dit kan ook goed terug gevonden worden bij 
+Society 5.0 waarbij er nog geen AI-aannames waren en de antwoorden random waren. Dit wijst op een vertrouwen in AI dat 
+kritisch denken kan ondermijnen. Daarnaast bleek dat het invullen van feedbackformulieren een drempel vormde, wat de 
+dataverzameling beperkte.
+
+Ons advies hierbij is om een combinatie van technische en educatieve maatregelen toe te passen om gebruikers bewuster en
+kritischer te maken ten opzichte van AI-uitkomsten. Hoewel bias-tests, audits en human-in-the-loop mechanismen 
+essentieel zijn, zijn ze op zichzelf niet voldoende. Daarom adviseren wij: AI-systemen in te zetten als leermiddel dat 
+hun eigen beperkingen en aannames transparant toont, ruimte te creëren voor reflectie, dialoog en feedback binnen de 
+gebruikerservaring, en AI niet alleen efficiënt, maar ook begrijpelijk en bespreekbaar te maken. Voor concrete 
+vervolgstappen kan het onderzoek worden uitgebreid door dieper te onderzoeken waarom mensen AI vertrouwen en aannames 
+accepteren. Samenwerking met psychologen of gedragswetenschappers kan helpen deze mechanismen beter in kaart te brengen,
+zodat het ontwerp verder kan worden geoptimaliseerd om kritisch denken bij gebruikers te stimuleren. Door deze 
+maatregelen te combineren kan de opdrachtgever AI-toepassingen ontwikkelen die niet alleen functioneel en innovatief 
+zijn, maar ook verantwoord en mensgericht.
+
+link naar de prototype: https://www.parallax-darktech.nl/
+
 
 ## Introductie
 
@@ -40,6 +68,36 @@ verzamelen. Doel was niet om een productierijpe gezichtsherkenner te bouwen, maa
 zien hoe snel AI aannames maakt, welke risico’s dat met zich meebrengt en hoe gebruikers daarop reageren.
 
 ## Analyse
+
+De probleemstelling van onze opdracht is dat generatieve AI-tools zoals ChatGPT, Claude en Midjourney mainstream zijn
+geworden. Deze tools worden steeds vaker gebruikt in bijvoorbeeld het onderwijs, werk of privé, alleen weinig mensen
+begrijpen hoe deze tools en de AI-systemen erachter precies werken. Vragen zoals "Wat is een LLM?", "Hoe komt een AI tot
+een antwoord?" en "Wat zijn de implicaties van het massaal inzetten van deze technologie in het dagelijks leven?" heeft
+de gemiddelde gebruiker geen antwoord op.
+
+De voornaamste oorzaak is het gebruik aan publieke AI-literacy, ofwel het vermogen om AI-systemen kritisch te begrijpen
+en gebruiken. Er is behoefte aan nieuwe educatieve en ervaringsgerichte manieren om niet-tech experts bewust te maken
+van hoe generatieve AI werkt, welke aannames erin zitten, en wat de ethische risico's zijn (denk aan bias,
+desinformatie, auteursrecht, vervreemding van creatief werk, of afhankelijkheid van black-box systemen).
+
+Voor deze oorzaak hebben wij het afgelopen semester een interventie bedacht aan de hand van de kernvraag: "Hoe kun je
+via een interactief, provocatief prototype het publiek laten reflecteren op de werking, aannames en gevolgen van
+generatieve AI-technologieën zoals ChatGPT of Claude?"
+
+Tijdens het project hebben wij verkend hoe wij generatieve AI op een speelse en kritische manier kunnen presenteren aan
+niet-tech experts. Hierbij hebben we vooral gebruik gemaakt van de bekendste AI-chatbots zoals ChatGPT, Claude en Gemini
+omdat deze in het dagelijks leven het meest gebruikt worden. We hebben in het begin kort overwogen zelf een AI-model te
+draaien, maar dit zal voor niet-tech experts mogelijk te complex zijn en wij zagen geen verdere toegevoegde waarde ten
+opzichte van AI API's. Hieruit viel verder niet echt iets te leren, maar kan wel helpen bij het overbrengen tot
+niet-tech experts omdat zij waarschijnlijk alleen bekend zijn met deze grote AI-systemen.  
+We hebben ook verkend wat voor impact de toevoeging van opgevraagde beredenering van AI-antwoorden en de denkwijze van
+AI kan hebben op het ondersteunen van het doel van ons project. Hieruit kan je leren dat AI met overtuiging antwoord
+geeft dat nergens op gebaseerd is, puur zodat de gebruiker antwoord krijgt op zijn/haar vraag. Dit is een van de
+oorzaken dat AI onbetrouwbaar is en bijvoorbeeld misinformatie verspreidt.  
+Tot slot hebben we ook geleerd dat mensen nog weleens geneigd zijn om de antwoorden van AI goed te praten. Op Society
+5.0 deden wij alsof we met foto's van mensen aannames lieten genereren door AI (eigenlijk gewoon random hardcoded
+waarden), en toen mensen zagen dat de AI soms rare of onjuiste aannames deed, probeerden ze dit alsnog te verklaren door
+bijvoorbeeld lichtinval.
 
 ## Dark
 
@@ -124,37 +182,65 @@ noodzakelijke frictie (bijvoorbeeld extra bevestiging bij risicovolle uitspraken
 organisatorische prikkels vaak sterker dan ethische richtlijnen — technische patronen helpen, maar governance, beleid en
 toezicht blijven cruciaal om verantwoorde inzet op schaal af te dwingen.
 
-## Analyse
+## Advies
 
-De probleemstelling van onze opdracht is dat generatieve AI-tools zoals ChatGPT, Claude en Midjourney mainstream zijn
-geworden. Deze tools worden steeds vaker gebruikt in bijvoorbeeld het onderwijs, werk of privé, alleen weinig mensen
-begrijpen hoe deze tools en de AI-systemen erachter precies werken. Vragen zoals "Wat is een LLM?", "Hoe komt een AI tot
-een antwoord?" en "Wat zijn de implicaties van het massaal inzetten van deze technologie in het dagelijks leven?" heeft
-de gemiddelde gebruiker geen antwoord op.
+Voor het advies moeten we eerst kijken naar het probleem en hoe wij dit hebben uitvergroot. Het probleem is dat 
+generatieve AI-tools zoals ChatGPT, Claude en Gemini mainstream zijn geworden. Deze tools worden steeds vaker gebruikt 
+in bijvoorbeeld het onderwijs, werk of privé, alleen weinig mensen begrijpen hoe deze tools en de AI-systemen erachter 
+precies werken. Om dit probleem te voorkomen hebben wij een prototype ontwikkeld dat mensen bewust maakt van de werking,
+aannames en gevolgen van generatieve AI-technologieën. Dit prototype is een fotobooth ervaring waarbij gebruikers in de 
+booth gaan zitten om een foto te maken, waarna verschillende AI-modellen (OpenAI, Claude, Gemini) assumpties genereren 
+op basis van die afbeelding. De bedoeling voor de fotobooth is naast mensen bewuster maken van AI ook om gesprekken op 
+gang te brengen over AI en vooroordelen.
 
-De voornaamste oorzaak is het gebruik aan publieke AI-literacy, ofwel het vermogen om AI-systemen kritisch te begrijpen
-en gebruiken. Er is behoefte aan nieuwe educatieve en ervaringsgerichte manieren om niet-tech experts bewust te maken
-van hoe generatieve AI werkt, welke aannames erin zitten, en wat de ethische risico's zijn (denk aan bias,
-desinformatie, auteursrecht, vervreemding van creatief werk, of afhankelijkheid van black-box systemen).
+Doormiddel van gebruikerstesten [1] tijdens Society 5.0 en Studio.Next hebben wij onderzocht of en hoe dit prototype mensen 
+bewuster maakt van de werking en risico's van AI. Uit deze testen kwamen verschillende inzichten naar voren. Mensen 
+waren vaak geneigd om de AI-aannames te rechtvaardigen, zelfs als deze onjuist of absurd waren. Dit kan ook goed terug 
+gevonden worden bij Society 5.0 waarbij er nog geen AI-aannames waren en de antwoorden compleet random waren. Dit wijst 
+op een vertrouwen in AI dat kritisch denken kan ondermijnen. Daarnaast bleek dat het invullen van feedbackformulieren 
+een drempel vormde, wat de dataverzameling beperkte. Om hier conclusies uit te kunnen trekken zie je snel dat mensen 
+geneigd zijn om AI te vertrouwen en de antwoorden goed te praten. Dit is een belangrijk inzicht voor het ontwerp van 
+AI-systemen en educatieve tools. Hierbij is het cruciaal om mechanismen in te bouwen die kritisch denken stimuleren en 
+gebruikers bewust maken van de beperkingen en risico's van AI. Het echte dilemma hierbij is dat AI steeds vaker 
+onzichtbaar beslissingen voor ons neemt, zonder dat wij hier controle over hebben. Hoe kunnen we Gen-AI beter benutten 
+zonder dat menselijke autonomie en keuzevrijheid langzaam wordne overgenomen door het systeem?
 
-Voor deze oorzaak hebben wij het afgelopen semester een interventie bedacht aan de hand van de kernvraag: "Hoe kun je
-via een interactief, provocatief prototype het publiek laten reflecteren op de werking, aannames en gevolgen van
-generatieve AI-technologieën zoals ChatGPT of Claude?"
+Als we kijken naar de donkere en lichte kant en de impact die dit heeft op de maatschappij, zien we dat AI zowel 
+positieve als negatieve gevolgen kan hebben. Voor bij de donkere kant is het belangrijk om duidelijke grenzen te stellen
+aan het gebruik van AI, vooral wanneer het gaat om sociale scores en biometrische surveillance. Zonder deze grenzen kan 
+AI snel uit de hand lopen en onze macht en vrijheid van keuzes overnemen. Aan de lichte kant kunnen we AI verantwoorder 
+maken door transparantie, geïnformeerde toestemming, human-in-the-loop beslissingen en regelmatige bias-tests toe te 
+passen. Deze maatregelen kunnen helpen om de negatieve gevolgen van AI te beperken en ervoor te zorgen dat AI-systemen 
+op een ethische manier worden ingezet. Zelfs met transparantie en menselijke controle blijft AI keuzes beïnvloeden op 
+een manier die moeilijk zichtbaar is voor gebruikers. Subtiele framing, waarschijnlijkheidsuitspraken en schaalvoordelen
+zorgen ervoor dat AI-adviezen alsnog richtinggevend worden, waardoor echte keuzevrijheid onder druk kan komen te staan.
 
-Tijdens het project hebben wij verkend hoe wij generatieve AI op een speelse en kritische manier kunnen presenteren aan
-niet-tech experts. Hierbij hebben we vooral gebruik gemaakt van de bekendste AI-chatbots zoals ChatGPT, Claude en Gemini
-omdat deze in het dagelijks leven het meest gebruikt worden. We hebben in het begin kort overwogen zelf een AI-model te
-draaien, maar dit zal voor niet-tech experts mogelijk te complex zijn en wij zagen geen verdere toegevoegde waarde ten
-opzichte van AI API's. Hieruit viel verder niet echt iets te leren, maar kan wel helpen bij het overbrengen tot
-niet-tech experts omdat zij waarschijnlijk alleen bekend zijn met deze grote AI-systemen.  
-We hebben ook verkend wat voor impact de toevoeging van opgevraagde beredenering van AI-antwoorden en de denkwijze van
-AI kan hebben op het ondersteunen van het doel van ons project. Hieruit kan je leren dat AI met overtuiging antwoord
-geeft dat nergens op gebaseerd is, puur zodat de gebruiker antwoord krijgt op zijn/haar vraag. Dit is een van de
-oorzaken dat AI onbetrouwbaar is en bijvoorbeeld misinformatie verspreidt.  
-Tot slot hebben we ook geleerd dat mensen nog weleens geneigd zijn om de antwoorden van AI goed te praten. Op Society
-5.0 deden wij alsof we met foto's van mensen aannames lieten genereren door AI (eigenlijk gewoon random hardcoded
-waarden), en toen mensen zagen dat de AI soms rare of onjuiste aannames deed, probeerden ze dit alsnog te verklaren door
-bijvoorbeeld lichtinval.
+Waarom dit relevant is voor onze opdrachtgever? Omdat ontwerp- en ontwikkelkeuzes direct bepalen hoe AI-systemen invloed
+uitoefenen op gebruikers. Ons onderzoek laat zien dat mensen AI-uitkomsten snel vertrouwen en rationaliseren, zelfs 
+wanneer deze onjuist zijn. Dit betekent dat slecht ontworpen AI niet neutraal is, maar actief bijdraagt aan het 
+ondermijnen van kritisch denken en autonomie. 
+
+Juist daarom ligt er bij ontwerpers en ontwikkelaars een duidelijke verantwoordelijkheid. Door bewust rekening te houden
+met de risico’s en ethische implicaties van Gen-AI, kan de opdrachtgever AI-toepassingen ontwikkelen die transparant, 
+controleerbaar en mensgericht zijn. Dit verkleint maatschappelijke risico’s, vergroot vertrouwen bij gebruikers en 
+draagt bij aan duurzame en verantwoorde innovatie.
+
+Voor concrete aanbevelingen kan het onderzoek kan uitgebreid worden door bijvoorbeeld meer diepgang te zoeken in de 
+psychologische aspecten van waarom mensen AI vertrouwen en deze aannames accepteren. In dit vervolgonderzoek kan er 
+misschien samengewerkt worden met psychologen of gedragswetenschappers om dit beter in kaart te brengen. Met behulp van 
+deze inzichten kan het ontwerp worden aangepast om kritischer denken te stimuleren.
+
+Een andere aanbeveling betreft de combinatie van technische en educatieve maatregelen. Hoewel bias-tests, audits en 
+human-in-the-loop mechanismen essentieel zijn, zijn ze op zichzelf niet voldoende. Ons onderzoek laat zien dat educatief
+en ervaringsgericht ontwerp een cruciale rol speelt in het vergroten van AI‑literacy. Daarom adviseren wij:
+
+- AI-systemen te gebruiken als leermiddel dat hun eigen tekortkomingen laat zien.
+- Ruimte te creëren voor reflectie, gesprek en feedback binnen de gebruikerservaring. 
+- AI niet alleen efficiënt, maar ook begrijpelijk en bespreekbaar te maken.
+
+Bronnen:
+
+[1] https://docs.google.com/spreadsheets/d/1R6vBBvVR3SH3v7ZQED2n-C4D2KTi3C9rxXEZDQL9Ro4/edit?resourcekey=&gid=1316423657#gid=1316423657
 
 ## Proces en rollen
 
