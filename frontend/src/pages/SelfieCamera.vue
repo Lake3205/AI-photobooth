@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import {onMounted, ref} from 'vue'
+import {onMounted, onUnmounted, ref} from 'vue'
 import {useWebcamService} from '@/services/webcamService'
 import {useFaceDetection} from '@/composables/useFaceDetection'
-import {CameraIcon} from '@heroicons/vue/24/outline'
+import {CameraIcon, CheckCircleIcon} from '@heroicons/vue/24/outline'
 import UploadButton from '@/components/UploadButton.vue'
 import AssumptionsPanel from '@/components/AssumptionsPanel.vue'
 import TermsButton from '@/components/TermsButton.vue'
@@ -51,17 +51,139 @@ const {
   loadModel
 } = useFaceDetection(videoElement, isStreaming)
 
-// Auto-start camera when component mounts
+// Notification state: show when sessionStorage.comparison_data transitions from empty->present
+const showComparisonNotification = ref(false)
+let _pollInterval: number | null = null
+let _hideTimeout: number | null = null
+let _lastSeenComparison: string | null = null
+let _lastSeenCompletedAt: number | null = null
+let _mountedAt: number = Date.now()
+
+function checkSessionComparison() {
+  try {
+    const raw = sessionStorage.getItem('comparison_data')
+
+    if (!raw) {
+      _lastSeenComparison = null
+      _lastSeenCompletedAt = null
+      return
+    }
+
+    if (raw === _lastSeenComparison) return
+
+    let parsed: any = null
+    try {
+      parsed = JSON.parse(raw)
+    } catch (e) {
+      console.warn('comparison_data in sessionStorage is not valid JSON yet', e)
+      return
+    }
+
+    const completedAt = parsed && typeof parsed.__comparison_completed_at === 'number' ? parsed.__comparison_completed_at : null
+
+    if (completedAt == null || completedAt <= _mountedAt) {
+      return
+    }
+
+    if (_lastSeenCompletedAt != null && completedAt <= _lastSeenCompletedAt) return
+
+    const requiredKeys = ['gemini', 'claude', 'openai']
+    const hasAllKeys = requiredKeys.every(k => {
+      if (!parsed || typeof parsed !== 'object') return false
+      const v = parsed[k]
+      if (v == null) return false
+
+      if (v && typeof v === 'object' && Array.isArray((v as any).assumptions)) {
+        return (v as any).assumptions.length > 0
+      }
+
+      if (typeof v === 'object') return Object.keys(v).length > 0
+
+      return Boolean(v)
+    })
+
+    if (hasAllKeys) {
+      _lastSeenComparison = raw
+      _lastSeenCompletedAt = completedAt
+      showComparisonNotification.value = true
+      if (_hideTimeout) {
+        clearTimeout(_hideTimeout)
+      }
+      _hideTimeout = window.setTimeout(() => {
+        showComparisonNotification.value = false
+        _hideTimeout = null
+      }, 5000)
+    } else {
+    }
+  } catch (e) {
+    console.error('Error reading comparison_data from sessionStorage', e)
+  }
+}
+
 onMounted(async () => {
+  _mountedAt = Date.now()
   await loadModel()
   startCamera()
+
+  checkSessionComparison()
+  _pollInterval = window.setInterval(checkSessionComparison, 1000)
+})
+
+onUnmounted(() => {
+  if (_pollInterval) {
+    clearInterval(_pollInterval);
+    _pollInterval = null
+  }
+  if (_hideTimeout) {
+    clearTimeout(_hideTimeout);
+    _hideTimeout = null
+  }
 })
 </script>
 
 <template>
-  <main class="relative overflow-hidden bg-black text-white min-h-screen">
-
+  <main class="relative overflow-hidden bg-black text-white h-screen">
+    
     <TermsPopup ref="termsPopup"/>
+
+    <Transition
+        enter-active-class="transition-all duration-300 ease-out"
+        enter-from-class="translate-x-full opacity-0"
+        enter-to-class="translate-x-0 opacity-100"
+        leave-active-class="transition-all duration-200 ease-in"
+        leave-from-class="translate-x-0 opacity-100"
+        leave-to-class="translate-x-full opacity-0"
+    >
+      <div
+          v-if="showComparisonNotification"
+          class="fixed top-4 right-4 z-50 max-w-sm"
+      >
+        <div
+            class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg shadow-2xl p-4 border border-indigo-400/50 backdrop-blur-sm">
+          <div class="flex items-start gap-3">
+            <div class="flex-shrink-0">
+              <CheckCircleIcon class="w-6 h-6 text-green-300"/>
+            </div>
+            <div class="flex-1">
+              <h4 class="font-semibold text-white text-sm mb-1">
+                AI Comparison Ready!
+              </h4>
+              <p class="text-indigo-100 text-xs">
+                All 3 AI models have completed their analysis
+              </p>
+            </div>
+            <button
+                class="flex-shrink-0 text-white/70 hover:text-white transition-colors"
+                @click="showComparisonNotification = false"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </Transition>
 
     <div class="pointer-events-none absolute inset-0 opacity-80">
       <div

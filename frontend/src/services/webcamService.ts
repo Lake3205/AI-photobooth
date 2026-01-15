@@ -8,13 +8,6 @@ interface CapturedImage {
     blob: Blob
 }
 
-interface TestAnalysisResponse {
-    model: string;
-    version: string;
-    assumptions: AssumptionData;
-    token?: string;
-}
-
 const {setCookie} = useCookieService();
 
 class AssumptionsService {
@@ -39,7 +32,7 @@ class AssumptionsService {
                 throw new Error(`${errorDetail}`);
             }
 
-            const data: TestAnalysisResponse = await response.json();
+            const data: any = await response.json();
 
             if (!data.assumptions) {
                 return null as unknown as AssumptionData;
@@ -49,10 +42,55 @@ class AssumptionsService {
                 setCookie("form_token", data.token, 1);
             }
 
+            if (data.id) {
+                sessionStorage.setItem("assumption_id", String(data.id));
+            } else {
+                console.warn("No id in response data");
+            }
+            sessionStorage.setItem("ai_model", data.model || "gemini");
+
+            this.startComparison(data.id, data.model || "gemini");
+
             return data.assumptions;
         } catch (error) {
             console.error('Error generating assumptions:', error);
             throw new Error(error instanceof Error ? error.message : 'Failed to generate assumptions');
+        }
+    }
+
+    async startComparison(assumptionId: number, aiModel: string): Promise<void> {
+        try {
+            const imageData = sessionStorage.getItem("captured_image");
+            if (!imageData || !assumptionId || !aiModel) {
+                console.warn("Cannot start comparison - missing data");
+                return;
+            }
+
+            // Convert base64 to blob
+            const response = await fetch(imageData);
+            const blob = await response.blob();
+
+            const formData = new FormData();
+            formData.append('image', blob, 'selfie.jpg');
+
+            const url = `${this.baseUrl}/assumptions/compare?assumptions_id=${assumptionId}&ai_model=${aiModel}`;
+
+            fetch(url, {
+                method: "POST",
+                body: formData,
+            }).then(async (compareResponse) => {
+                if (compareResponse.ok) {
+                    const data = await compareResponse.json();
+                    const enriched = {...data, __comparison_completed_at: Date.now()};
+                    sessionStorage.setItem("comparison_data", JSON.stringify(enriched));
+                } else {
+                    console.error("Comparison failed:", compareResponse.status);
+                }
+            }).catch((error) => {
+                console.error("Comparison error:", error);
+            });
+        } catch (error) {
+            console.error("Failed to start comparison:", error);
         }
     }
 }
@@ -101,13 +139,30 @@ export const useWebcamService = () => {
         }
     })
 
+    const saveImageToStorage = async (imageBlob: Blob) => {
+        try {
+            // Convert blob to base64 for storage
+            const reader = new FileReader();
+            reader.readAsDataURL(imageBlob);
+            reader.onloadend = () => {
+                const base64data = reader.result as string;
+                sessionStorage.setItem('captured_image', base64data);
+                sessionStorage.setItem('captured_image_type', imageBlob.type);
+            };
+        } catch (error) {
+            console.error('Error saving image to storage:', error);
+        }
+    };
+
     const analyzeImage = async (imageBlob: Blob) => {
         try {
             isAnalyzing.value = true
             analysisError.value = null
 
-            const assumptions = await assumptionsService.generateAssumptions(imageBlob)
-            analysisData.value = assumptions
+            // Save image to sessionStorage for later use (comparison)
+            await saveImageToStorage(imageBlob);
+
+            analysisData.value = await assumptionsService.generateAssumptions(imageBlob)
         } catch (error) {
             console.error('Analysis error:', error)
             analysisError.value = error instanceof Error ? error.message : 'Analysis failed'
@@ -181,7 +236,7 @@ export const useWebcamService = () => {
             'bg-gradient-to-r from-amber-500 to-yellow-300'
         ];
 
-        const index = Math.abs(getStringHash(key)) % colorClasses.length; // Ensure index is always valid
+        const index = Math.abs(getStringHash(key)) % colorClasses.length;
         return colorClasses[index] as string;
     };
 

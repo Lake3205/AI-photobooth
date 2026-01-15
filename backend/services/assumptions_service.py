@@ -1,15 +1,15 @@
 from copy import deepcopy
-from typing import Any, Coroutine
 
-from fastapi import HTTPException
-from fastapi import status
 from clients.claude import ClaudeClient
-from models.assumptions import AssumptionsModel
-from constants.clients import Clients
-from services.database_service import DatabaseService
 from clients.google_ai_client import GoogleAIClient
 from clients.openai_client import OpenAIClient
+from constants.clients import Clients
 from constants.model_version_constants import GEMINI_MODEL_VERSION, CLAUDE_MODEL_VERSION, OPENAI_MODEL_VERSION
+from fastapi import HTTPException
+from fastapi import status
+from models.assumptions import AssumptionsModel
+from services.database_service import DatabaseService
+
 
 class AssumptionsService:
     def __init__(self):
@@ -18,7 +18,8 @@ class AssumptionsService:
         self.db_service = DatabaseService()
         self.openai_client = OpenAIClient()
 
-    async def get_assumptions(self, assumptions_model: AssumptionsModel, image_bytes, mime_type, image_name, detect_face = True) -> dict:
+    async def get_assumptions(self, assumptions_model: AssumptionsModel, image_bytes, mime_type, image_name,
+                              detect_face=True) -> dict:
         if detect_face:
             face_detected = await self.google_client.detect_face(image_bytes=image_bytes, mime_type=mime_type)
             if not face_detected.face_detected:
@@ -54,12 +55,36 @@ class AssumptionsService:
         # Log the assumption to the database
         if response:
             try:
-                assumption_id = self.db_service.log_assumption_to_db(ai_model=model_name, data=response, thought=thought)
+                assumption_id = self.db_service.log_assumption_to_db(ai_model=model_name, data=response,
+                                                                     thought=thought)
                 response['id'] = assumption_id
             except Exception as e:
                 print(f"failed to log assumption to database: {e}")
 
         return response
+
+    async def get_thought_by_id(self, assumption_id: int) -> str:
+        conn = None
+        cur = None
+
+        try:
+            conn = self.db_service.get_db_connection()
+            cur = conn.cursor()
+
+            query = "SELECT thought FROM assumptions WHERE id = ?"
+            cur.execute(query, (assumption_id,))
+            row = cur.fetchone()
+
+            if not row:
+                return None
+
+            return row[0]
+
+        except Exception as e:
+            print(f"Error getting thought: {e}")
+            return None
+        finally:
+            self.db_service.close_resources(cur, conn)
 
     async def get_assumptions_by_id(self, assumption_id: int) -> dict:
         conn = None
@@ -72,19 +97,18 @@ class AssumptionsService:
             assumptions_model = AssumptionsModel()
 
             query = """
-            SELECT ac.id, ac.value, av.value, av.reasoning
-            FROM assumptions a 
-            LEFT JOIN assumption_values av ON a.id = av.assumption_id 
-            LEFT JOIN assumption_constants ac ON av.assumption_constant_id = ac.id
-            WHERE a.id = ?
-            """
+                    SELECT ac.id, ac.value, av.value, av.reasoning
+                    FROM assumptions a
+                             LEFT JOIN assumption_values av ON a.id = av.assumption_id
+                             LEFT JOIN assumption_constants ac ON av.assumption_constant_id = ac.id
+                    WHERE a.id = ? \
+                    """
 
             cur.execute(query, (assumption_id,))
             rows = cur.fetchall()
 
             if not rows:
                 raise Exception(f"No assumption found with ID: {assumption_id}")
-
 
             for row in rows:
                 assumption = row[1]
@@ -107,38 +131,87 @@ class AssumptionsService:
             self.db_service.close_resources(cur, conn)
 
     async def compare_assumptions(self, image_bytes, mime_type, image_name, assumptions_id, assumptions_model) -> dict:
-        existing_assumptions = await self.get_assumptions_by_id(assumptions_id)
+        # Get existing assumptions from database (includes thought)
+        existing_assumptions_dict = await self.get_assumptions_by_id(assumptions_id)
+        existing_thought = await self.get_thought_by_id(assumptions_id)
 
         detect_face = False
-        comparison_results = {assumptions_model.model.value.lower(): existing_assumptions}
+        comparison_results = {
+            assumptions_model.model.value.lower(): {
+                "thought": existing_thought,
+                "assumptions": existing_assumptions_dict
+            }
+        }
 
-        def change_model(new_assumptions_model: AssumptionsModel, client: Clients ,version: str) -> AssumptionsModel:
+        def change_model(new_assumptions_model: AssumptionsModel, client: Clients, version: str) -> AssumptionsModel:
             current_model = deepcopy(new_assumptions_model)
             current_model.model = client
             current_model.version = version
             return current_model
 
+        def wrap_assumptions(raw_response: dict, thought: str = None) -> dict:
+            """Convert raw AI response to structured format with thought and assumptions"""
+            assumptions_model_temp = AssumptionsModel()
+            for key, value in raw_response.items():
+                if key in assumptions_model_temp.assumptions and isinstance(value, dict):
+                    assumptions_model_temp.assumptions[key]["value"] = value.get("value")
+                    if "reasoning" in value:
+                        assumptions_model_temp.assumptions[key]["reasoning"] = value.get("reasoning")
+            return {
+                "thought": thought,
+                "assumptions": assumptions_model_temp.assumptions
+            }
+
         match assumptions_model.model:
             case Clients.CLAUDE:
-                comparison_results["gemini"] = await self.get_assumptions(
-                    change_model(assumptions_model, Clients.GEMINI, GEMINI_MODEL_VERSION), image_bytes, mime_type, image_name, detect_face
+                gemini_response = await self.get_assumptions(
+                    change_model(assumptions_model, Clients.GEMINI, GEMINI_MODEL_VERSION), image_bytes, mime_type,
+                    image_name, detect_face
                 )
-                comparison_results["openai"] = await self.get_assumptions(
-                    change_model(assumptions_model, Clients.OPENAI, OPENAI_MODEL_VERSION), image_bytes, mime_type, image_name, detect_face
+                gemini_thought = await self.get_thought_by_id(gemini_response.get('id')) if gemini_response.get(
+                    'id') else None
+                comparison_results["gemini"] = wrap_assumptions(gemini_response, gemini_thought)
+
+                openai_response = await self.get_assumptions(
+                    change_model(assumptions_model, Clients.OPENAI, OPENAI_MODEL_VERSION), image_bytes, mime_type,
+                    image_name, detect_face
                 )
+                openai_thought = await self.get_thought_by_id(openai_response.get('id')) if openai_response.get(
+                    'id') else None
+                comparison_results["openai"] = wrap_assumptions(openai_response, openai_thought)
+
             case Clients.OPENAI:
-                comparison_results["claude"] = await self.get_assumptions(
-                    change_model(assumptions_model, Clients.CLAUDE, CLAUDE_MODEL_VERSION), image_bytes, mime_type, image_name, detect_face
+                claude_response = await self.get_assumptions(
+                    change_model(assumptions_model, Clients.CLAUDE, CLAUDE_MODEL_VERSION), image_bytes, mime_type,
+                    image_name, detect_face
                 )
-                comparison_results["gemini"] = await self.get_assumptions(
-                    change_model(assumptions_model, Clients.GEMINI, GEMINI_MODEL_VERSION), image_bytes, mime_type, image_name,detect_face
+                claude_thought = await self.get_thought_by_id(claude_response.get('id')) if claude_response.get(
+                    'id') else None
+                comparison_results["claude"] = wrap_assumptions(claude_response, claude_thought)
+
+                gemini_response = await self.get_assumptions(
+                    change_model(assumptions_model, Clients.GEMINI, GEMINI_MODEL_VERSION), image_bytes, mime_type,
+                    image_name, detect_face
                 )
+                gemini_thought = await self.get_thought_by_id(gemini_response.get('id')) if gemini_response.get(
+                    'id') else None
+                comparison_results["gemini"] = wrap_assumptions(gemini_response, gemini_thought)
+
             case Clients.GEMINI:
-                comparison_results["claude"] = await self.get_assumptions(
-                    change_model(assumptions_model, Clients.CLAUDE, CLAUDE_MODEL_VERSION), image_bytes, mime_type, image_name, detect_face
+                claude_response = await self.get_assumptions(
+                    change_model(assumptions_model, Clients.CLAUDE, CLAUDE_MODEL_VERSION), image_bytes, mime_type,
+                    image_name, detect_face
                 )
-                comparison_results["openai"] = await self.get_assumptions(
-                    change_model(assumptions_model, Clients.OPENAI, OPENAI_MODEL_VERSION), image_bytes, mime_type, image_name, detect_face
+                claude_thought = await self.get_thought_by_id(claude_response.get('id')) if claude_response.get(
+                    'id') else None
+                comparison_results["claude"] = wrap_assumptions(claude_response, claude_thought)
+
+                openai_response = await self.get_assumptions(
+                    change_model(assumptions_model, Clients.OPENAI, OPENAI_MODEL_VERSION), image_bytes, mime_type,
+                    image_name, detect_face
                 )
+                openai_thought = await self.get_thought_by_id(openai_response.get('id')) if openai_response.get(
+                    'id') else None
+                comparison_results["openai"] = wrap_assumptions(openai_response, openai_thought)
 
         return comparison_results
