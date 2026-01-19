@@ -1,0 +1,126 @@
+<script lang="ts" setup>
+import {onMounted, ref, watch} from 'vue'
+import {useRouter} from 'vue-router'
+import BaseCard from '../components/BaseCard.vue'
+import {createChartForAssumption, fetchAssumptions, groupAssumptionsByFormat} from '../services/dashboardService'
+import {authService} from '../services/authService'
+import type {Chart} from 'chart.js'
+
+const router = useRouter()
+const loading = ref(true)
+const error = ref<string | null>(null)
+const charts = ref<Chart[]>([])
+const groupedAssumptions = ref<Record<string, { name: string; format: string; values: (string | number)[] }>>({})
+const selectedModel = ref<string>('gemini')
+const availableModels = ref<string[]>(['gemini', 'claude'])
+
+const loadDashboardData = async () => {
+  try {
+    loading.value = true
+    error.value = null
+
+    charts.value.forEach(chart => chart.destroy())
+    charts.value = []
+
+    const assumptions = await fetchAssumptions(selectedModel.value)
+
+    if (assumptions.length === 0) {
+      error.value = 'No data available yet!'
+      loading.value = false
+      return
+    }
+
+    groupedAssumptions.value = groupAssumptionsByFormat(assumptions)
+
+    loading.value = false
+
+    setTimeout(() => {
+      Object.entries(groupedAssumptions.value).forEach(([key, assumption]) => {
+        const canvas = document.getElementById(`chart-${key}`) as HTMLCanvasElement
+        if (canvas && assumption.values.length > 0) {
+          const chart = createChartForAssumption(canvas, assumption)
+          if (chart) {
+            charts.value.push(chart)
+          }
+        }
+      })
+    }, 100)
+
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : 'Failed to load'
+    loading.value = false
+  }
+}
+
+const handleLogout = () => {
+  authService.logout()
+  router.push('/login')
+}
+
+onMounted(loadDashboardData)
+
+watch(selectedModel, loadDashboardData)
+</script>
+
+<template>
+  <section class="p-4 sm:p-6 md:p-10 space-y-6 sm:space-y-10">
+    <header class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-indigo-200 via-fuchsia-200 to-pink-300 text-transparent bg-clip-text">
+          Dashboard
+        </h1>
+        <p class="mt-2 text-sm sm:text-base text-gray-400">Analytics and insights from AI assumptions</p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <div class="flex items-center gap-2 sm:gap-3">
+          <label class="text-white/70 text-sm font-medium" for="model-select">AI Model:</label>
+          <select
+              id="model-select"
+              v-model="selectedModel"
+              class="flex-1 sm:flex-initial px-3 sm:px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition min-h-[44px]"
+          >
+            <option v-for="model in availableModels" :key="model" :value="model">
+              {{ model.charAt(0).toUpperCase() + model.slice(1) }}
+            </option>
+          </select>
+        </div>
+
+        <button
+            class="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 rounded-lg text-red-300 hover:text-red-200 transition min-h-[44px]"
+            @click="handleLogout"
+        >
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <div v-if="loading" class="flex justify-center items-center py-20">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
+    </div>
+
+    <div v-else-if="error" class="bg-red-500/10 border border-red-500/50 rounded-lg p-6 text-center">
+      <p class="text-red-400 text-lg">{{ error }}</p>
+    </div>
+
+    <div v-else class="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
+      <BaseCard
+          v-for="(assumption, key) in groupedAssumptions"
+          :key="key"
+          class="p-4 sm:p-6"
+      >
+        <h2 class="text-lg sm:text-xl font-semibold mb-4 text-white">{{ assumption.name }}</h2>
+        <div class="h-64 sm:h-80">
+          <canvas :id="`chart-${key}`"></canvas>
+        </div>
+      </BaseCard>
+    </div>
+  </section>
+</template>
+
+<style scoped>
+canvas {
+  max-height: 100%;
+  max-width: 100%;
+}
+</style>
