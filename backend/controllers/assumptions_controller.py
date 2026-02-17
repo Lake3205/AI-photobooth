@@ -46,10 +46,13 @@ async def generate_assumptions(image: UploadFile, ai_model: Clients):
         case _:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="AI model not supported yet.")
     image_bytes, mime_type, image_name = read_image_bytes(image)
+    
+    # Create a session for this selfie request
+    session_id = assumptions_service.db_service.create_assumption_session(image_name, mime_type)
 
     try:
         assumptions = await assumptions_service.get_assumptions(assumptions_model, image_bytes, mime_type, image_name,
-                                                                detect_face)
+                                                                detect_face, session_id)
     except errors.ClientError as e:
         if e.code == 429:
             raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS,
@@ -76,7 +79,7 @@ async def generate_assumptions(image: UploadFile, ai_model: Clients):
 
     if 'id' in assumptions and type(assumptions['id'] is int):
         assumption_id = assumptions['id']
-        token = form_service.log_form_token(assumption_id)
+        token = form_service.log_form_token(assumption_id, session_id)
 
         assumptions_model.set_token(token)
         assumptions_model.assumption_id = assumption_id
@@ -84,6 +87,97 @@ async def generate_assumptions(image: UploadFile, ai_model: Clients):
     assumptions_model.set_assumptions_json(assumptions)
 
     return assumptions_model.to_dict()
+
+
+@router.post("/generate-all", status_code=status.HTTP_200_OK)
+async def generate_all_assumptions(image: UploadFile):
+    """Generate assumptions from all available AI models (Gemini, OpenAI, Claude) in one session"""
+    image_bytes, mime_type, image_name = read_image_bytes(image)
+    
+    # Create ONE session for all AI models
+    session_id = assumptions_service.db_service.create_assumption_session(image_name, mime_type)
+    
+    # Disable face detection for all models in batch generation (assumed to be pre-checked)
+    detect_face = False
+    results = {
+        "session_id": session_id,
+        "assumptions": {}
+    }
+    
+    # Try Gemini
+    try:
+        gemini_model = AssumptionsModel()
+        gemini_model.model = Clients.GEMINI
+        gemini_model.version = GEMINI_MODEL_VERSION
+        
+        gemini_assumptions = await assumptions_service.get_assumptions(
+            gemini_model, image_bytes, mime_type, image_name, detect_face, session_id
+        )
+        
+        if 'id' in gemini_assumptions:
+            gemini_model.assumption_id = gemini_assumptions['id']
+            token = form_service.log_form_token(gemini_assumptions['id'], session_id)
+            gemini_model.set_token(token)
+        
+        gemini_model.set_assumptions_json(gemini_assumptions)
+        gemini_dict = gemini_model.to_dict()
+        # Add thought to the response for comparison view
+        if 'thought' in gemini_assumptions:
+            gemini_dict['thought'] = gemini_assumptions['thought']
+        results["assumptions"]["gemini"] = gemini_dict
+        results["primary_token"] = gemini_model.token  # Use Gemini's token as primary
+        
+    except Exception as e:
+        results["assumptions"]["gemini"] = {"error": str(e)}
+    
+    # Try OpenAI
+    try:
+        openai_model = AssumptionsModel()
+        openai_model.model = Clients.OPENAI
+        openai_model.version = OPENAI_MODEL_VERSION
+        
+        openai_assumptions = await assumptions_service.get_assumptions(
+            openai_model, image_bytes, mime_type, image_name, False, session_id
+        )
+        
+        if 'id' in openai_assumptions:
+            openai_model.assumption_id = openai_assumptions['id']
+        
+        openai_model.set_assumptions_json(openai_assumptions)
+        openai_dict = openai_model.to_dict()
+        # Add thought to the response for comparison view
+        if 'thought' in openai_assumptions:
+            openai_dict['thought'] = openai_assumptions['thought']
+        results["assumptions"]["openai"] = openai_dict
+        
+    except Exception as e:
+        results["assumptions"]["openai"] = {"error": str(e)}
+    
+    # Try Claude (skip if no API key)
+    if assumptions_service.claude_client.api_key:
+        try:
+            claude_model = AssumptionsModel()
+            claude_model.model = Clients.CLAUDE
+            claude_model.version = CLAUDE_MODEL_VERSION
+            
+            claude_assumptions = await assumptions_service.get_assumptions(
+                claude_model, image_bytes, mime_type, image_name, False, session_id
+            )
+            
+            if 'id' in claude_assumptions:
+                claude_model.assumption_id = claude_assumptions['id']
+            
+            claude_model.set_assumptions_json(claude_assumptions)
+            claude_dict = claude_model.to_dict()
+            # Add thought to the response for comparison view
+            if 'thought' in claude_assumptions:
+                claude_dict['thought'] = claude_assumptions['thought']
+            results["assumptions"]["claude"] = claude_dict
+            
+        except Exception as e:
+            results["assumptions"]["claude"] = {"error": str(e)}
+    
+    return results
 
 
 # Endpoint for testing purposes that returns fixed assumptions

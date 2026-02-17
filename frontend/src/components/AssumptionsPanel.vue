@@ -25,8 +25,9 @@ const props = defineProps<{
 const {getCookie} = useCookieService();
 
 const entries = computed(() => {
-  if (!props.analysisData) return []
-  return Object.keys(props.analysisData).map((k) => (props.analysisData as any)[k]) as AssumptionType[]
+  if (!props.analysisData || !props.analysisData.assumptions) return []
+  const assumptions = props.analysisData.assumptions
+  return Object.keys(assumptions).map((k) => (assumptions as any)[k]) as AssumptionType[]
 })
 
 // Separate text and numeric fields for better presentation

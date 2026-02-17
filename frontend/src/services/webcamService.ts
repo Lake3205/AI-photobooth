@@ -1,4 +1,4 @@
-import type {AssumptionData, AssumptionType} from '@/types/AssumptionType';
+import type {AssumptionData} from '@/types/AssumptionType';
 import {computed, onUnmounted, ref, watch} from 'vue'
 import {useCookieService} from './cookieService';
 
@@ -22,7 +22,7 @@ class AssumptionsService {
             const formData = new FormData();
             formData.append('image', imageBlob, filename);
 
-            const response = await fetch(`${this.baseUrl}/assumptions/generate?ai_model=gemini`, {
+            const response = await fetch(`${this.baseUrl}/assumptions/generate-all`, {
                 method: 'POST',
                 body: formData,
             });
@@ -34,31 +34,76 @@ class AssumptionsService {
 
             const data: any = await response.json();
 
-            if (!data.assumptions) {
+            // Handle the new multi-model response format
+            if (!data.assumptions || !data.assumptions.gemini) {
                 return null as unknown as AssumptionData;
             }
 
-            if (data.token) {
-                setCookie("form_token", data.token, 1);
+            // Store session_id for tracking related assumptions
+            if (data.session_id) {
+                sessionStorage.setItem("session_id", String(data.session_id));
             }
 
-            if (data.id) {
-                sessionStorage.setItem("assumption_id", String(data.id));
+            // Use primary token (from Gemini) for the form
+            if (data.primary_token) {
+                setCookie("form_token", data.primary_token, 1);
+            }
+
+            // Store Gemini assumption ID as primary
+            const geminiData = data.assumptions.gemini;
+            if (geminiData.id) {
+                sessionStorage.setItem("assumption_id", String(geminiData.id));
             } else {
-                console.warn("No id in response data");
+                console.warn("No id in Gemini response data");
             }
-            sessionStorage.setItem("ai_model", data.model || "gemini");
+            sessionStorage.setItem("ai_model", geminiData.model || "gemini");
 
-            this.startComparison(data.id, data.model || "gemini");
+            // Store comparison data from all models
+            // Extract the structure expected by ComparisonData type
+            const comparisonData: any = {};
+            
+            if (data.assumptions.gemini) {
+                comparisonData.gemini = {
+                    thought: data.assumptions.gemini.thought || '',
+                    assumptions: data.assumptions.gemini.assumptions
+                };
+            }
+            
+            if (data.assumptions.openai && !data.assumptions.openai.error) {
+                comparisonData.openai = {
+                    thought: data.assumptions.openai.thought || '',
+                    assumptions: data.assumptions.openai.assumptions
+                };
+            }
+            
+            if (data.assumptions.claude && !data.assumptions.claude.error) {
+                comparisonData.claude = {
+                    thought: data.assumptions.claude.thought || '',
+                    assumptions: data.assumptions.claude.assumptions
+                };
+            }
+            
+            sessionStorage.setItem("comparison_data", JSON.stringify(comparisonData));
 
-            return data.assumptions;
+            // Return the full AssumptionData structure for Gemini (primary)
+            return {
+                thought: geminiData.thought || '',
+                assumptions: geminiData.assumptions
+            };
         } catch (error) {
             console.error('Error generating assumptions:', error);
             throw new Error(error instanceof Error ? error.message : 'Failed to generate assumptions');
         }
     }
 
-    async startComparison(assumptionId: number, aiModel: string): Promise<void> {
+    async startComparison(_assumptionId: number, _aiModel: string): Promise<void> {
+        // This method is no longer needed since /generate-all handles all models
+        // Keeping it for backward compatibility but it won't be called
+        console.log("Comparison already completed in generate-all endpoint");
+        return;
+    }
+
+    async oldStartComparison(assumptionId: number, aiModel: string): Promise<void> {
         try {
             const imageData = sessionStorage.getItem("captured_image");
             if (!imageData || !assumptionId || !aiModel) {

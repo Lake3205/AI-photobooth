@@ -19,7 +19,7 @@ class AssumptionsService:
         self.openai_client = OpenAIClient()
 
     async def get_assumptions(self, assumptions_model: AssumptionsModel, image_bytes, mime_type, image_name,
-                              detect_face=True) -> dict:
+                              detect_face=True, session_id: int = None) -> dict:
         if detect_face:
             face_detected = await self.google_client.detect_face(image_bytes=image_bytes, mime_type=mime_type)
             if not face_detected.face_detected:
@@ -58,6 +58,15 @@ class AssumptionsService:
                 assumption_id = self.db_service.log_assumption_to_db(ai_model=model_name, data=response,
                                                                      thought=thought)
                 response['id'] = assumption_id
+                
+                # Include thought in response if available
+                if thought:
+                    response['thought'] = thought
+                
+                # Link assumption to session if session_id is provided
+                if session_id and assumption_id:
+                    self.db_service.link_assumption_to_session(session_id, assumption_id)
+                    response['session_id'] = session_id
             except Exception as e:
                 print(f"failed to log assumption to database: {e}")
 
@@ -142,6 +151,11 @@ class AssumptionsService:
                 "assumptions": existing_assumptions_dict
             }
         }
+        
+        # Create a session for this comparison to group all related assumptions
+        session_id = self.db_service.create_assumption_session(image_name, mime_type)
+        # Link the existing assumption to this session
+        self.db_service.link_assumption_to_session(session_id, assumptions_id)
 
         def change_model(new_assumptions_model: AssumptionsModel, client: Clients, version: str) -> AssumptionsModel:
             current_model = deepcopy(new_assumptions_model)
@@ -166,7 +180,7 @@ class AssumptionsService:
             case Clients.CLAUDE:
                 gemini_response = await self.get_assumptions(
                     change_model(assumptions_model, Clients.GEMINI, GEMINI_MODEL_VERSION), image_bytes, mime_type,
-                    image_name, detect_face
+                    image_name, detect_face, session_id
                 )
                 gemini_thought = await self.get_thought_by_id(gemini_response.get('id')) if gemini_response.get(
                     'id') else None
@@ -174,7 +188,7 @@ class AssumptionsService:
 
                 openai_response = await self.get_assumptions(
                     change_model(assumptions_model, Clients.OPENAI, OPENAI_MODEL_VERSION), image_bytes, mime_type,
-                    image_name, detect_face
+                    image_name, detect_face, session_id
                 )
                 openai_thought = await self.get_thought_by_id(openai_response.get('id')) if openai_response.get(
                     'id') else None
@@ -183,7 +197,7 @@ class AssumptionsService:
             case Clients.OPENAI:
                 claude_response = await self.get_assumptions(
                     change_model(assumptions_model, Clients.CLAUDE, CLAUDE_MODEL_VERSION), image_bytes, mime_type,
-                    image_name, detect_face
+                    image_name, detect_face, session_id
                 )
                 claude_thought = await self.get_thought_by_id(claude_response.get('id')) if claude_response.get(
                     'id') else None
@@ -191,7 +205,7 @@ class AssumptionsService:
 
                 gemini_response = await self.get_assumptions(
                     change_model(assumptions_model, Clients.GEMINI, GEMINI_MODEL_VERSION), image_bytes, mime_type,
-                    image_name, detect_face
+                    image_name, detect_face, session_id
                 )
                 gemini_thought = await self.get_thought_by_id(gemini_response.get('id')) if gemini_response.get(
                     'id') else None
@@ -200,7 +214,7 @@ class AssumptionsService:
             case Clients.GEMINI:
                 claude_response = await self.get_assumptions(
                     change_model(assumptions_model, Clients.CLAUDE, CLAUDE_MODEL_VERSION), image_bytes, mime_type,
-                    image_name, detect_face
+                    image_name, detect_face, session_id
                 )
                 claude_thought = await self.get_thought_by_id(claude_response.get('id')) if claude_response.get(
                     'id') else None
@@ -208,10 +222,11 @@ class AssumptionsService:
 
                 openai_response = await self.get_assumptions(
                     change_model(assumptions_model, Clients.OPENAI, OPENAI_MODEL_VERSION), image_bytes, mime_type,
-                    image_name, detect_face
+                    image_name, detect_face, session_id
                 )
                 openai_thought = await self.get_thought_by_id(openai_response.get('id')) if openai_response.get(
                     'id') else None
                 comparison_results["openai"] = wrap_assumptions(openai_response, openai_thought)
-
+        
+        comparison_results["session_id"] = session_id
         return comparison_results

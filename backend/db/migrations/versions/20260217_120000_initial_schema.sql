@@ -118,29 +118,29 @@ CREATE TABLE IF NOT EXISTS form_tokens (
         ON DELETE CASCADE
 );
 
--- Create indexes for better query performance
-CREATE INDEX idx_assumption_constants_format_id
+-- Create indexes for better query performance (skip if they exist)
+CREATE INDEX IF NOT EXISTS idx_assumption_constants_format_id
     ON assumption_constants(format_id);
 
-CREATE INDEX idx_assumption_values_assumption_id
+CREATE INDEX IF NOT EXISTS idx_assumption_values_assumption_id
     ON assumption_values(assumption_id);
 
-CREATE INDEX idx_assumption_values_constant_id
+CREATE INDEX IF NOT EXISTS idx_assumption_values_constant_id
     ON assumption_values(assumption_constant_id);
 
-CREATE INDEX idx_forms_assumption_id
+CREATE INDEX IF NOT EXISTS idx_forms_assumption_id
     ON forms(assumption_id);
 
-CREATE INDEX idx_form_questions_type_id
+CREATE INDEX IF NOT EXISTS idx_form_questions_type_id
     ON form_questions(question_type_id);
 
-CREATE INDEX idx_form_results_form_id
+CREATE INDEX IF NOT EXISTS idx_form_results_form_id
     ON form_results(form_id);
 
-CREATE INDEX idx_form_results_question_id
+CREATE INDEX IF NOT EXISTS idx_form_results_question_id
     ON form_results(form_question_id);
 
-CREATE INDEX idx_form_tokens_assumption_id
+CREATE INDEX IF NOT EXISTS idx_form_tokens_assumption_id
     ON form_tokens(assumption_id);
 
 -- DOWN

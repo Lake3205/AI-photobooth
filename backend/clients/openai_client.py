@@ -1,6 +1,7 @@
 import requests
 import json
 import config
+import base64
 
 from constants.prompt import USER_PROMPT, SYSTEM_PROMPT
 from models.assumptions import AssumptionsResponse
@@ -10,17 +11,6 @@ from services.image_service import ImageService
 from openai import OpenAI
 
 base_url = "https://api.openai.com/v1"
-
-async def upload_image(image_bytes: bytes, filename: str, content_type: str) -> str:
-    response = requests.post(
-        "https://catbox.moe/user/api.php",
-        data={"reqtype": "fileupload"},
-        files={"fileToUpload": (filename, image_bytes, content_type)}
-    )
-    if response.status_code == 200:
-        return response.text.strip()
-    else:
-        raise Exception(f"Catbox upload failed: {response.status_code} - {response.text}")
 
 class OpenAIClient:
     def __init__(self):
@@ -43,7 +33,13 @@ class OpenAIClient:
         ]
 
     async def generate_openai_response(self, image_bytes: bytes, filename: str, content_type: str, version) -> dict:
-        image_url = await upload_image(image_bytes, filename, content_type)
+        # Resize image to reduce token usage
+        resized_bytes = ImageService().resize_image(image_bytes)
+        
+        # Convert image to base64 data URL
+        base64_image = base64.b64encode(resized_bytes).decode('utf-8')
+        data_url = f"data:{content_type};base64,{base64_image}"
+        
         messages = [
             ChatCompletionUserMessageParam(
                     role="user",
@@ -54,7 +50,7 @@ class OpenAIClient:
                         ),
                         ChatCompletionContentPartImageParam(
                             type="image_url",
-                            image_url={"url": image_url}
+                            image_url={"url": data_url}
                         )
                     ]
             )]

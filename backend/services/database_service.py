@@ -309,6 +309,93 @@ class DatabaseSingleton:
         finally:
             self.close_resources(cur, conn)
 
+    def create_assumption_session(self, image_name: str = None, image_mime_type: str = None):
+        """Create a new assumption session for grouping related assumptions"""
+        conn = None
+        cur = None
+        
+        try:
+            conn = self.get_connection()
+            cur = conn.cursor()
+            
+            query = """
+                INSERT INTO assumption_sessions (image_name, image_mime_type)
+                VALUES (?, ?)
+            """
+            cur.execute(query, (image_name, image_mime_type))
+            session_id = cur.lastrowid
+            
+            conn.commit()
+            return session_id
+            
+        except Exception as e:
+            if conn:
+                try:
+                    conn.rollback()
+                except Exception as rollback_error:
+                    print(f"Error during rollback: {rollback_error}")
+            raise HTTPException(status_code=500, detail=f"Error creating session: {e}")
+        finally:
+            self.close_resources(cur, conn)
+
+    def link_assumption_to_session(self, session_id: int, assumption_id: int):
+        """Link an assumption to a session"""
+        conn = None
+        cur = None
+        
+        try:
+            conn = self.get_connection()
+            cur = conn.cursor()
+            
+            query = """
+                INSERT INTO assumption_session_assumptions (session_id, assumption_id)
+                VALUES (?, ?)
+            """
+            cur.execute(query, (session_id, assumption_id))
+            
+            conn.commit()
+            
+        except Exception as e:
+            if conn:
+                try:
+                    conn.rollback()
+                except Exception as rollback_error:
+                    print(f"Error during rollback: {rollback_error}")
+            raise HTTPException(status_code=500, detail=f"Error linking assumption to session: {e}")
+        finally:
+            self.close_resources(cur, conn)
+
+    def get_session_assumptions(self, session_id: int):
+        """Get all assumptions for a given session"""
+        conn = None
+        cur = None
+        
+        try:
+            conn = self.get_connection()
+            cur = conn.cursor()
+            
+            query = """
+                SELECT a.id, a.ai_model, a.created_at, a.thought
+                FROM assumptions a
+                JOIN assumption_session_assumptions asa ON a.id = asa.assumption_id
+                WHERE asa.session_id = ?
+                ORDER BY a.created_at
+            """
+            cur.execute(query, (session_id,))
+            rows = cur.fetchall()
+            
+            return [{
+                "id": row[0],
+                "ai_model": row[1],
+                "created_at": row[2],
+                "thought": row[3]
+            } for row in rows]
+            
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error getting session assumptions: {e}")
+        finally:
+            self.close_resources(cur, conn)
+
 class DatabaseService:
     _instance = None
     _db_singleton = None
@@ -345,3 +432,12 @@ class DatabaseService:
 
     def get_user_by_username(self, username: str):
         return self._db_singleton.get_user_by_username(username)
+
+    def create_assumption_session(self, image_name: str = None, image_mime_type: str = None):
+        return self._db_singleton.create_assumption_session(image_name, image_mime_type)
+
+    def link_assumption_to_session(self, session_id: int, assumption_id: int):
+        return self._db_singleton.link_assumption_to_session(session_id, assumption_id)
+
+    def get_session_assumptions(self, session_id: int):
+        return self._db_singleton.get_session_assumptions(session_id)

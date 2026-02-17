@@ -65,6 +65,5 @@ if (token) {
           </form>
         </div>
       </div>
-    </div>
   </PageLayout>
 </template>

@@ -132,7 +132,7 @@ class FormService:
         finally:
             self.db_service.close_resources(cur, conn)
         
-    def log_form_token(self, assumption_id: int):
+    def log_form_token(self, assumption_id: int, session_id: int = None):
         conn = None
         cur = None
         
@@ -144,11 +144,11 @@ class FormService:
             cur = conn.cursor()
             
             query = """
-            INSERT INTO form_tokens (token, assumption_id, expires_at)
-            VALUES (?, ?, ?)
+            INSERT INTO form_tokens (token, assumption_id, expires_at, session_id)
+            VALUES (?, ?, ?, ?)
             """
             
-            cur.execute(query, (access_token, assumption_id, expires_at))
+            cur.execute(query, (access_token, assumption_id, expires_at, session_id))
             conn.commit()
             
             return access_token

@@ -10,11 +10,26 @@ erDiagram
         DATETIME created_at
     }
 
+    assumption_sessions {
+        INT id PK
+        DATETIME created_at
+        VARCHAR image_name
+        VARCHAR image_mime_type
+    }
+
     assumptions {
         INT id PK
         DATETIME created_at
         VARCHAR ai_model
         TINYINT reasoning_enabled
+        TEXT thought
+    }
+
+    assumption_session_assumptions {
+        INT id PK
+        INT session_id FK
+        INT assumption_id FK
+        DATETIME created_at
     }
 
     assumption_constants {
@@ -65,20 +80,27 @@ erDiagram
     form_tokens {
         VARCHAR token PK
         INT assumption_id FK
+        INT session_id FK
         DATETIME expires_at
         TINYINT used
         DATETIME created_at
     }
 
     %% Relationships
+    assumption_sessions ||--o{ assumption_session_assumptions : "groups"
+    assumptions ||--o{ assumption_session_assumptions : "belongs to"
+    
     assumptions ||--o{ assumption_values : "has values"
     assumption_constants ||--o{ assumption_values : "defines"
     
     assumption_constants }|..|{ formats : "has format"
 
     assumptions ||--o{ forms : "has forms"
+    assumption_sessions ||--o{ form_tokens : "tracks forms"
+    assumptions ||--o{ form_tokens : "generates tokens"
+    
     assumption_constants ||--o{ form_questions : "used in questions"
     form_questions ||--o{ form_results : "receives answers"
     forms ||--o{ form_results : "contains results"
-    assumptions ||--o{ form_tokens : "has tokens"
+    form_question_types ||--o{ form_questions : "defines type"
 ```
