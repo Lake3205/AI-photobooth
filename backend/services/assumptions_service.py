@@ -9,6 +9,7 @@ from fastapi import HTTPException
 from fastapi import status
 from models.assumptions import AssumptionsModel
 from services.database_service import DatabaseService
+from services.ai_settings_service import AISettingsService
 
 
 class AssumptionsService:
@@ -17,9 +18,23 @@ class AssumptionsService:
         self.google_client = GoogleAIClient()
         self.db_service = DatabaseService()
         self.openai_client = OpenAIClient()
+        self.ai_settings_service = AISettingsService()
 
     async def get_assumptions(self, assumptions_model: AssumptionsModel, image_bytes, mime_type, image_name,
                               detect_face=True, session_id: int = None) -> dict:
+        # Check if the requested provider is enabled
+        provider_name = assumptions_model.model.value
+        if not self.ai_settings_service.is_provider_enabled(provider_name):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, 
+                detail=f"AI provider '{provider_name}' is currently disabled"
+            )
+        
+        # Get the model version from settings (overrides the version from the request)
+        model_version = self.ai_settings_service.get_provider_model(provider_name)
+        if model_version:
+            assumptions_model.version = model_version
+        
         if detect_face:
             face_detected = await self.google_client.detect_face(image_bytes=image_bytes, mime_type=mime_type)
             if not face_detected.face_detected:

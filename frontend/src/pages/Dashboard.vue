@@ -5,10 +5,11 @@ import AIOutputCharts from '../components/AIOutputCharts.vue'
 import AssumptionComparison from '../components/AssumptionComparison.vue'
 import FormQuestionsManager from '../components/FormQuestionsManager.vue'
 import FormResultsCharts from '../components/FormResultsCharts.vue'
+import AIProviderSettings from '../components/AIProviderSettings.vue'
 import {authService} from '../services/authService'
 
 const router = useRouter()
-const activeView = ref<'aiOutput' | 'comparison' | 'formResults' | 'questions'>('aiOutput')
+const activeView = ref<'aiOutput' | 'comparison' | 'formResults' | 'questions' | 'aiSettings'>('aiOutput')
 
 const handleLogout = () => {
   authService.logout()
@@ -63,6 +64,13 @@ const handleLogout = () => {
       >
         Manage Questions
       </button>
+      <button
+          :class="activeView === 'aiSettings' ? 'bg-indigo-500/30 border-indigo-400 text-indigo-100' : 'bg-white/5 border-white/20 text-white/80 hover:bg-white/10'"
+          class="px-4 py-2 border rounded-lg transition min-h-[44px]"
+          @click="activeView = 'aiSettings'"
+      >
+        AI Settings
+      </button>
     </div>
 
     <AIOutputCharts v-if="activeView === 'aiOutput'" />
@@ -71,6 +79,8 @@ const handleLogout = () => {
     
     <FormResultsCharts v-else-if="activeView === 'formResults'" />
     
-    <FormQuestionsManager v-else />
+    <FormQuestionsManager v-else-if="activeView === 'questions'" />
+    
+    <AIProviderSettings v-else-if="activeView === 'aiSettings'" />
   </section>
 </template>
