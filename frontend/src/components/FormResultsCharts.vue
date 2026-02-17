@@ -1,47 +1,17 @@
 <script lang="ts" setup>
-import {nextTick, onBeforeUnmount, onMounted, ref} from 'vue'
-import BaseCard from './BaseCard.vue'
-import {createChartForFormQuestion, fetchFormResults} from '../services/dashboardService'
-import type {FormResult} from '../services/dashboardService'
-import type {Chart} from 'chart.js'
+import { onMounted, ref } from 'vue'
+import ChartCard from './ChartCard.vue'
+import { createChartForFormQuestion, fetchFormResults } from '../services/dashboardService'
+import type { FormResult } from '../services/dashboardService'
 
 const loading = ref(true)
 const error = ref<string | null>(null)
-const charts = ref<Chart[]>([])
 const questions = ref<FormResult[]>([])
-const chartKey = ref(0)
-
-const destroyCharts = () => {
-  charts.value.forEach(chart => {
-    try {
-      chart.destroy()
-    } catch (e) {
-      console.warn('Error destroying chart:', e)
-    }
-  })
-  charts.value = []
-}
-
-const renderCharts = async () => {
-  await nextTick()
-  
-  questions.value.forEach((question) => {
-    const canvas = document.getElementById(`chart-question-${question.id}`) as HTMLCanvasElement
-    if (canvas && question.answers.length > 0) {
-      const chart = createChartForFormQuestion(canvas, question)
-      if (chart) {
-        charts.value.push(chart)
-      }
-    }
-  })
-}
 
 const loadFormResults = async () => {
   try {
     loading.value = true
     error.value = null
-
-    destroyCharts()
 
     const results = await fetchFormResults()
 
@@ -59,12 +29,7 @@ const loadFormResults = async () => {
       return
     }
 
-    // Force Vue to recreate canvas elements
-    chartKey.value++
-
     loading.value = false
-
-    await renderCharts()
 
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to load form results'
@@ -73,10 +38,6 @@ const loadFormResults = async () => {
 }
 
 onMounted(loadFormResults)
-
-onBeforeUnmount(() => {
-  destroyCharts()
-})
 </script>
 
 <template>
@@ -89,17 +50,15 @@ onBeforeUnmount(() => {
   </div>
 
   <div v-else class="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
-    <BaseCard
+    <ChartCard
         v-for="question in questions"
-        :key="`${question.id}-${chartKey}`"
-        class="p-4 sm:p-6"
+        :key="`question-${question.id}`"
+        :title="question.question"
+        :subtitle="`Total responses: ${question.answers.length}`"
+        :chart-id="`chart-question-${question.id}`"
+        :chart-data="question"
+        :create-chart="createChartForFormQuestion"
     >
-      <h2 class="text-lg sm:text-xl font-semibold mb-4 text-white">{{ question.question }}</h2>
-      <p class="text-sm text-gray-400 mb-4">Total responses: {{ question.answers.length }}</p>
-      <div class="h-64 sm:h-80">
-        <canvas :id="`chart-question-${question.id}`"></canvas>
-      </div>
-      
       <!-- Show explanations for yes/no questions if they exist -->
       <div v-if="question.type === 'yes_no_explain'" class="mt-6">
         <h3 class="text-md font-semibold text-white mb-2">Explanations:</h3>
@@ -121,17 +80,11 @@ onBeforeUnmount(() => {
           </p>
         </div>
       </div>
-    </BaseCard>
+    </ChartCard>
   </div>
 </template>
 
 <style scoped>
-/* Chart canvas sizing */
-canvas {
-  max-height: 100%;
-  max-width: 100%;
-}
-
 /* Custom scrollbar styling */
 .overflow-y-auto::-webkit-scrollbar {
   width: 6px;
