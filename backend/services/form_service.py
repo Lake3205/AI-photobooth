@@ -25,6 +25,63 @@ class FormService:
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid form data",
         )
+
+    def _get_or_create_question_type(self, cur, question_type: str, scale: list[int] | None = None):
+        cur.execute(
+            """
+            SELECT id, min, max FROM form_question_types
+            WHERE value = ?
+            """,
+            (question_type,)
+        )
+        result = cur.fetchone()
+
+        min_val = scale[0] if question_type == "scale" and scale and len(scale) > 0 else None
+        max_val = scale[1] if question_type == "scale" and scale and len(scale) > 1 else None
+
+        if result:
+            question_type_id = result[0]
+            if question_type == "scale" and (result[1] != min_val or result[2] != max_val):
+                cur.execute(
+                    """
+                    UPDATE form_question_types
+                    SET min = ?, max = ?
+                    WHERE id = ?
+                    """,
+                    (min_val, max_val, question_type_id)
+                )
+            return question_type_id
+
+        cur.execute(
+            """
+            INSERT INTO form_question_types (value, min, max)
+            VALUES (?, ?, ?)
+            """,
+            (question_type, min_val, max_val)
+        )
+        return cur.lastrowid
+
+    def _ensure_default_questions(self, cur):
+        cur.execute("SELECT COUNT(*) FROM form_questions")
+        result = cur.fetchone()
+        question_count = result[0] if result else 0
+
+        if question_count > 0:
+            return
+
+        for question_data in ALLOWED_QUESTIONS.values():
+            question_text = question_data.get("question", "")
+            question_type = question_data.get("type", "")
+            scale = question_data.get("scale", None)
+
+            question_type_id = self._get_or_create_question_type(cur, question_type, scale)
+            cur.execute(
+                """
+                INSERT INTO form_questions (question_type_id, question)
+                VALUES (?, ?)
+                """,
+                (question_type_id, question_text)
+            )
         
     def create_form_token(self, assumption_id: int):
         return create_access_token(data={"sub": str(assumption_id)}, expires_delta=self.expiration_time)
@@ -176,55 +233,55 @@ class FormService:
             
             # Process each question in the form data
             for question_key, question_data in form_data.items():
+                if not question_key.startswith("q_"):
+                    raise self.form_exception
+
+                try:
+                    question_id = int(question_key[2:])
+                except ValueError:
+                    raise self.form_exception
+
+                question_metadata_query = """
+                SELECT fq.id, fq.question, fqt.value, fqt.min, fqt.max
+                FROM form_questions fq
+                JOIN form_question_types fqt ON fq.question_type_id = fqt.id
+                WHERE fq.id = ?
+                """
+                cur.execute(question_metadata_query, (question_id,))
+                metadata_result = cur.fetchone()
+
+                if not metadata_result:
+                    raise self.form_exception
+
                 question_text = question_data.get("question", "")
                 question_type = question_data.get("type", "")
                 answer = question_data.get("answer", "")
                 explanation = question_data.get("explanation", "")
                 scale = question_data.get("scale", None)
-                
-                # Get or create form_question_type
-                type_query = """
-                SELECT id FROM form_question_types
-                WHERE value = ?
-                """
-                cur.execute(type_query, (question_type,))
-                type_result = cur.fetchone()
-                
-                if type_result:
-                    question_type_id = type_result[0]
+
+                expected_question_text = metadata_result[1]
+                expected_question_type = metadata_result[2]
+                expected_scale = [metadata_result[3], metadata_result[4]] if metadata_result[3] is not None and metadata_result[4] is not None else None
+
+                if question_text != expected_question_text:
+                    raise self.form_exception
+                if question_type != expected_question_type:
+                    raise self.form_exception
+
+                if question_type == "scale":
+                    if expected_scale is None or scale != expected_scale:
+                        raise self.form_exception
+                    self._validate_scale_answer(answer, expected_scale)
+                elif question_type == "yes_no_explain":
+                    self._validate_yes_no_explain_answer(answer)
                 else:
-                    min_val = scale[0] if scale and len(scale) > 0 else None
-                    max_val = scale[1] if scale and len(scale) > 1 else None
-                    
-                    create_type_query = """
-                    INSERT INTO form_question_types (value, min, max)
-                    VALUES (?, ?, ?)
-                    """
-                    cur.execute(create_type_query, (question_type, min_val, max_val))
-                    question_type_id = cur.lastrowid
-                
-                question_query = """
-                SELECT id FROM form_questions
-                WHERE question_type_id = ? AND question = ?
-                """
-                cur.execute(question_query, (question_type_id, question_text))
-                question_result = cur.fetchone()
-                
-                if question_result:
-                    form_question_id = question_result[0]
-                else:
-                    create_question_query = """
-                    INSERT INTO form_questions (question_type_id, question)
-                    VALUES (?, ?)
-                    """
-                    cur.execute(create_question_query, (question_type_id, question_text))
-                    form_question_id = cur.lastrowid
+                    raise self.form_exception
                 
                 insert_result_query = """
                 INSERT INTO form_results (form_id, form_question_id, value, explanation)
                 VALUES (?, ?, ?, ?)
                 """
-                cur.execute(insert_result_query, (form_id, form_question_id, answer, explanation if explanation else None))
+                cur.execute(insert_result_query, (form_id, question_id, answer, explanation if explanation else None))
             
             # Mark the token as used
             update_token_query = """
@@ -256,26 +313,31 @@ class FormService:
             
     def validate_form_data(self, form_data: dict):
         try:
+            allowed_questions = self.get_form_questions()
+
             for key, question_data in form_data.items():
-                if key not in ALLOWED_QUESTIONS:
+                if key not in allowed_questions:
                     raise self.form_exception
                 question = question_data.get("question", "")
                 question_type = question_data.get("type", "")
                 answer = question_data.get("answer", "")
                 scale = question_data.get("scale", None)
                 
-                if question != ALLOWED_QUESTIONS[key]["question"]:
+                if question != allowed_questions[key]["question"]:
                     raise self.form_exception
-                if (question_type != ALLOWED_QUESTIONS[key]["type"]):
+                if (question_type != allowed_questions[key]["type"]):
                     raise self.form_exception
-                if (scale and scale != ALLOWED_QUESTIONS[key].get("scale", None)):
+                if (scale and scale != allowed_questions[key].get("scale", None)):
                     raise self.form_exception
                 
                 if question_type == "scale":
-                    self._validate_scale_answer(answer, scale)
+                    allowed_scale = allowed_questions[key].get("scale", None)
+                    if not allowed_scale:
+                        raise self.form_exception
+                    self._validate_scale_answer(answer, allowed_scale)
                 elif question_type == "yes_no_explain":
                     self._validate_yes_no_explain_answer(answer)
-        except ValueError or HTTPException:
+        except (ValueError, HTTPException):
             raise self.form_exception
              
     def _validate_scale_answer(self, answer: int, scale: list[int]):
@@ -294,4 +356,150 @@ class FormService:
             raise ValueError(f"Answer {answer} is not valid for yes/no question")
 
     def get_form_questions(self):
-        return ALLOWED_QUESTIONS
+        conn = None
+        cur = None
+
+        try:
+            conn = self.db_service.get_db_connection()
+            cur = conn.cursor()
+
+            self._ensure_default_questions(cur)
+
+            query = """
+            SELECT fq.id, fq.question, fqt.value, fqt.min, fqt.max
+            FROM form_questions fq
+            JOIN form_question_types fqt ON fq.question_type_id = fqt.id
+            ORDER BY fq.id
+            """
+            cur.execute(query)
+            rows = cur.fetchall()
+            conn.commit()
+
+            questions = {}
+            for row in rows:
+                question_id = row[0]
+                question_text = row[1]
+                question_type = row[2]
+                min_val = row[3]
+                max_val = row[4]
+
+                question_key = f"q_{question_id}"
+                questions[question_key] = {
+                    "question": question_text,
+                    "type": question_type,
+                }
+
+                if question_type == "scale" and min_val is not None and max_val is not None:
+                    questions[question_key]["scale"] = [int(min_val), int(max_val)]
+
+            return questions
+        except Exception:
+            if conn:
+                try:
+                    conn.rollback()
+                except Exception as rollback_error:
+                    print(f"Error during rollback: {rollback_error}")
+            raise
+        finally:
+            self.db_service.close_resources(cur, conn)
+
+    def add_form_question(self, question_data: dict):
+        conn = None
+        cur = None
+
+        try:
+            question_text = question_data.get("question", "").strip()
+            question_type = question_data.get("type", "")
+            scale = question_data.get("scale", None)
+
+            if not question_text:
+                raise self.form_exception
+            if question_type not in ["scale", "yes_no_explain"]:
+                raise self.form_exception
+            if question_type == "scale":
+                if not isinstance(scale, list) or len(scale) != 2:
+                    raise self.form_exception
+                self._validate_scale_answer(scale[0], scale)
+                self._validate_scale_answer(scale[1], scale)
+            if question_type == "yes_no_explain":
+                scale = None
+
+            conn = self.db_service.get_db_connection()
+            cur = conn.cursor()
+
+            question_type_id = self._get_or_create_question_type(cur, question_type, scale)
+            cur.execute(
+                """
+                INSERT INTO form_questions (question_type_id, question)
+                VALUES (?, ?)
+                """,
+                (question_type_id, question_text)
+            )
+
+            question_id = cur.lastrowid
+            conn.commit()
+
+            response = {
+                "id": question_id,
+                "key": f"q_{question_id}",
+                "question": question_text,
+                "type": question_type,
+            }
+            if question_type == "scale" and scale:
+                response["scale"] = scale
+
+            return response
+        except HTTPException:
+            if conn:
+                try:
+                    conn.rollback()
+                except Exception as rollback_error:
+                    print(f"Error during rollback: {rollback_error}")
+            raise
+        except Exception:
+            if conn:
+                try:
+                    conn.rollback()
+                except Exception as rollback_error:
+                    print(f"Error during rollback: {rollback_error}")
+            raise self.form_exception
+        finally:
+            self.db_service.close_resources(cur, conn)
+
+    def delete_form_question(self, question_id: int):
+        conn = None
+        cur = None
+
+        try:
+            conn = self.db_service.get_db_connection()
+            cur = conn.cursor()
+
+            cur.execute(
+                """
+                DELETE FROM form_questions
+                WHERE id = ?
+                """,
+                (question_id,)
+            )
+
+            if cur.rowcount == 0:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Question not found")
+
+            conn.commit()
+            return {"success": True, "deleted_id": question_id}
+        except HTTPException:
+            if conn:
+                try:
+                    conn.rollback()
+                except Exception as rollback_error:
+                    print(f"Error during rollback: {rollback_error}")
+            raise
+        except Exception:
+            if conn:
+                try:
+                    conn.rollback()
+                except Exception as rollback_error:
+                    print(f"Error during rollback: {rollback_error}")
+            raise
+        finally:
+            self.db_service.close_resources(cur, conn)

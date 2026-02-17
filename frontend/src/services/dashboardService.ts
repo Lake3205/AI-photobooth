@@ -1,6 +1,7 @@
 import { Chart, registerables } from 'chart.js';
 import type { ChartConfiguration } from 'chart.js';
 import { authService } from './authService';
+import type { FormQuestions, questionType } from '@/types/FormTypes';
 
 Chart.register(...registerables);
 
@@ -15,6 +16,63 @@ export interface AssumptionRecord {
     ai_model: string;
     assumptions: Record<string, AssumptionValue>;
     date_created: string;
+}
+
+export interface DashboardQuestion {
+    key: string;
+    id: number;
+    question: string;
+    type: questionType;
+    scale?: [number, number];
+}
+
+function parseQuestionId(questionKey: string): number {
+    const parsed = Number.parseInt(questionKey.replace('q_', ''), 10);
+    return Number.isNaN(parsed) ? -1 : parsed;
+}
+
+export async function fetchFormQuestions(): Promise<DashboardQuestion[]> {
+    const response = await authService.authenticatedFetch(`${import.meta.env.VITE_API_URL}/form/questions`);
+    if (!response.ok) {
+        throw new Error('Failed to fetch form questions');
+    }
+
+    const questions = (await response.json()) as FormQuestions;
+
+    return Object.entries(questions)
+        .map(([key, value]) => ({
+            key,
+            id: parseQuestionId(key),
+            question: value.question,
+            type: value.type,
+            scale: value.scale,
+        }))
+        .filter((question) => question.id > 0)
+        .sort((a, b) => a.id - b.id);
+}
+
+export async function addFormQuestion(payload: { question: string; type: questionType; scale?: [number, number] }): Promise<void> {
+    const response = await authService.authenticatedFetch(`${import.meta.env.VITE_API_URL}/form/questions`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to add question');
+    }
+}
+
+export async function removeFormQuestion(questionId: number): Promise<void> {
+    const response = await authService.authenticatedFetch(`${import.meta.env.VITE_API_URL}/form/questions/${questionId}`, {
+        method: 'DELETE',
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to delete question');
+    }
 }
 
 // Get data fom backend API

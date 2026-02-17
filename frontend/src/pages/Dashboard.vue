@@ -1,65 +1,19 @@
 <script lang="ts" setup>
-import {onMounted, ref, watch} from 'vue'
+import {ref} from 'vue'
 import {useRouter} from 'vue-router'
-import BaseCard from '../components/BaseCard.vue'
-import {createChartForAssumption, fetchAssumptions, groupAssumptionsByFormat} from '../services/dashboardService'
+import DashboardAnalytics from '../components/DashboardAnalytics.vue'
+import FormQuestionsManager from '../components/FormQuestionsManager.vue'
 import {authService} from '../services/authService'
-import type {Chart} from 'chart.js'
 
 const router = useRouter()
-const loading = ref(true)
-const error = ref<string | null>(null)
-const charts = ref<Chart[]>([])
-const groupedAssumptions = ref<Record<string, { name: string; format: string; values: (string | number)[] }>>({})
+const activeView = ref<'analytics' | 'questions'>('analytics')
 const selectedModel = ref<string>('gemini')
 const availableModels = ref<string[]>(['gemini', 'claude'])
-
-const loadDashboardData = async () => {
-  try {
-    loading.value = true
-    error.value = null
-
-    charts.value.forEach(chart => chart.destroy())
-    charts.value = []
-
-    const assumptions = await fetchAssumptions(selectedModel.value)
-
-    if (assumptions.length === 0) {
-      error.value = 'No data available yet!'
-      loading.value = false
-      return
-    }
-
-    groupedAssumptions.value = groupAssumptionsByFormat(assumptions)
-
-    loading.value = false
-
-    setTimeout(() => {
-      Object.entries(groupedAssumptions.value).forEach(([key, assumption]) => {
-        const canvas = document.getElementById(`chart-${key}`) as HTMLCanvasElement
-        if (canvas && assumption.values.length > 0) {
-          const chart = createChartForAssumption(canvas, assumption)
-          if (chart) {
-            charts.value.push(chart)
-          }
-        }
-      })
-    }, 100)
-
-  } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Failed to load'
-    loading.value = false
-  }
-}
 
 const handleLogout = () => {
   authService.logout()
   router.push('/login')
 }
-
-onMounted(loadDashboardData)
-
-watch(selectedModel, loadDashboardData)
 </script>
 
 <template>
@@ -67,9 +21,9 @@ watch(selectedModel, loadDashboardData)
     <header class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
       <div>
         <h1 class="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-indigo-200 via-fuchsia-200 to-pink-300 text-transparent bg-clip-text">
-          Dashboard
+          Admin Dashboard
         </h1>
-        <p class="mt-2 text-sm sm:text-base text-gray-400">Analytics and insights from AI assumptions</p>
+        <p class="mt-2 text-sm sm:text-base text-gray-400">Analytics and form question management</p>
       </div>
 
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
@@ -95,33 +49,25 @@ watch(selectedModel, loadDashboardData)
       </div>
     </header>
 
-    <div v-if="loading" class="flex justify-center items-center py-20">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
-    </div>
-
-    <div v-else-if="error" class="bg-red-500/10 border border-red-500/50 rounded-lg p-6 text-center">
-      <p class="text-red-400 text-lg">{{ error }}</p>
-    </div>
-
-    <div v-else class="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
-      <BaseCard
-          v-for="(assumption, key) in groupedAssumptions"
-          :key="key"
-          class="p-4 sm:p-6"
+    <div class="flex gap-2 sm:gap-3">
+      <button
+          :class="activeView === 'analytics' ? 'bg-indigo-500/30 border-indigo-400 text-indigo-100' : 'bg-white/5 border-white/20 text-white/80 hover:bg-white/10'"
+          class="px-4 py-2 border rounded-lg transition min-h-[44px]"
+          @click="activeView = 'analytics'"
       >
-        <h2 class="text-lg sm:text-xl font-semibold mb-4 text-white">{{ assumption.name }}</h2>
-        <div class="h-64 sm:h-80">
-          <canvas :id="`chart-${key}`"></canvas>
-        </div>
-      </BaseCard>
+        Analytics
+      </button>
+      <button
+          :class="activeView === 'questions' ? 'bg-indigo-500/30 border-indigo-400 text-indigo-100' : 'bg-white/5 border-white/20 text-white/80 hover:bg-white/10'"
+          class="px-4 py-2 border rounded-lg transition min-h-[44px]"
+          @click="activeView = 'questions'"
+      >
+        Form Questions
+      </button>
     </div>
+
+    <DashboardAnalytics v-if="activeView === 'analytics'" :selected-model="selectedModel" />
+    
+    <FormQuestionsManager v-else />
   </section>
 </template>
-
-<style scoped>
-/* Chart canvas sizing */
-canvas {
-  max-height: 100%;
-  max-width: 100%;
-}
-</style>

@@ -4,6 +4,7 @@ from typing import Annotated
 from jose import JWTError
 
 from services.form_service import FormService
+from controllers.auth_controller import require_admin
 
 router = APIRouter(prefix="/form", tags=["Form"])
 form_service = FormService()
@@ -41,6 +42,32 @@ def get_assumptions(token: Annotated[HTTPAuthorizationCredentials, Depends(beare
 @router.get("/questions", status_code=status.HTTP_200_OK)
 def get_form_questions():
     return form_service.get_form_questions()
+
+@router.post("/questions", status_code=status.HTTP_201_CREATED)
+def add_form_question(question_data: dict, _user = Depends(require_admin)):
+    try:
+        return form_service.add_form_question(question_data)
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        print(e)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Failed to add question",
+        )
+
+@router.delete("/questions/{question_id}", status_code=status.HTTP_200_OK)
+def delete_form_question(question_id: int, _user = Depends(require_admin)):
+    try:
+        return form_service.delete_form_question(question_id)
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        print(e)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Failed to delete question",
+        )
         
 @router.post("/submit", status_code=status.HTTP_200_OK)
 def submit_form(form_data: dict, token: Annotated[HTTPAuthorizationCredentials, Depends(bearer_scheme)]):
