@@ -1,6 +1,47 @@
 version: "3.9"
 
 services:
+  # Local MariaDB database for development
+  db:
+    image: mariadb:11.2
+    container_name: ai-photobooth-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${DB_NAME:-darktech}
+      MYSQL_USER: ${DB_USER:-darktech_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-password}
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # phpMyAdmin for database management
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: ai-photobooth-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: ${DB_USER:-darktech_user}
+      PMA_PASSWORD: ${DB_PASSWORD:-password}
+      UPLOAD_LIMIT: 100M
+    ports:
+      - "8080:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
   backend:
     build: ./backend
     ports:
@@ -10,6 +51,8 @@ services:
       - ENV=production
     env_file:
       - .env.production
+    networks:
+      - app-network
 
   frontend:
     build: ./frontend
@@ -22,6 +65,8 @@ services:
       - .env.production
     depends_on:
       - backend
+    networks:
+      - app-network
 
   frontend-dev:
     build: ./frontend
@@ -34,6 +79,8 @@ services:
       - .env.development
     depends_on:
       - backend-dev
+    networks:
+      - app-network
 
   backend-dev:
     build: ./backend
@@ -44,3 +91,15 @@ services:
       - ENV=development
     env_file:
       - .env.development
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db_data:
