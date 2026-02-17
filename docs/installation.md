@@ -19,9 +19,44 @@ cd dark-tech
 - Python 3.8 or higher
 - pip (Python package installer)
 
-### Install packages
+### Setup Virtual Environment (Recommended)
 
-Navigate to the backend directory and install the required packages:
+Using a virtual environment isolates your project dependencies from system Python packages.
+
+Navigate to the backend directory:
+
+```bash
+cd backend
+```
+
+#### For Windows (PowerShell):
+
+```powershell
+# Run the setup script
+.\setup_venv.ps1
+
+# Or manually create and activate:
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
+
+#### For Linux/Mac:
+
+```bash
+# Run the setup script
+chmod +x setup_venv.sh
+./setup_venv.sh
+
+# Or manually create and activate:
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+### Install packages (without virtual environment)
+
+If you prefer not to use a virtual environment, navigate to the backend directory and install the required packages directly:
 
 ```bash
 cd backend
@@ -40,11 +75,17 @@ GEMINI_API_KEY=your_gemini_api_key_here
 
 ### Run the Backend Server
 
-Start the FastAPI server using Uvicorn:
+Make sure your virtual environment is activated (if using one), then start the FastAPI server using Uvicorn:
 
 ```bash
+# Activate virtual environment first (if not already activated)
+# Windows: .\venv\Scripts\Activate.ps1
+# Linux/Mac: source venv/bin/activate
+
 uvicorn main:app --reload
 ```
+
+The backend server will run on `http://localhost:8000`.
 
 ## Frontend Setup
 
