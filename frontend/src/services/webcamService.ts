@@ -196,24 +196,6 @@ export const useWebcamService = () => {
         isNavbarOpen.value = false
     }
 
-    const formatField = (field: AssumptionType): string => {
-        if (field.format === 'percentage' && typeof field.value === 'number') {
-            return `${field.value.toFixed(1)}%`
-        } else if (field.format === 'currency' && typeof field.value === 'number') {
-            return `€${field.value.toLocaleString()}`
-        } else if (field.format === 'number' && typeof field.value === 'number') {
-            return field.value.toString()
-        } else if (field.format === 'weight' && typeof field.value === 'number') {
-            return `${field.value.toFixed(1)} kg`
-        } else if (field.format === 'years' && typeof field.value === 'number') {
-            return `${field.value} years`
-        } else if (field.format === 'hoursDay' && typeof field.value === 'number') {
-            return `${field.value} hours per day`
-        }
-        return String(field.value)
-    }
-
-
     const getStringHash = (str: string): number => {
         let hash = 0
         for (let i = 0; i < str.length; i++) {
@@ -429,7 +411,6 @@ export const useWebcamService = () => {
         clearAllData,
 
         // Helper
-        formatField,
         getStringHash,
         getBarColorClass,
         uploadFile,
