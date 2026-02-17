@@ -503,3 +503,68 @@ class FormService:
             raise
         finally:
             self.db_service.close_resources(cur, conn)
+
+    def get_form_results(self):
+        conn = None
+        cur = None
+
+        try:
+            conn = self.db_service.get_db_connection()
+            cur = conn.cursor()
+
+            query = """
+            SELECT 
+                fq.id,
+                fq.question,
+                fqt.value as question_type,
+                fqt.min,
+                fqt.max,
+                fr.value,
+                fr.explanation
+            FROM form_questions fq
+            JOIN form_question_types fqt ON fq.question_type_id = fqt.id
+            LEFT JOIN form_results fr ON fq.id = fr.form_question_id
+            ORDER BY fq.id, fr.id
+            """
+            cur.execute(query)
+            rows = cur.fetchall()
+
+            # Group results by question
+            questions_map = {}
+            for row in rows:
+                question_id = row[0]
+                question_text = row[1]
+                question_type = row[2]
+                min_val = row[3]
+                max_val = row[4]
+                answer_value = row[5]
+                explanation = row[6]
+
+                if question_id not in questions_map:
+                    questions_map[question_id] = {
+                        "id": question_id,
+                        "question": question_text,
+                        "type": question_type,
+                        "answers": []
+                    }
+                    
+                    if question_type == "scale" and min_val is not None and max_val is not None:
+                        questions_map[question_id]["scale"] = [int(min_val), int(max_val)]
+
+                # Only add answer if it exists (LEFT JOIN might return NULL)
+                if answer_value is not None:
+                    answer_entry = {"value": answer_value}
+                    if explanation:
+                        answer_entry["explanation"] = explanation
+                    questions_map[question_id]["answers"].append(answer_entry)
+
+            return list(questions_map.values())
+        except Exception:
+            if conn:
+                try:
+                    conn.rollback()
+                except Exception as rollback_error:
+                    print(f"Error during rollback: {rollback_error}")
+            raise
+        finally:
+            self.db_service.close_resources(cur, conn)

@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import {ref} from 'vue'
 import {useRouter} from 'vue-router'
-import DashboardAnalytics from '../components/DashboardAnalytics.vue'
+import AIOutputCharts from '../components/AIOutputCharts.vue'
 import FormQuestionsManager from '../components/FormQuestionsManager.vue'
+import FormResultsCharts from '../components/FormResultsCharts.vue'
 import {authService} from '../services/authService'
 
 const router = useRouter()
-const activeView = ref<'analytics' | 'questions'>('analytics')
+const activeView = ref<'aiOutput' | 'formResults' | 'questions'>('aiOutput')
 const selectedModel = ref<string>('gemini')
 const availableModels = ref<string[]>(['gemini', 'claude'])
 
@@ -23,7 +24,7 @@ const handleLogout = () => {
         <h1 class="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-indigo-200 via-fuchsia-200 to-pink-300 text-transparent bg-clip-text">
           Admin Dashboard
         </h1>
-        <p class="mt-2 text-sm sm:text-base text-gray-400">Analytics and form question management</p>
+        <p class="mt-2 text-sm sm:text-base text-gray-400">AI outputs, form responses, and question management</p>
       </div>
 
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
@@ -49,24 +50,33 @@ const handleLogout = () => {
       </div>
     </header>
 
-    <div class="flex gap-2 sm:gap-3">
+    <div class="flex flex-wrap gap-2 sm:gap-3">
       <button
-          :class="activeView === 'analytics' ? 'bg-indigo-500/30 border-indigo-400 text-indigo-100' : 'bg-white/5 border-white/20 text-white/80 hover:bg-white/10'"
+          :class="activeView === 'aiOutput' ? 'bg-indigo-500/30 border-indigo-400 text-indigo-100' : 'bg-white/5 border-white/20 text-white/80 hover:bg-white/10'"
           class="px-4 py-2 border rounded-lg transition min-h-[44px]"
-          @click="activeView = 'analytics'"
+          @click="activeView = 'aiOutput'"
       >
-        Analytics
+        AI Outputs
+      </button>
+      <button
+          :class="activeView === 'formResults' ? 'bg-indigo-500/30 border-indigo-400 text-indigo-100' : 'bg-white/5 border-white/20 text-white/80 hover:bg-white/10'"
+          class="px-4 py-2 border rounded-lg transition min-h-[44px]"
+          @click="activeView = 'formResults'"
+      >
+        Form Responses
       </button>
       <button
           :class="activeView === 'questions' ? 'bg-indigo-500/30 border-indigo-400 text-indigo-100' : 'bg-white/5 border-white/20 text-white/80 hover:bg-white/10'"
           class="px-4 py-2 border rounded-lg transition min-h-[44px]"
           @click="activeView = 'questions'"
       >
-        Form Questions
+        Manage Questions
       </button>
     </div>
 
-    <DashboardAnalytics v-if="activeView === 'analytics'" :selected-model="selectedModel" />
+    <AIOutputCharts v-if="activeView === 'aiOutput'" :selected-model="selectedModel" />
+    
+    <FormResultsCharts v-else-if="activeView === 'formResults'" />
     
     <FormQuestionsManager v-else />
   </section>

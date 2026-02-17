@@ -43,6 +43,19 @@ def get_assumptions(token: Annotated[HTTPAuthorizationCredentials, Depends(beare
 def get_form_questions():
     return form_service.get_form_questions()
 
+@router.get("/results", status_code=status.HTTP_200_OK)
+def get_form_results(_user = Depends(require_admin)):
+    try:
+        return form_service.get_form_results()
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        print(e)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to fetch form results",
+        )
+
 @router.post("/questions", status_code=status.HTTP_201_CREATED)
 def add_form_question(question_data: dict, _user = Depends(require_admin)):
     try:
