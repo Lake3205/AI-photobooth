@@ -45,7 +45,3 @@ function handleMouseLeave() {
     ></span>
   </label>
 </template>
-
-<style scoped>
-</style>
-

@@ -1,0 +1,188 @@
+/* Shared Transition and Transform Styles */
+
+/* Column sliding transitions (used in PhotoBooth and SelfieCamera) */
+.column-slide {
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: transform 500ms cubic-bezier(0.22, 0.9, 0.3, 1);
+  transform: translate3d(0, 0, 0);
+}
+
+.column-slide-left {
+  transform: translate3d(-0.5rem, 0, 0);
+}
+
+.column-slide-right {
+  will-change: opacity, transform;
+  transform: translate3d(1rem, 0, 0);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 320ms ease, opacity 320ms ease;
+}
+
+.column-slide-right.show {
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
+  pointer-events: auto;
+  transition-delay: 180ms;
+}
+
+.column-slide-right.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .column-slide,
+  .column-slide-left {
+    transform: none !important;
+  }
+
+  .column-slide-right {
+    transform: none !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transition-delay: 0ms !important;
+  }
+}
+
+/* Smooth hover effects */
+.transition-smooth {
+  transition: all 0.2s ease;
+}
+
+.transition-colors {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.transition-transform {
+  transition: transform 0.2s ease;
+}
+
+.transition-opacity {
+  transition: opacity 0.3s ease;
+}
+
+/* Hover lift effect */
+.hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+/* Hover scale effect */
+.hover-scale {
+  transition: transform 0.2s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* Hover brightness */
+.hover-brighten {
+  transition: filter 0.2s ease;
+}
+
+.hover-brighten:hover {
+  filter: brightness(1.1);
+}
+
+/* Active press effect */
+.active-press:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+/* Backdrop blur transitions */
+.backdrop-blur-transition {
+  backdrop-filter: blur(0px);
+  transition: backdrop-filter 0.3s ease;
+}
+
+.backdrop-blur-transition.active {
+  backdrop-filter: blur(8px);
+}
+
+/* Fade transitions */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Slide fade transitions */
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slide-fade-enter-from {
+  transform: translateX(20px);
+  opacity: 0;
+}
+
+.slide-fade-leave-to {
+  transform: translateX(-20px);
+  opacity: 0;
+}
+
+/* Scale fade transitions */
+.scale-fade-enter-active,
+.scale-fade-leave-active {
+  transition: all 0.2s ease;
+}
+
+.scale-fade-enter-from,
+.scale-fade-leave-to {
+  transform: scale(0.95);
+  opacity: 0;
+}
+
+/* Panel/modal appear transitions */
+.panel-appear {
+  animation: panelSlideIn 0.4s ease-out forwards;
+}
+
+@keyframes panelSlideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Smooth GPU-accelerated transforms */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Hover underline effect */
+.hover-underline {
+  position: relative;
+}
+
+.hover-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width 0.3s ease;
+}
+
+.hover-underline:hover::after {
+  width: 100%;
+}

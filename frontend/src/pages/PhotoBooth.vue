@@ -1,13 +1,20 @@
 <script lang="ts" setup>
 import {computed, onMounted, ref, watch} from 'vue'
 import {useWebcamService} from '@/services/webcamService'
-import {CameraIcon} from '@heroicons/vue/24/outline'
+import {useFaceDetection} from '@/composables/useFaceDetection'
+import {useCommonStyles} from '@/composables/useCommonStyles'
 import UploadButton from '@/components/UploadButton.vue'
 import AssumptionsPanel from '@/components/AssumptionsPanel.vue'
+import PageLayout from '@/components/shared/PageLayout.vue'
+import CameraFrame from '@/components/shared/CameraFrame.vue'
+import CameraOverlay from '@/components/shared/CameraOverlay.vue'
+import CameraControls from '@/components/shared/CameraControls.vue'
 import QrcodeVue from 'qrcode.vue'
 import {useCookieService} from '@/services/cookieService'
+import '@/assets/face-detection.css'
 
 const {getCookie} = useCookieService()
+const {formatField, getBarColorClass} = useCommonStyles()
 
 const {
   // Template refs
@@ -35,9 +42,16 @@ const {
 
   // Helper functions
   uploadFile,
-  getBarColorClass,
-  formatField,
 } = useWebcamService()
+
+// Face detection
+const {
+  faceDetected,
+  faceBounds,
+  isModelLoading,
+  isInitializing,
+  loadModel
+} = useFaceDetection(videoElement, isStreaming)
 
 const formToken = ref('')
 const capturedAt = ref<string | null>(null)
@@ -69,94 +83,82 @@ watch(latestImage, (val) => {
   }
 })
 
-onMounted(() => {
+onMounted(async () => {
   updateFormToken()
+  await loadModel()
   startCamera()
 })
 </script>
 
 <template>
-  <main class="relative overflow-hidden bg-black text-white min-h-screen">
-
-    <div class="pointer-events-none absolute inset-0 opacity-80">
+  <PageLayout container-class="px-4 sm:px-6 py-4 sm:py-8 mx-auto" style="--panel-w:28rem;">
+    <div class="flex flex-col md:flex-row items-start justify-center gap-4 md:gap-0">
       <div
-          class="absolute -top-60 -left-60 h-[36rem] w-[36rem] rounded-full bg-gradient-to-br from-blue-500/60 to-blue-300/30 blur-3xl"></div>
-      <div
-          class="absolute -bottom-60 -right-60 h-[36rem] w-[36rem] rounded-full bg-gradient-to-tr from-blue-400/50 to-white/10 blur-3xl"></div>
-      <div
-          class="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:24px_24px]"></div>
-    </div>
+          :class="['column-slide', latestImage ? 'column-slide-left' : '', 'w-full md:w-auto']"
+          :style="latestImage ? 'min-width:320px; width: 40vw; max-width:640px; flex-shrink: 0;' : 'min-width:320px; width: 80vw; max-width:1200px; flex-shrink: 0;'">
+        <header v-if="!latestImage?.dataUrl" class="mb-3 sm:mb-4">
+          <h1 class="bg-gradient-to-b from-white to-blue-300 bg-clip-text text-2xl sm:text-3xl font-extrabold tracking-tight text-transparent">
+            Take a Selfie
+          </h1>
+          <p class="mt-1 sm:mt-2 text-sm sm:text-base text-blue-100/90">Position yourself in the frame and capture the
+            perfect shot</p>
+        </header>
 
-    <div class="relative z-10 px-4 sm:px-6 py-4 sm:py-8 mx-auto" style="--panel-w:28rem;">
-      <div class="flex flex-col md:flex-row items-start justify-center gap-4 md:gap-0">
-        <div
-            :class="['left-column transition-transform duration-500 ease-in-out w-full md:w-auto']"
-            :data-slide="latestImage ? 'true' : 'false'"
-            :style="latestImage ? 'min-width:320px; width: 40vw; max-width:640px; flex-shrink: 0;' : 'min-width:320px; width: 80vw; max-width:1200px; flex-shrink: 0;'">
-          <header v-if="!latestImage?.dataUrl" class="mb-3 sm:mb-4">
-            <h1 class="bg-gradient-to-b from-white to-blue-300 bg-clip-text text-2xl sm:text-3xl font-extrabold tracking-tight text-transparent">
-              Take a Selfie
-            </h1>
-            <p class="mt-1 sm:mt-2 text-sm sm:text-base text-blue-100/90">Position yourself in the frame and capture the
-              perfect shot</p>
-          </header>
+        <CameraFrame>
+          <video v-if="!latestImage?.dataUrl"
+                 ref="videoElement"
+                 :class="['absolute inset-0 w-full h-full object-cover z-0', isStreaming ? '' : 'opacity-50']"
+                 autoplay playsinline></video>
 
-          <div
-              class="relative rounded-2xl sm:rounded-3xl border border-white/15 bg-white/5 p-1.5 sm:p-2 overflow-hidden">
-            <div
-                class="relative aspect-[16/9] w-full rounded-xl overflow-hidden bg-black/50 flex items-center justify-center">
-              <video v-if="!latestImage?.dataUrl"
-                     ref="videoElement"
-                     :class="['absolute inset-0 w-full h-full object-cover z-0', isStreaming ? '' : 'opacity-50']"
-                     autoplay playsinline></video>
-
-              <img v-if="latestImage?.dataUrl"
-                   :src="latestImage.dataUrl"
-                   alt="Captured"
-                   class="absolute inset-0 w-full h-full object-contain z-0"/>
-
-              <div v-if="!latestImage?.dataUrl && !isStreaming && !isLoading"
-                   class="absolute inset-0 z-10 flex items-center justify-center bg-black/70 rounded-xl p-4">
-                <div class="text-center">
-                  <CameraIcon class="h-16 sm:h-20 w-16 sm:w-20 text-white/50 mx-auto mb-3 sm:mb-4"/>
-                  <p class="text-white/70 text-base sm:text-lg">Camera not active</p>
-                  <div class="mt-4 sm:mt-6 flex flex-col gap-2 sm:gap-3">
-                    <button
-                        class="px-6 sm:px-8 py-3 sm:py-4 cursor-pointer bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-base sm:text-lg transition-colors min-h-[44px]"
-                        @click="startCamera">Start Camera
-                    </button>
-                    <UploadButton :label="'Choose file instead'" :onChange="uploadFile" accept="image/*"
-                                  class="px-4 sm:px-6 py-3 text-sm sm:text-base min-h-[44px]"/>
-                  </div>
-                </div>
-              </div>
-
-              <div v-if="!latestImage?.dataUrl && isLoading"
-                   class="absolute inset-0 z-10 flex items-center justify-center bg-black/70">
-                <div class="text-center">
-                  <div
-                      class="animate-spin rounded-full h-12 sm:h-16 w-12 sm:w-16 border-b-2 border-white mx-auto mb-3 sm:mb-4"></div>
-                  <p class="text-white/70 text-base sm:text-lg">Loading camera...</p>
-                </div>
-              </div>
-
-              <div v-if="!latestImage?.dataUrl && isStreaming"
-                   class="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-20">
-                <button :disabled="countdown > 0"
-                        aria-label="Take selfie"
-                        class="group relative p-3 sm:p-4 bg-gradient-to-r from-blue-600/80 to-blue-400/70 hover:scale-105 active:scale-100 border border-white/10 rounded-full shadow-lg transition-all duration-200 min-w-[44px] min-h-[44px]"
-                        tabindex="1" @click="takeLatestPicture">
-                  <span
-                      class="absolute -inset-0 rounded-full bg-gradient-to-r from-blue-500/20 to-blue-300/20 group-hover:from-blue-500/30 group-hover:to-blue-300/30 transition-all block"></span>
-                  <CameraIcon class="relative h-6 sm:h-7 w-6 sm:w-7 text-white"/>
-                  <span v-if="countdown > 0"
-                        class="absolute inset-0 flex items-center justify-center text-2xl sm:text-3xl font-bold text-white bg-black/60 rounded-full z-10">{{
-                      countdown
-                    }}</span>
-                </button>
+          <div v-if="(isModelLoading || isInitializing) && isStreaming && !latestImage?.dataUrl"
+               class="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
+            <div class="face-detection-loading">
+              <div class="loading-text">
+                <span class="loading-dots">{{ isModelLoading ? 'Loading AI Model' : 'Preparing Detection' }}</span>
               </div>
             </div>
           </div>
+
+          <div v-if="faceDetected && isStreaming && !isModelLoading && !isInitializing && !latestImage?.dataUrl"
+               class="absolute inset-0 z-10 pointer-events-none">
+            <div v-for="face in faceBounds"
+                 :key="face.index"
+                 :style="{
+                   left: face.x + 'px',
+                   top: face.y + 'px',
+                   width: face.width + 'px',
+                   height: face.height + 'px'
+                 }"
+                 class="face-box face-box-appear">
+
+              <div class="face-info">
+                <div class="info-text">FACE {{ face.index + 1 }}</div>
+              </div>
+            </div>
+          </div>
+
+          <img v-if="latestImage?.dataUrl"
+               :src="latestImage.dataUrl"
+               alt="Captured"
+               class="absolute inset-0 w-full h-full object-contain z-0"/>
+
+          <CameraOverlay v-if="!latestImage?.dataUrl && !isStreaming && !isLoading" message="Camera not active">
+            <template #actions>
+              <div class="mt-4 sm:mt-6 flex flex-col gap-2 sm:gap-3">
+                <button
+                    class="px-6 sm:px-8 py-3 sm:py-4 cursor-pointer bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-base sm:text-lg transition-colors min-h-[44px]"
+                    @click="startCamera">Start Camera
+                </button>
+                <UploadButton :label="'Choose file instead'" :onChange="uploadFile" accept="image/*"
+                              class="px-4 sm:px-6 py-3 text-sm sm:text-base min-h-[44px]"/>
+              </div>
+            </template>
+          </CameraOverlay>
+
+          <CameraOverlay v-if="!latestImage?.dataUrl && isLoading" message="Loading camera..." :show-spinner="true" />
+
+          <CameraControls v-if="!latestImage?.dataUrl && isStreaming" :countdown="countdown" aria-label="Take selfie" @capture="takeLatestPicture" />
+        </CameraFrame>
 
           <div v-if="latestImage?.dataUrl && qrCodeUrl && analysisData" class="mt-3 sm:mt-4 flex justify-center">
             <div class="rounded-xl sm:rounded-2xl p-3 sm:p-4 w-full max-w-md">
@@ -195,51 +197,15 @@ onMounted(() => {
           </div>
         </div>
       </div>
-    </div>
 
     <canvas ref="canvasElement" class="hidden"></canvas>
-  </main>
+  </PageLayout>
 </template>
 
 <style scoped>
-.left-column {
-  will-change: transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  transition: transform 500ms cubic-bezier(0.22, 0.9, 0.3, 1);
-  transform: translate3d(0, 0, 0);
-}
-
-.left-column[data-slide="true"] {
-  transform: translate3d(-0.5rem, 0, 0);
-}
-
-.right-column {
-  will-change: opacity, transform;
-  transform: translate3d(1rem, 0, 0);
-  opacity: 0;
-  pointer-events: none;
-  transition: transform 320ms ease, opacity 320ms ease;
-}
-
-.right-column.show {
-  transform: translate3d(0, 0, 0);
-  opacity: 1;
-  pointer-events: auto;
-  transition-delay: 180ms;
-}
-
-.right-column.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
 
 button[aria-label="Take selfie"] {
   box-shadow: 0 6px 18px rgba(59, 119, 242, 0.18);
-}
-
-button[aria-label="Take selfie"]:active {
-  transform: translateY(1px) scale(0.99);
 }
 
 button[class*="bg-white/6"] {

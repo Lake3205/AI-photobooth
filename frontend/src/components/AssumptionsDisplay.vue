@@ -180,6 +180,3 @@ const formatValue = (value: string | number, format: string): string => {
     </div>
   </div>
 </template>
-
-<style scoped>
-</style>

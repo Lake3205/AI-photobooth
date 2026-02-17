@@ -27,7 +27,7 @@ function tacMidpoint(scale: [number, number]): number {
           :min="question.scale ? question.scale[0] : 1"
           :name="id.toString()"
           :value="tacMidpoint(question.scale ? question.scale : [1,5])"
-          class="w-full z-20 relative range-slider"
+          class="range-slider w-full"
           required
           type="range"
       />
@@ -47,7 +47,7 @@ function tacMidpoint(scale: [number, number]): number {
           <input
               :id="id.toString() + '_yes'"
               :name="id.toString()"
-              class="w-5 h-5 text-indigo-500 bg-white/10 border-white/20 focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+              class="radio-custom"
               required
               type="radio"
               value="yes"
@@ -58,7 +58,7 @@ function tacMidpoint(scale: [number, number]): number {
           <input
               :id="id.toString() + '_no'"
               :name="id.toString()"
-              class="w-5 h-5 text-indigo-500 bg-white/10 border-white/20 focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+              class="radio-custom"
               required
               type="radio"
               value="no"
@@ -73,7 +73,7 @@ function tacMidpoint(scale: [number, number]): number {
         <textarea
             :id="id.toString() + '_explanation'"
             :name="id.toString() + '_explanation'"
-            class="w-full min-h-[100px] rounded-lg border border-white/20 bg-white/10 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition resize-none"
+            class="textarea-base"
             placeholder="Type your explanation here..."
             rows="4"
         ></textarea>
@@ -81,53 +81,3 @@ function tacMidpoint(scale: [number, number]): number {
     </div>
   </div>
 </template>
-
-<style scoped>
-.range-slider {
-  -webkit-appearance: none;
-  appearance: none;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
-  outline: none;
-}
-
-.range-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 24px;
-  height: 24px;
-  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.5);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.range-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.7);
-}
-
-.range-slider::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
-  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-  border-radius: 50%;
-  cursor: pointer;
-  border: none;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.5);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.range-slider::-moz-range-thumb:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.7);
-}
-
-.range-slider::-moz-range-track {
-  height: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
-}
-</style>
