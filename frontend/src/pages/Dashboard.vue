@@ -8,8 +8,6 @@ import {authService} from '../services/authService'
 
 const router = useRouter()
 const activeView = ref<'aiOutput' | 'formResults' | 'questions'>('aiOutput')
-const selectedModel = ref<string>('gemini')
-const availableModels = ref<string[]>(['gemini', 'claude'])
 
 const handleLogout = () => {
   authService.logout()
@@ -27,27 +25,12 @@ const handleLogout = () => {
         <p class="mt-2 text-sm sm:text-base text-gray-400">AI outputs, form responses, and question management</p>
       </div>
 
-      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-        <div class="flex items-center gap-2 sm:gap-3">
-          <label class="text-white/70 text-sm font-medium" for="model-select">AI Model:</label>
-          <select
-              id="model-select"
-              v-model="selectedModel"
-              class="flex-1 sm:flex-initial px-3 sm:px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition min-h-[44px]"
-          >
-            <option v-for="model in availableModels" :key="model" :value="model">
-              {{ model.charAt(0).toUpperCase() + model.slice(1) }}
-            </option>
-          </select>
-        </div>
-
-        <button
-            class="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 rounded-lg text-red-300 hover:text-red-200 transition min-h-[44px]"
-            @click="handleLogout"
-        >
-          Logout
-        </button>
-      </div>
+      <button
+          class="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 rounded-lg text-red-300 hover:text-red-200 transition min-h-[44px]"
+          @click="handleLogout"
+      >
+        Logout
+      </button>
     </header>
 
     <div class="flex flex-wrap gap-2 sm:gap-3">
@@ -74,7 +57,7 @@ const handleLogout = () => {
       </button>
     </div>
 
-    <AIOutputCharts v-if="activeView === 'aiOutput'" :selected-model="selectedModel" />
+    <AIOutputCharts v-if="activeView === 'aiOutput'" />
     
     <FormResultsCharts v-else-if="activeView === 'formResults'" />
     
