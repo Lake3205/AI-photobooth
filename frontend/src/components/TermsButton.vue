@@ -37,12 +37,3 @@ function handleMouseLeave() {
   </button>
 </template>
 
-<style scoped>
-/* Fixed position bottom-left */
-.terms-btn-fixed {
-  position: fixed;
-  left: 1.5rem;
-  bottom: 1.5rem;
-  z-index: 50;
-}
-</style>

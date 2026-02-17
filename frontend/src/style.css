@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* Import shared stylesheets */
+@import "./assets/animations.css";
+@import "./assets/transitions.css";
+@import "./assets/buttons.css";
+@import "./assets/cards.css";
+@import "./assets/forms.css";
+@import "./assets/utilities.css";
+@import "./assets/face-detection.css";
+
 :root {
 	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;

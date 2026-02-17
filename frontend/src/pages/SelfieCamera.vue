@@ -192,10 +192,10 @@ onUnmounted(() => {
     </Transition>
       <div class="flex flex-col md:flex-row items-start justify-center gap-4 md:gap-0">
         <div
-            :class="['left-column transition-transform duration-500 ease-in-out w-full md:w-auto', latestImage ? 'slide-left' : '']"
+            :class="['column-slide', latestImage ? 'column-slide-left' : '', 'w-full md:w-auto']"
             class="min-w-full md:min-w-[320px]"
             style="flex:1 1 auto; max-width: calc(100% - var(--panel-w));">
-          <header class="mb-3 sm:mb-4">
+          <header class="mb-3 sm:mb-4">,
             <h1 class="bg-gradient-to-b from-white to-blue-300 bg-clip-text text-2xl sm:text-3xl font-extrabold tracking-tight text-transparent">
               Take a Selfie
             </h1>
@@ -254,8 +254,7 @@ onUnmounted(() => {
           </CameraFrame>
         </div>
 
-        <div :class="latestImage ? 'show' : 'hidden'"
-             class="right-column w-full md:w-150 transition-all duration-500 ease-in-out"
+        <div :class="['column-slide-right', latestImage ? 'show' : 'hidden', 'w-full md:w-150']"
              style="--panel-w:28rem;">
           <div v-if="latestImage" class="w-full">
             <div class="rounded-xl sm:rounded-2xl bg-white/5 to-transparent p-1.5 sm:p-2">
@@ -293,50 +292,3 @@ onUnmounted(() => {
     <TermsButton :onBeforeNavigate="stopCamera" class="terms-btn-fixed"/>
   </PageLayout>
 </template>
-
-<style scoped>
-.left-column {
-  will-change: transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  transition: transform 500ms cubic-bezier(0.22, 0.9, 0.3, 1);
-  transform: translate3d(0, 0, 0);
-}
-
-.left-column.slide-left {
-  transform: translate3d(-0.5rem, 0, 0);
-}
-
-.right-column {
-  will-change: opacity, transform;
-  transform: translate3d(1rem, 0, 0);
-  opacity: 0;
-  pointer-events: none;
-  transition: transform 320ms ease, opacity 320ms ease;
-}
-
-.right-column.show {
-  transform: translate3d(0, 0, 0);
-  opacity: 1;
-  pointer-events: auto;
-  transition-delay: 180ms;
-}
-
-.right-column.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
-@media (max-width: 768px) {
-  .left-column {
-    transform: none !important;
-  }
-
-  .right-column {
-    transform: none !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    transition-delay: 0ms !important;
-  }
-}
-</style>

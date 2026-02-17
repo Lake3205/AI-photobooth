@@ -119,6 +119,7 @@ watch(selectedModel, loadDashboardData)
 </template>
 
 <style scoped>
+/* Chart canvas sizing */
 canvas {
   max-height: 100%;
   max-width: 100%;
