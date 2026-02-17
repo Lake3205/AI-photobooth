@@ -14,12 +14,26 @@ from typing import List, Tuple, Optional
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 try:
-    import mariadb
     from config import DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME
 except ImportError as e:
-    print(f"✗ Error importing dependencies: {e}")
-    print("Make sure you have mariadb installed: pip install mariadb")
+    print(f"✗ Error importing config: {e}")
     sys.exit(1)
+
+# Try to import database connector (mariadb or pymysql as fallback)
+DB_CONNECTOR = None
+try:
+    import mariadb
+    DB_CONNECTOR = 'mariadb'
+except ImportError:
+    try:
+        import pymysql
+        DB_CONNECTOR = 'pymysql'
+    except ImportError:
+        print("✗ No database connector found!")
+        print("Install one of:")
+        print("  pip install mariadb")
+        print("  pip install pymysql")
+        sys.exit(1)
 
 
 class MigrationManager:
@@ -34,18 +48,30 @@ class MigrationManager:
     def connect(self) -> bool:
         """Establish database connection"""
         try:
-            self.connection = mariadb.connect(
-                host=DB_HOST,
-                port=DB_PORT,
-                user=DB_USER,
-                password=DB_PASSWORD,
-                database=DB_NAME,
-                autocommit=False
-            )
+            if DB_CONNECTOR == 'mariadb':
+                import mariadb
+                self.connection = mariadb.connect(
+                    host=DB_HOST,
+                    port=DB_PORT,
+                    user=DB_USER,
+                    password=DB_PASSWORD,
+                    database=DB_NAME,
+                    autocommit=False
+                )
+            else:  # pymysql
+                import pymysql
+                self.connection = pymysql.connect(
+                    host=DB_HOST,
+                    port=DB_PORT,
+                    user=DB_USER,
+                    password=DB_PASSWORD,
+                    database=DB_NAME,
+                    autocommit=False
+                )
             self.cursor = self.connection.cursor()
-            print(f"✓ Connected to database: {DB_NAME}@{DB_HOST}:{DB_PORT}")
+            print(f"✓ Connected to database: {DB_NAME}@{DB_HOST}:{DB_PORT} (using {DB_CONNECTOR})")
             return True
-        except mariadb.Error as e:
+        except Exception as e:
             print(f"✗ Error connecting to database: {e}")
             print(f"  Host: {DB_HOST}:{DB_PORT}")
             print(f"  Database: {DB_NAME}")
@@ -71,7 +97,7 @@ class MigrationManager:
                 )
             """)
             self.connection.commit()
-        except mariadb.Error as e:
+        except Exception as e:
             print(f"✗ Error creating migrations table: {e}")
             self.connection.rollback()
             raise
@@ -83,7 +109,7 @@ class MigrationManager:
                 "SELECT version FROM schema_migrations ORDER BY applied_at"
             )
             return [row[0] for row in self.cursor.fetchall()]
-        except mariadb.Error:
+        except Exception:
             return []
     
     def get_available_migrations(self) -> List[Tuple[str, Path]]:
@@ -152,7 +178,7 @@ class MigrationManager:
             if statement.strip():
                 try:
                     self.cursor.execute(statement)
-                except mariadb.Error as e:
+                except Exception as e:
                     print(f"✗ Error executing SQL: {e}")
                     print(f"  Statement: {statement[:100]}...")
                     raise

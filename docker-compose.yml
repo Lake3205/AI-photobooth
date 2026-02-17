@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   # Local MariaDB database for development
   db:
