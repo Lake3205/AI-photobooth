@@ -97,3 +97,15 @@ async def delete_assumption_endpoint(assumption_id: int, user = Depends(require_
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to delete assumption: {str(e)}"
         )
+
+# Endpoint to get all sessions with their assumptions
+@router.get("/sessions", status_code=status.HTTP_200_OK)
+async def get_all_sessions_endpoint(user = Depends(require_admin)):
+    try:
+        result = db_service.get_all_sessions()
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve sessions: {str(e)}"
+        )

@@ -15,7 +15,13 @@ interface Assumption {
   date_created: string
 }
 
-interface GroupedAssumption {
+interface Session {
+  id: number
+  created_at: string
+  assumptions: Assumption[]
+}
+
+interface SessionWithComparison {
   id: number
   timestamp: string
   models: Record<string, Record<string, AssumptionValue>>
@@ -24,70 +30,71 @@ interface GroupedAssumption {
 
 const loading = ref(true)
 const error = ref<string | null>(null)
-const allAssumptions = ref<Assumption[]>([])
+const allSessions = ref<Session[]>([])
 const expandedRows = ref<Set<number>>(new Set())
 
 // Get all unique assumption constant keys
 const assumptionKeys = computed(() => {
-  if (allAssumptions.value.length === 0) return []
+  if (allSessions.value.length === 0) return []
   const keysSet = new Set<string>()
-  allAssumptions.value.forEach(assumption => {
-    Object.keys(assumption.assumptions).forEach(key => keysSet.add(key))
+  allSessions.value.forEach(session => {
+    session.assumptions.forEach(assumption => {
+      Object.keys(assumption.assumptions).forEach(key => keysSet.add(key))
+    })
   })
   return Array.from(keysSet).sort()
 })
 
-// Group assumptions by their ID and timestamp
-const groupedAssumptions = computed<GroupedAssumption[]>(() => {
-  const grouped = new Map<number, GroupedAssumption>()
-  
-  allAssumptions.value.forEach(assumption => {
-    if (!grouped.has(assumption.id)) {
-      grouped.set(assumption.id, {
-        id: assumption.id,
-        timestamp: assumption.date_created,
-        models: {},
-        hasDifferences: false
-      })
-    }
+// Process sessions for comparison
+const processedSessions = computed<SessionWithComparison[]>(() => {
+  const sessions = allSessions.value.map(session => {
+    const models: Record<string, Record<string, AssumptionValue>> = {}
     
-    const group = grouped.get(assumption.id)!
-    group.models[assumption.ai_model] = assumption.assumptions
-  })
-  
-  // Check for differences in each group
-  grouped.forEach(group => {
-    const modelNames = Object.keys(group.models)
+    // Group assumptions by AI model
+    session.assumptions.forEach(assumption => {
+      models[assumption.ai_model] = assumption.assumptions
+    })
+    
+    // Check for differences
+    let hasDifferences = false
+    const modelNames = Object.keys(models)
     if (modelNames.length > 1) {
       // Check each assumption key for differences
       for (const key of assumptionKeys.value) {
         const values = modelNames
-          .map(model => group.models[model]?.[key]?.value)
+          .map(model => models[model]?.[key]?.value)
           .filter(v => v !== undefined && v !== null)
         
         if (values.length > 1) {
           const uniqueValues = new Set(values.map(v => String(v)))
           if (uniqueValues.size > 1) {
-            group.hasDifferences = true
+            hasDifferences = true
             break
           }
         }
       }
     }
+    
+    return {
+      id: session.id,
+      timestamp: session.created_at,
+      models,
+      hasDifferences
+    }
   })
   
-  return Array.from(grouped.values()).sort((a, b) => 
+  return sessions.sort((a, b) => 
     new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
   )
 })
 
 // Check if a specific key has differences across models
-const hasDifferencesForKey = (group: GroupedAssumption, key: string): boolean => {
-  const modelNames = Object.keys(group.models)
+const hasDifferencesForKey = (session: SessionWithComparison, key: string): boolean => {
+  const modelNames = Object.keys(session.models)
   if (modelNames.length <= 1) return false
   
   const values = modelNames
-    .map(model => group.models[model]?.[key]?.value)
+    .map(model => session.models[model]?.[key]?.value)
     .filter(v => v !== undefined && v !== null)
   
   if (values.length <= 1) return false
@@ -139,23 +146,23 @@ const formatDate = (dateStr: string): string => {
   })
 }
 
-const loadAssumptions = async () => {
+const loadSessions = async () => {
   try {
     loading.value = true
     error.value = null
     
     const response = await authService.authenticatedFetch(
-      `${import.meta.env.VITE_API_URL}/database/assumptions`
+      `${import.meta.env.VITE_API_URL}/database/sessions`
     )
     
     if (!response.ok) {
-      throw new Error('Failed to fetch assumptions')
+      throw new Error('Failed to fetch sessions')
     }
     
-    allAssumptions.value = await response.json()
+    allSessions.value = await response.json()
     
-    if (allAssumptions.value.length === 0) {
-      error.value = 'No assumptions data available yet!'
+    if (allSessions.value.length === 0) {
+      error.value = 'No session data available yet!'
     }
     
   } catch (err) {
@@ -165,16 +172,17 @@ const loadAssumptions = async () => {
   }
 }
 
-onMounted(loadAssumptions)
+onMounted(loadSessions)
 </script>
 
 <template>
   <div class="space-y-6">
     <!-- Header -->
     <div class="bg-white/5 border border-white/20 rounded-lg p-4">
-      <h2 class="text-xl font-bold text-white mb-2">Assumption Comparison</h2>
+      <h2 class="text-xl font-bold text-white mb-2">Session Comparison</h2>
       <p class="text-sm text-white/70">
-        Compare AI model outputs for each assumption session. 
+        Compare AI model outputs for each session. 
+        Each session represents one photo analyzed by multiple AI models.
         <span class="text-yellow-400">Yellow highlights</span> indicate differences between models.
       </p>
     </div>
@@ -192,19 +200,19 @@ onMounted(loadAssumptions)
     <!-- Data Display -->
     <div v-else class="space-y-4">
       <div
-        v-for="group in groupedAssumptions"
-        :key="group.id"
+        v-for="session in processedSessions"
+        :key="session.id"
         class="bg-white/5 border border-white/20 rounded-lg overflow-hidden"
       >
-        <!-- Group Header -->
+        <!-- Session Header -->
         <div
           class="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition"
-          @click="toggleRow(group.id)"
+          @click="toggleRow(session.id)"
         >
           <div class="flex items-center gap-3">
             <svg
               class="w-5 h-5 text-white/70 transition-transform"
-              :class="{ 'rotate-90': expandedRows.has(group.id) }"
+              :class="{ 'rotate-90': expandedRows.has(session.id) }"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -213,17 +221,17 @@ onMounted(loadAssumptions)
             </svg>
             <div>
               <div class="text-white font-medium">
-                Assumption #{{ group.id }}
+                Session #{{ session.id }}
               </div>
               <div class="text-sm text-white/50">
-                {{ formatDate(group.timestamp) }}
+                {{ formatDate(session.timestamp) }}
               </div>
             </div>
           </div>
           <div class="flex items-center gap-3">
             <div class="flex gap-2">
               <span
-                v-for="modelName in Object.keys(group.models)"
+                v-for="modelName in Object.keys(session.models)"
                 :key="modelName"
                 class="px-2 py-1 text-xs rounded bg-indigo-500/30 text-indigo-200 border border-indigo-400/50 capitalize"
               >
@@ -231,7 +239,7 @@ onMounted(loadAssumptions)
               </span>
             </div>
             <span
-              v-if="group.hasDifferences"
+              v-if="session.hasDifferences"
               class="px-3 py-1 text-xs rounded bg-yellow-500/20 text-yellow-300 border border-yellow-500/50"
             >
               Has Differences
@@ -240,7 +248,7 @@ onMounted(loadAssumptions)
         </div>
 
         <!-- Expanded Content -->
-        <div v-if="expandedRows.has(group.id)" class="border-t border-white/20">
+        <div v-if="expandedRows.has(session.id)" class="border-t border-white/20">
           <div class="overflow-x-auto">
             <table class="w-full">
               <thead class="bg-white/5">
@@ -249,7 +257,7 @@ onMounted(loadAssumptions)
                     Attribute
                   </th>
                   <th
-                    v-for="modelName in Object.keys(group.models)"
+                    v-for="modelName in Object.keys(session.models)"
                     :key="`header-${modelName}`"
                     class="px-4 py-3 text-left text-xs font-medium text-white/70 uppercase tracking-wider capitalize"
                   >
@@ -262,18 +270,18 @@ onMounted(loadAssumptions)
                   v-for="key in assumptionKeys"
                   :key="key"
                   :class="{
-                    'bg-yellow-500/10': hasDifferencesForKey(group, key)
+                    'bg-yellow-500/10': hasDifferencesForKey(session, key)
                   }"
                 >
                   <td class="px-4 py-3 text-sm text-white/90 font-medium">
-                    {{ Object.values(group.models)[0]?.[key]?.name || key }}
+                    {{ Object.values(session.models)[0]?.[key]?.name || key }}
                   </td>
                   <td
-                    v-for="modelName in Object.keys(group.models)"
+                    v-for="modelName in Object.keys(session.models)"
                     :key="`${key}-${modelName}`"
                     class="px-4 py-3 text-sm text-white/70"
                   >
-                    {{ group.models[modelName] ? getDisplayValue(group.models[modelName][key]) : 'N/A' }}
+                    {{ session.models[modelName] ? getDisplayValue(session.models[modelName][key]) : 'N/A' }}
                   </td>
                 </tr>
               </tbody>

@@ -396,6 +396,58 @@ class DatabaseSingleton:
         finally:
             self.close_resources(cur, conn)
 
+    def get_all_sessions(self):
+        """Get all assumption sessions with their full assumption data"""
+        conn = None
+        cur = None
+        
+        try:
+            conn = self.get_connection()
+            cur = conn.cursor()
+            
+            # Get all sessions
+            sessions_query = """
+                SELECT id, created_at, image_name, image_mime_type
+                FROM assumption_sessions
+                ORDER BY created_at DESC
+            """
+            cur.execute(sessions_query)
+            session_rows = cur.fetchall()
+            
+            sessions = []
+            for session_row in session_rows:
+                session_id = session_row[0]
+                session_created = session_row[1]
+                
+                # Get all assumptions for this session with their values
+                assumptions_query = """
+                    SELECT a.id, a.ai_model, a.created_at, ac.value, av.value
+                    FROM assumptions a
+                    JOIN assumption_session_assumptions asa ON a.id = asa.assumption_id
+                    LEFT JOIN assumption_values av ON a.id = av.assumption_id
+                    LEFT JOIN assumption_constants ac ON av.assumption_constant_id = ac.id
+                    WHERE asa.session_id = ?
+                    ORDER BY a.ai_model, a.created_at
+                """
+                cur.execute(assumptions_query, (session_id,))
+                assumption_rows = cur.fetchall()
+                
+                # Format assumptions using the existing logic
+                formatted_assumptions = self._format_assumptions(assumption_rows)
+                
+                sessions.append({
+                    "id": session_id,
+                    "created_at": session_created,
+                    "assumptions": formatted_assumptions
+                })
+            
+            return sessions
+            
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error getting all sessions: {e}")
+        finally:
+            self.close_resources(cur, conn)
+
 class DatabaseService:
     _instance = None
     _db_singleton = None
@@ -441,3 +493,6 @@ class DatabaseService:
 
     def get_session_assumptions(self, session_id: int):
         return self._db_singleton.get_session_assumptions(session_id)
+
+    def get_all_sessions(self):
+        return self._db_singleton.get_all_sessions()
